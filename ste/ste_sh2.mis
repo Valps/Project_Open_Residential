@@ -1,0 +1,359 @@
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Water Carry On! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+// Decompiled from "ste_sh2.scr" Using Epic GTA2 Script Decompiler by T.M.
+
+//FORWARD scie_hard_phone_m2:
+//FORWARD clean_up_scie_hard_phone_m2:
+
+CHAR_DATA s_h_2_h2000_guard_1
+CHAR_DATA s_h_2_h2000_guard_2
+CHAR_DATA s_h_2_h2000_guard_3
+CHAR_DATA s_h_2_h2000_guard_4
+CHAR_DATA s_h_2_h2000_guard_5
+CHAR_DATA s_h_2_h2000_guard_6
+CHAR_DATA s_h_2_h2000_guard_7
+CHAR_DATA s_h_2_h2000_guard_8
+CHAR_DATA s_h_2_h2000_guard_9
+CHAR_DATA s_h_2_h2000_respawning_guard
+
+CHAR_DATA s_h_2_srs_clones
+
+OBJ_DATA s_h_2_turbine_1_obj
+OBJ_DATA s_h_2_turbine_2_obj
+OBJ_DATA s_h_2_turbine_3_obj
+OBJ_DATA s_h_2_turbine_4_obj
+
+OBJ_DATA s_h_2_health_powerup_1
+OBJ_DATA s_h_2_health_powerup_2
+OBJ_DATA s_h_2_armour_powerup
+OBJ_DATA s_h_2_invul_powerup
+OBJ_DATA s_h_2_cocktail_molotov
+
+OBJ_DATA s_h_2_h2000_generator_obj
+
+//COUNTER count2 = 0
+COUNTER s_h_2_player_arrived_h2000 = 0
+COUNTER s_h_2_h2000_generator_destroyed = 0
+COUNTER s_h_2_turbine_1_destroyed = 0
+COUNTER s_h_2_turbine_2_destroyed = 0
+COUNTER s_h_2_turbine_3_destroyed = 0
+COUNTER s_h_2_turbine_4_destroyed = 0
+COUNTER s_h_2_turbines_destroyed_count = 0
+//COUNTER count10 = 0
+COUNTER s_h_2_h2000_guard_alive = 0
+COUNTER s_h_2_while_loop = 0
+COUNTER s_h_2_lights_sounds_created = 0
+
+LIGHT s_h_2_alarm_light_1
+LIGHT s_h_2_alarm_light_2
+LIGHT s_h_2_alarm_light_3
+LIGHT s_h_2_alarm_light_4
+LIGHT s_h_2_alarm_light_5
+LIGHT s_h_2_alarm_light_6
+LIGHT s_h_2_alarm_light_7
+LIGHT s_h_2_alarm_light_8
+
+SOUND s_h_2_alarm_sound_1
+SOUND s_h_2_alarm_sound_2
+SOUND s_h_2_alarm_sound_3
+SOUND s_h_2_alarm_sound_4
+SOUND s_h_2_alarm_sound_5
+SOUND s_h_2_alarm_sound_6
+SOUND s_h_2_alarm_sound_7
+SOUND s_h_2_alarm_sound_8
+
+scie_hard_phone_m2:
+ 
+	SET savecount20 = 0
+ 
+	SET savecount81 = 1
+	SET savecount82 = 1
+ 
+	DISPLAY_MESSAGE (2463)          //  WATER CARRY ON!
+ 
+	s_h_2_health_powerup_1 = CREATE_OBJ (136.50, 6.50, 6.00) 0 COLLECT_30 END
+	s_h_2_health_powerup_2 = CREATE_OBJ (129.50, 20.50, 2.00) 0 COLLECT_30 END
+	s_h_2_armour_powerup = CREATE_OBJ (129.50, 22.50, 2.00) 0 COLLECT_31 END
+	s_h_2_invul_powerup = CREATE_OBJ (80.50, 70.50, 6.00) 0 COLLECT_34 END
+	s_h_2_cocktail_molotov = CREATE_OBJ (104.50, 2.50, 6.00) 0 COLLECT_04 END
+ 
+	FORCE_CLEANUP (s_h_2_health_powerup_1)
+	FORCE_CLEANUP (s_h_2_health_powerup_2)
+	FORCE_CLEANUP (s_h_2_armour_powerup)
+	FORCE_CLEANUP (s_h_2_invul_powerup)
+	FORCE_CLEANUP (s_h_2_cocktail_molotov)
+ 
+	EXEC
+	    s_h_2_h2000_generator_obj = CREATE_OBJ (130.50, 21.50, 2.00) 0 POWERGEN END
+	    s_h_2_turbine_1_obj = CREATE_OBJ (119.50, 6.50, 4.00) 180 INVISIBLE_DESTRUCTIBLE END
+	    s_h_2_turbine_2_obj = CREATE_OBJ (123.50, 6.50, 4.00) 180 INVISIBLE_DESTRUCTIBLE END
+	    s_h_2_turbine_3_obj = CREATE_OBJ (127.50, 6.50, 4.00) 180 INVISIBLE_DESTRUCTIBLE END
+	    s_h_2_turbine_4_obj = CREATE_OBJ (131.50, 6.50, 4.00) 180 INVISIBLE_DESTRUCTIBLE END
+	    s_h_2_h2000_guard_1 = CREATE_CHAR (119.50, 4.50, 6.00) 8 180 CRIMINAL END
+	    s_h_2_h2000_guard_2 = CREATE_CHAR (123.50, 4.50, 6.00) 8 180 CRIMINAL END
+	    s_h_2_h2000_guard_3 = CREATE_CHAR (127.50, 4.50, 6.00) 8 180 CRIMINAL END
+	    s_h_2_h2000_guard_4 = CREATE_CHAR (131.50, 4.50, 6.00) 8 180 CRIMINAL END
+	    s_h_2_h2000_guard_5 = CREATE_CHAR (103.50, 8.50, 6.00) 8 90 CRIMINAL END
+	    s_h_2_h2000_guard_6 = CREATE_CHAR (105.50, 8.50, 6.00) 8 270 CRIMINAL END
+	    s_h_2_h2000_guard_7 = CREATE_CHAR (95.50, 7.50, 6.00) 8 0 CRIMINAL END
+	    s_h_2_h2000_guard_8 = CREATE_CHAR (91.50, 7.50, 6.00) 8 0 CRIMINAL END
+	    s_h_2_h2000_guard_9 = CREATE_CHAR (87.50, 7.50, 6.00) 8 0 CRIMINAL END
+	    SET_CHAR_THREAT_REACTION (s_h_2_h2000_guard_1, REACT_AS_NORMAL)
+	    SET_CHAR_THREAT_REACTION (s_h_2_h2000_guard_2, REACT_AS_NORMAL)
+	    SET_CHAR_THREAT_REACTION (s_h_2_h2000_guard_3, REACT_AS_NORMAL)
+	    SET_CHAR_THREAT_REACTION (s_h_2_h2000_guard_4, REACT_AS_NORMAL)
+	    SET_CHAR_THREAT_REACTION (s_h_2_h2000_guard_5, REACT_AS_NORMAL)
+	    SET_CHAR_THREAT_REACTION (s_h_2_h2000_guard_6, REACT_AS_NORMAL)
+	    SET_CHAR_THREAT_REACTION (s_h_2_h2000_guard_7, REACT_AS_NORMAL)
+	    SET_CHAR_THREAT_REACTION (s_h_2_h2000_guard_8, REACT_AS_NORMAL)
+	    SET_CHAR_THREAT_REACTION (s_h_2_h2000_guard_9, REACT_AS_NORMAL)
+     SET_CHAR_THREAT_SEARCH (s_h_2_h2000_guard_1, AREA_PLAYER_ONLY)
+	    SET_CHAR_THREAT_SEARCH (s_h_2_h2000_guard_2, AREA_PLAYER_ONLY)
+	    SET_CHAR_THREAT_SEARCH (s_h_2_h2000_guard_3, AREA_PLAYER_ONLY)
+	    SET_CHAR_THREAT_SEARCH (s_h_2_h2000_guard_4, AREA_PLAYER_ONLY)
+	    SET_CHAR_THREAT_SEARCH (s_h_2_h2000_guard_5, AREA_PLAYER_ONLY)
+	    SET_CHAR_THREAT_SEARCH (s_h_2_h2000_guard_6, AREA_PLAYER_ONLY)
+	    SET_CHAR_THREAT_SEARCH (s_h_2_h2000_guard_7, AREA_PLAYER_ONLY)
+	    SET_CHAR_THREAT_SEARCH (s_h_2_h2000_guard_8, AREA_PLAYER_ONLY)
+	    SET_CHAR_THREAT_SEARCH (s_h_2_h2000_guard_9, AREA_PLAYER_ONLY)
+	    GIVE_WEAPON (s_h_2_h2000_guard_1, MACHINE_GUN)
+	    GIVE_WEAPON (s_h_2_h2000_guard_2, PISTOL)
+	    GIVE_WEAPON (s_h_2_h2000_guard_3, SHOTGUN)
+	    GIVE_WEAPON (s_h_2_h2000_guard_4, MACHINE_GUN)
+	    GIVE_WEAPON (s_h_2_h2000_guard_5, SHOTGUN)
+	    GIVE_WEAPON (s_h_2_h2000_guard_6, PISTOL)
+	    GIVE_WEAPON (s_h_2_h2000_guard_7, MACHINE_GUN)
+	    GIVE_WEAPON (s_h_2_h2000_guard_8, PISTOL)
+	    GIVE_WEAPON (s_h_2_h2000_guard_9, SHOTGUN)
+	    ADD_CHAR_TO_GANG (s_h_2_h2000_guard_1, zaibgang)
+	    ADD_CHAR_TO_GANG (s_h_2_h2000_guard_2, zaibgang)
+	    ADD_CHAR_TO_GANG (s_h_2_h2000_guard_3, zaibgang)
+	    ADD_CHAR_TO_GANG (s_h_2_h2000_guard_4, zaibgang)
+	    ADD_CHAR_TO_GANG (s_h_2_h2000_guard_5, zaibgang)
+	    ADD_CHAR_TO_GANG (s_h_2_h2000_guard_6, zaibgang)
+	    ADD_CHAR_TO_GANG (s_h_2_h2000_guard_7, zaibgang)
+	    ADD_CHAR_TO_GANG (s_h_2_h2000_guard_8, zaibgang)
+	    ADD_CHAR_TO_GANG (s_h_2_h2000_guard_9, zaibgang)
+	    ADD_PATROL_POINT (s_h_2_h2000_guard_9, 87.50, 2.50, 6.50)
+	    ADD_PATROL_POINT (s_h_2_h2000_guard_9, 87.50, 7.50, 6.50)
+	    ADD_PATROL_POINT (s_h_2_h2000_guard_8, 91.50, 2.50, 6.50)
+	    ADD_PATROL_POINT (s_h_2_h2000_guard_8, 91.50, 7.50, 6.50)
+	    ADD_PATROL_POINT (s_h_2_h2000_guard_7, 95.50, 2.50, 6.50)
+	    ADD_PATROL_POINT (s_h_2_h2000_guard_7, 95.50, 7.50, 6.50)
+	ENDEXEC
+ 
+ //  Creating the SRS clones to help the player
+	s_h_2_srs_clones = CREATE_CHAR (221.50, 223.50, 2.00) 7 270 CRIMINAL END
+	ADD_CHAR_TO_GANG (s_h_2_srs_clones, sciegang)
+	GIVE_WEAPON (s_h_2_srs_clones, PISTOL)
+	SET_CHAR_OBJECTIVE (s_h_2_srs_clones, WAIT_ON_FOOT)
+	SET_CHAR_THREAT_REACTION (s_h_2_srs_clones, NO_REACTION)
+ ADD_GROUP_TO_CHARACTER (s_h_2_srs_clones, 3)
+ 
+	MAKE_NEW_LEADER_OF_GROUP (s_h_2_srs_clones, p1)
+ 
+	DISPLAY_BRIEF (2516)                //  "I have SRS Clones who can help you, THC-303!"
+	DISPLAY_BRIEF (2511)                //  "THC-303! Dr LaBrat here. We need you to shut down the H2000 Water Company, no questions asked."
+	POINT_ARROW_AT (arrow1, 104.50, 9.50, 6.00)       //  Point at H2000 Water Company
+ 
+ WHILE_EXEC ( s_h_2_while_loop = 0 )
+    
+    //  If the player has arrived at H2000 Water Company
+    IF ( ( LOCATE_CHARACTER_ANY_MEANS(p1, 104.50, 9.50, 6.00, 3.50, 3.50) ) AND ( s_h_2_player_arrived_h2000 = 0 ) )
+       DISPLAY_BRIEF (2512)                             //  "Destroy the FOUR Turbines and await further instruction. Oh yes - beware of the guards."
+	      POINT_ARROW_AT (arrow1, s_h_2_turbine_1_obj)
+	      POINT_ARROW_AT (arrow3, s_h_2_turbine_2_obj)
+	      POINT_ARROW_AT (arrow4, s_h_2_turbine_3_obj)
+	      POINT_ARROW_AT (arrow5, s_h_2_turbine_4_obj)
+	      SET s_h_2_player_arrived_h2000 = 1
+    ENDIF
+    
+    //  If the first turbine has been destroyed
+    IF ( ( CHECK_OBJ_MODEL(s_h_2_turbine_1_obj, INVISIBLE_DEAD) ) AND ( s_h_2_turbine_1_destroyed = 0 ) )
+       EXPLODE_NO_RING (119.50, 6.50, 3.50)
+	      EXPLODE_NO_RING (119.50, 6.50, 4.50)
+	      EXPLODE_NO_RING (119.50, 6.50, 5.50)
+	      EXPLODE_NO_RING (119.50, 6.50, 6.50)
+	      CHANGE_BLOCK LID (119, 6, 3) NOT_FLAT NOT_FLIP 0 0 100       //  Change tile to a broken turbine
+	      REMOVE_ARROW (arrow1)
+	      ++s_h_2_turbines_destroyed_count
+	      SET s_h_2_turbine_1_destroyed = 1
+	      DELETE_ITEM (sound19)                 //  Delete INDUSTRIAL_HIGH sound
+    ENDIF
+    
+    //  If the second turbine has been destroyed
+    IF ( ( CHECK_OBJ_MODEL(s_h_2_turbine_2_obj, INVISIBLE_DEAD) ) AND ( s_h_2_turbine_2_destroyed = 0 ) )
+       EXPLODE_NO_RING (123.50, 6.50, 3.50)
+	      EXPLODE_NO_RING (123.50, 6.50, 4.50)
+	      EXPLODE_NO_RING (123.50, 6.50, 5.50)
+	      EXPLODE_NO_RING (123.50, 6.50, 6.50)
+       CHANGE_BLOCK LID (123, 6, 3) NOT_FLAT NOT_FLIP 0 0 100       //  Change tile to a broken turbine
+	      REMOVE_ARROW (arrow3)
+	      ++s_h_2_turbines_destroyed_count
+	      SET s_h_2_turbine_2_destroyed = 1
+	      DELETE_ITEM (sound20)                 //  Delete INDUSTRIAL_HIGH sound
+    ENDIF
+    
+    //  If the third turbine has been destroyed
+    IF ( ( CHECK_OBJ_MODEL(s_h_2_turbine_3_obj, INVISIBLE_DEAD) ) AND ( s_h_2_turbine_3_destroyed = 0 ) )
+       EXPLODE_NO_RING (127.50, 6.50, 3.50)
+	      EXPLODE_NO_RING (127.50, 6.50, 4.50)
+	      EXPLODE_NO_RING (127.50, 6.50, 5.50)
+	      EXPLODE_NO_RING (127.50, 6.50, 6.50)
+	      CHANGE_BLOCK LID (127, 6, 3) NOT_FLAT NOT_FLIP 0 0 100       //  Change tile to a broken turbine
+	      REMOVE_ARROW (arrow4)
+	      ++s_h_2_turbines_destroyed_count
+	      SET s_h_2_turbine_3_destroyed = 1
+	      DELETE_ITEM (sound21)                 //  Delete INDUSTRIAL_HIGH sound
+    ENDIF
+    
+    //  If the fourth turbine has been destroyed
+    IF ( ( CHECK_OBJ_MODEL(s_h_2_turbine_4_obj, INVISIBLE_DEAD) ) AND ( s_h_2_turbine_4_destroyed = 0 ) )
+       EXPLODE_NO_RING (131.50, 6.50, 3.50)
+	      EXPLODE_NO_RING (131.50, 6.50, 4.50)
+	      EXPLODE_NO_RING (131.50, 6.50, 5.50)
+	      EXPLODE_NO_RING (131.50, 6.50, 6.50)
+	      CHANGE_BLOCK LID (131, 6, 3) NOT_FLAT NOT_FLIP 0 0 100       //  Change tile to a broken turbine
+	      REMOVE_ARROW (arrow5)
+	      ++s_h_2_turbines_destroyed_count
+	      SET s_h_2_turbine_4_destroyed = 1
+	      DELETE_ITEM (sound22)                 //  Delete INDUSTRIAL_HIGH sound
+    ENDIF
+    
+    //  If all turbines has been destroyed
+    IF ( s_h_2_turbines_destroyed_count = 4 )
+       DISPLAY_BRIEF (2514)            //  "Excellent, THC-303. Now all you need to do is destroy the Generator and the H2000 Water Company will have to call in the plumbers! Ha ha ha!"
+	      POINT_ARROW_AT (arrow1, s_h_2_h2000_generator_obj)
+	      SET s_h_2_turbines_destroyed_count = 5                  //  Lock this IF
+    ENDIF
+    
+    //  If the H2000 generator has been destroyed                  (note that you don't have to destroy the four turbines to trigger this part of the mission)
+    IF ( ( CHECK_OBJ_MODEL(s_h_2_h2000_generator_obj, POWERGEN_DEAD) ) AND ( s_h_2_h2000_generator_destroyed = 0 ) )
+       DISPLAY_BRIEF (2515)                       //  "Get out of there fastTHC-303! The guards are on your tail!"
+	      REMOVE_ARROW (arrow1)
+	      EXPLODE (130.50, 21.50, 3.00)
+	      EXPLODE (132.50, 21.50, 2.00)
+	      EXPLODE (131.50, 21.50, 2.00)
+	      EXPLODE (130.50, 22.50, 3.00)
+	      EXPLODE (130.50, 20.50, 2.00)
+	      SET s_h_2_h2000_generator_destroyed = 1
+	      POINT_ARROW_AT (arrow1, 156.50, 11.50, 5.00)        //  Point arrow at the entrance of H2000
+    ENDIF
+    
+    //  Create the H2000 alarm lights and sounds
+    IF ( s_h_2_h2000_generator_destroyed = 1 )
+       s_h_2_alarm_light_1 = CREATE_LIGHT (125.00, 25.00, 1.00) 7.99 255 (255, 0, 0) 30 100 5
+	      s_h_2_alarm_light_2 = CREATE_LIGHT (130.00, 21.00, 1.00) 7.99 255 (255, 0, 0) 30 100 5
+	      s_h_2_alarm_light_3 = CREATE_LIGHT (115.00, 25.00, 2.00) 7.99 255 (255, 0, 0) 30 100 5
+	      s_h_2_alarm_light_4 = CREATE_LIGHT (115.00, 20.00, 2.00) 7.99 255 (255, 0, 0) 30 100 5
+	      s_h_2_alarm_light_5 = CREATE_LIGHT (103.00, 20.00, 2.00) 7.99 255 (255, 0, 0) 30 100 5
+	      s_h_2_alarm_light_6 = CREATE_LIGHT (102.00, 15.00, 2.00) 7.99 255 (255, 0, 0) 30 100 5
+	      s_h_2_alarm_light_7 = CREATE_LIGHT (134.00, 17.00, 2.00) 7.99 255 (255, 0, 0) 30 100 5
+	      s_h_2_alarm_light_8 = CREATE_LIGHT (144.00, 14.00, 6.00) 7.99 255 (255, 0, 0) 30 100 5
+	      s_h_2_alarm_sound_1 = CREATE_SOUND (125.00, 25.00, 1.00) PRISON_ALARM PLAY_FOREVER END
+	      s_h_2_alarm_sound_2 = CREATE_SOUND (130.00, 21.00, 1.00) PRISON_ALARM PLAY_FOREVER END
+	      s_h_2_alarm_sound_3 = CREATE_SOUND (115.00, 25.00, 2.00) PRISON_ALARM PLAY_FOREVER END
+	      s_h_2_alarm_sound_4 = CREATE_SOUND (115.00, 20.00, 2.00) PRISON_ALARM PLAY_FOREVER END
+	      s_h_2_alarm_sound_5 = CREATE_SOUND (103.00, 20.00, 2.00) PRISON_ALARM PLAY_FOREVER END
+	      s_h_2_alarm_sound_6 = CREATE_SOUND (102.00, 15.00, 2.00) PRISON_ALARM PLAY_FOREVER END
+	      s_h_2_alarm_sound_7 = CREATE_SOUND (134.00, 17.00, 2.00) PRISON_ALARM PLAY_FOREVER END
+	      s_h_2_alarm_sound_8 = CREATE_SOUND (144.00, 14.00, 6.00) PRISON_ALARM PLAY_FOREVER END
+	      SET s_h_2_h2000_generator_destroyed = 2
+	      SET s_h_2_lights_sounds_created = 1
+    ENDIF
+    
+    //  If the H2000 guard is died or hasn't been created yet
+    IF ( ( s_h_2_h2000_generator_destroyed = 2 ) AND ( s_h_2_h2000_guard_alive = 0 ) )
+       IF ( NOT ( IS_POINT_ONSCREEN(118.50, 15.50, 2.00) ) )                  //  Only spawn him if the player isn't looking at his spawn point
+          s_h_2_h2000_respawning_guard = CREATE_CHAR (118.50, 15.50, 2.00) 8 180 CRIMINAL END
+	         SET_CHAR_THREAT_REACTION (s_h_2_h2000_respawning_guard, REACT_AS_NORMAL)
+	         GIVE_WEAPON (s_h_2_h2000_respawning_guard, MACHINE_GUN)
+	         ADD_CHAR_TO_GANG (s_h_2_h2000_respawning_guard, zaibgang)
+	         SET_CHAR_OBJECTIVE (s_h_2_h2000_respawning_guard, KILL_CHAR_ON_FOOT, p1)
+	         SET s_h_2_h2000_guard_alive = 1
+       ENDIF
+    ENDIF
+    
+    //  If the H2000 guard has died
+    IF ( ( s_h_2_h2000_guard_alive = 1 ) AND ( HAS_CHARACTER_DIED(s_h_2_h2000_respawning_guard) ) )
+       SET s_h_2_h2000_guard_alive = 0
+    ENDIF
+    
+    //  If the player has arrived at the entrance of the H2000
+    IF ( ( s_h_2_h2000_generator_destroyed = 2 ) AND ( LOCATE_CHARACTER_ON_FOOT(p1, 156.50, 11.50, 5.00, 2.00, 2.00) ) )
+       CLEAR_ALL_BRIEFS ()
+	      SET s_h_2_h2000_guard_alive = 2
+	      SET s_h_2_while_loop = 1
+	      ADD_SCORE (p1, 70000)
+	      DISPLAY_BRIEF (2517)         //  "Well done, THC-303. Now the H2000 Water Company is high and dry [...]. Have $70,000 for your outstanding contribution."
+	      SET savecount62 = 1
+	      DISPLAY_MESSAGE (2999)       //  Mission Complete!
+	      CLEAR_WANTED_LEVEL (p1)
+	      ADD_MULTIPLIER (p1, 1)
+	      CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (sciegang, p1, 1)
+      	REMOVE_ARROW (arrow1)
+	      SET_PHONE_DEAD (obj5)                          //  Disable the Scientist Hard phone
+	      DISABLE_THREAD_TRIGGER (trigger5)
+       RETURN
+    ENDIF
+	
+ ENDWHILE
+ 
+
+RETURN
+
+
+
+clean_up_scie_hard_phone_m2:                       //  Clean up
+ 
+ IF ( NOT ( HAS_CHARACTER_DIED(s_h_2_srs_clones) ) )
+	   DESTROY_GROUP (s_h_2_srs_clones)
+	ENDIF
+ 
+	SET savecount81 = 0
+	SET savecount82 = 0
+ 
+	REMOVE_ARROW (arrow1)
+	REMOVE_ARROW (arrow3)
+	REMOVE_ARROW (arrow4)
+	REMOVE_ARROW (arrow5)
+ 
+ //  Two lights and two sounds remains in the game, I don't know if it is on purpose or if the original author forgot to delete them
+ IF ( s_h_2_lights_sounds_created = 1 )
+	   DELETE_ITEM (s_h_2_alarm_sound_1)
+	   DELETE_ITEM (s_h_2_alarm_sound_2)
+	   DELETE_ITEM (s_h_2_alarm_sound_3)
+	   DELETE_ITEM (s_h_2_alarm_sound_4)
+	   DELETE_ITEM (s_h_2_alarm_sound_5)
+	   DELETE_ITEM (s_h_2_alarm_sound_6)
+    
+	   DELETE_ITEM (s_h_2_alarm_light_1)
+	   DELETE_ITEM (s_h_2_alarm_light_2)
+	   DELETE_ITEM (s_h_2_alarm_light_3)
+	   DELETE_ITEM (s_h_2_alarm_light_4)
+	   DELETE_ITEM (s_h_2_alarm_light_5)
+	   DELETE_ITEM (s_h_2_alarm_light_6)
+	ENDIF
+ 
+ IF ( savecount62 = 1 )
+	   ++savecount85
+	   ++savecount91
+	ENDIF
+ 
+ IF ( CHECK_DEATHARREST_EXECUTED() )
+	   ++savecount88
+	   ++savecount92
+	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (sciegang, p1, -1)
+	   CLEAR_WANTED_LEVEL (p1)
+	ENDIF
+ 
+	MISSION_HAS_FINISHED ()
+ 
+RETURN
+
+MISSIONSTART
+GOSUB scie_hard_phone_m2:
+GOSUB clean_up_scie_hard_phone_m2:
+MISSIONEND

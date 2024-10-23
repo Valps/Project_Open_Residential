@@ -1,0 +1,176 @@
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Law Enforcement Larceny! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+// Decompiled from "ste_zm3.scr" Using Epic GTA2 Script Decompiler by T.M.
+
+//FORWARD zaib_med_phone1_2_m3:
+//FORWARD clean_up_zaib_med_phone1_2_m3:
+
+COUNTER z_m_3_has_swat_van_parked = 0
+COUNTER z_m_3_is_player_in_swat_van = 0
+COUNTER z_m_3_has_sp_ag_car_parked = 0           //  sp_ag = special agent
+COUNTER z_m_3_is_player_in_sp_ag_car = 0
+//COUNTER count6 = 0
+//COUNTER count7 = 0
+COUNTER z_m_3_is_swat_van_parking = 0
+COUNTER z_m_3_is_sp_ag_car_parking = 0
+//COUNTER count10 = 0
+//COUNTER count11 = 0
+
+//OBJ_DATA obj169
+
+//CHAR_DATA chr7
+
+CAR_DATA z_m_3_police_vehicle       //  stands for both SWAT van and special agent car
+//CAR_DATA auto121
+//CAR_DATA auto122
+//CAR_DATA auto123
+
+zaib_med_phone1_2_m3:
+ 
+	SET savecount84 = 1
+	SET savecount81 = 1
+ 
+	DISPLAY_MESSAGE (2468)       //  LAW ENFORCEMENT LARCENY!
+	DISPLAY_BRIEF (2881)         //  "Red Valdez here! I have some extra special jobs in line for you, Gecko. But first I need to know just how tough you are. Can you steal a SWAT Van?"
+ 
+	MAKE_DOOR_AUTOMATIC (door1)
+ 
+ WHILE_EXEC ( z_m_3_has_swat_van_parked = 0 )
+    
+    //  If the player has entered a SWAT van
+    IF ( ( IS_CHARACTER_IN_MODEL(p1, SWATVAN) ) AND ( z_m_3_is_player_in_swat_van = 0 ) )
+       DISPLAY_BRIEF (2882)                                             //  "Stylish, Gecko! Bring the SWAT Van to my Garage."
+	      POINT_ARROW_AT (arrow1, 211.00, 33.00, 3.00)
+	      SET z_m_3_is_player_in_swat_van = 1
+	      STORE_CAR_CHARACTER_IS_IN (p1, z_m_3_police_vehicle)
+	      UPDATE_DOOR_TARGET (door1, z_m_3_police_vehicle)
+    ENDIF
+    
+    //  If the player has left a SWAT van
+    IF ( ( NOT ( IS_CHARACTER_IN_MODEL(p1, SWATVAN) ) ) AND ( z_m_3_is_player_in_swat_van = 1 ) )
+       CLEAR_ALL_BRIEFS ()
+	      DISPLAY_BRIEF_NOW (2883)                     //  "Stop burning time, Gecko. I want a SWAT Van!"
+	      REMOVE_ARROW (arrow1)
+	      SET z_m_3_is_player_in_swat_van = 0
+    ENDIF
+    
+    //  If the SWAT van is in front of zaibatsu garage door
+    IF ( ( ( z_m_3_is_player_in_swat_van = 1 ) AND ( IS_CAR_IN_BLOCK(z_m_3_police_vehicle, 211.00, 31.00, 3.00, 2.00, 2.00) ) ) AND ( IS_CHARACTER_IN_CAR(p1, z_m_3_police_vehicle) ) )
+       
+       REMOVE_ARROW (arrow1)
+	      PARK (z_m_3_police_vehicle, door1)                        //  Park it
+	      SET z_m_3_is_swat_van_parking = 1
+       
+       //  Wait while parking does not finish
+       WHILE_EXEC ( ( z_m_3_is_swat_van_parking = 1 ) AND ( NOT ( HAS_PARK_FINISHED() ) ) )
+          DO_NOWT
+          ENDEXEC
+       ENDWHILE
+       
+       SET z_m_3_has_swat_van_parked = 1          //  Get out of this WHILE_EXEC
+       
+    ENDIF
+ 
+ ENDWHILE
+	
+	//  A SWAT van has been parked
+ 
+	DISPLAY_BRIEF (2884)
+ 
+ WHILE_EXEC ( z_m_3_has_sp_ag_car_parked = 0 )
+    
+    //  If the player has entered a special agent car
+    IF ( ( IS_CHARACTER_IN_MODEL(p1, EDSELFBI) ) AND ( z_m_3_is_player_in_sp_ag_car = 0 ) )
+       DISPLAY_BRIEF (2885)                          //  "Cool, Gecko! Park the Special Agent Car# at my Garage."
+	      POINT_ARROW_AT (arrow1, 211.00, 33.00, 3.00)
+	      SET z_m_3_is_player_in_sp_ag_car = 1
+	      STORE_CAR_CHARACTER_IS_IN (p1, z_m_3_police_vehicle)
+	      UPDATE_DOOR_TARGET (door1, z_m_3_police_vehicle)
+    ENDIF
+    
+    //  If the player has left a special agent car
+    IF ( ( NOT ( IS_CHARACTER_IN_MODEL(p1, EDSELFBI) ) ) AND ( z_m_3_is_player_in_sp_ag_car = 1 ) )
+       DISPLAY_BRIEF_NOW (2886)                      //  "GECKO! I wanted a Special Agent Car - remember?"
+	      REMOVE_ARROW (arrow1)
+	      SET z_m_3_is_player_in_sp_ag_car = 0
+    ENDIF
+    
+    //  If the special agent car is in front of zaibatsu garage door
+    IF ( ( ( z_m_3_is_player_in_sp_ag_car = 1 ) AND ( IS_CAR_IN_BLOCK(z_m_3_police_vehicle, 211.00, 31.00, 3.00, 2.00, 2.00) ) ) AND ( IS_CHARACTER_IN_CAR(p1, z_m_3_police_vehicle) ) )
+       
+       REMOVE_ARROW (arrow1)
+	      PARK (z_m_3_police_vehicle, door1)                      //  Park it
+	      SET z_m_3_is_sp_ag_car_parking = 1
+       
+       //  Wait while parking does not finish
+       WHILE_EXEC ( ( z_m_3_is_sp_ag_car_parking = 1 ) AND ( NOT ( HAS_PARK_FINISHED() ) ) )
+          DO_NOWT
+          ENDEXEC
+       ENDWHILE
+       
+       SET z_m_3_has_sp_ag_car_parked = 1
+       
+    ENDIF
+ 
+ ENDWHILE
+ 
+ //  A special agent car has been parked
+	
+	IF ( ( z_m_3_has_swat_van_parked = 1 ) AND ( z_m_3_has_sp_ag_car_parked = 1 ) )
+    
+	   CLEAR_ALL_BRIEFS ()
+	   DISPLAY_BRIEF (2890)          //  "I can see you have a great future ahead of you, Gecko. For your splendid performance I give you... How does $50,000 sound?"
+	   ADD_SCORE (p1, 50000)
+	   SET savecount65 = 1
+	   DISPLAY_MESSAGE (2999)        //  Mission Complete!
+    
+    IF ( savecount58 = 1 )
+	      SET_PHONE_DEAD (obj13)
+	      DISABLE_THREAD_TRIGGER (trigger8)
+    ENDIF
+    
+    IF ( savecount59 = 1 )
+	      SET_PHONE_DEAD (obj14)
+	      DISABLE_THREAD_TRIGGER (trigger9)
+    ENDIF
+    
+	   CLEAR_WANTED_LEVEL (p1)
+	   ADD_MULTIPLIER (p1, 1)
+	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (zaibgang, p1, 1)
+    
+	ENDIF
+ 
+RETURN
+
+
+clean_up_zaib_med_phone1_2_m3:          //  Clean up
+ 
+	SET savecount81 = 0
+	SET savecount84 = 0
+ 
+	REMOVE_ARROW (arrow1)
+	MAKE_DOOR_MANUAL (door1)
+ 
+ IF ( savecount65 = 1 )
+	   ++savecount86
+	   ++savecount91
+	ENDIF
+ 
+ IF ( CHECK_DEATHARREST_EXECUTED() )
+	   ++savecount89
+	   ++savecount92
+	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (zaibgang, p1, -1)
+	   CLEAR_WANTED_LEVEL (p1)
+	ENDIF
+ 
+	MISSION_HAS_FINISHED ()
+ 
+RETURN
+
+MISSIONSTART
+SET savecount23 = 0
+GOSUB zaib_med_phone1_2_m3:
+GOSUB clean_up_zaib_med_phone1_2_m3:
+MISSIONEND

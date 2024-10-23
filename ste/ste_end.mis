@@ -1,0 +1,246 @@
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX THE END JOB! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+// Decompiled from "ste_end.scr" Using Epic GTA2 Script Decompiler by T.M.
+
+//FORWARD start_final_mission:
+//FORWARD clean_up_final_mission:
+
+CHAR_DATA redneck_leader_fm                 //  Billy Bob Bean
+CHAR_DATA scientists_leader_fm              //  Dr. LaBrat
+CHAR_DATA zaibatsu_leader_fm                //  Red Valdez
+
+CAR_DATA scie_car_fm                        //  Dr.Labrat's car
+
+COUNTER number_bosses_died_fm = 0           //  Counts the number of gang bosses died
+
+COUNTER flag_zaibatsu_leader_fm_died = 0
+COUNTER flag_redneck_leader_fm_died = 0
+COUNTER flag_scientist_leader_fm_died = 0
+
+COUNTER flag_arrow_zaibatsu_fm = 0          //  = 1 if there is an arrow at the zaibatsu leader
+COUNTER flag_arrow_scientist_fm = 0         //  = 1 if there is an arrow at the scientist leader
+COUNTER flag_arrow_redneck_fm = 0           //  = 1 if there is an arrow at the redneck leader
+
+COUNTER flag_zaibatsu_stage_fm = 0          //  1 = stage one;  2 = stage two
+COUNTER flag_scientist_stage_fm = 0         //  1 = stage one;  2 = stage two
+COUNTER flag_redneck_stage_fm = 0           //  1 = stage one;  2 = stage two
+
+COUNTER flag_brief_zaibatsu_fm = 0          //  "Do brief once" flag
+COUNTER flag_brief_scientist_fm = 0         //  "Do brief once" flag
+COUNTER flag_brief_redneck_fm = 0           //  "Do brief once" flag
+
+start_final_mission:
+
+	SET savecount81 = 1
+	SET savecount82 = 1
+ 
+	DELAY_HERE (600)             //  Wait 20 seconds
+ 
+ //  Creating Red Valdez
+	zaibatsu_leader_fm = CREATE_CHAR (221.50, 45.50, 3.00) 8 0 CRIMINAL_TYPE1 END
+	SET_CHAR_THREAT_REACTION (zaibatsu_leader_fm, REACT_AS_NORMAL)
+	SET_CHAR_THREAT_SEARCH (zaibatsu_leader_fm, LINE_OF_SIGHT_PLAYER_ONLY)
+	GIVE_WEAPON (zaibatsu_leader_fm, ROCKET_LAUNCHER)
+	SET flag_zaibatsu_stage_fm = 1
+	SET_CHAR_OBJECTIVE (zaibatsu_leader_fm, KILL_CHAR_ANY_MEANS, p1)
+	SET_FAVOURITE_MODEL (zaibatsu_leader_fm, VTYPE)
+ 
+ //  Creating Billy Bob Bean
+	redneck_leader_fm = CREATE_CHAR (26.50, 133.50, 2.00) 5 0 CRIMINAL_TYPE1 END
+	SET_CHAR_THREAT_REACTION (redneck_leader_fm, REACT_AS_NORMAL)
+	SET_CHAR_THREAT_SEARCH (redneck_leader_fm, LINE_OF_SIGHT_PLAYER_ONLY)
+	GIVE_WEAPON (redneck_leader_fm, MOLOTOV)
+	SET flag_redneck_stage_fm = 1
+	SET_CHAR_OBJECTIVE (redneck_leader_fm, KILL_CHAR_ANY_MEANS, p1)
+	SET_FAVOURITE_MODEL (redneck_leader_fm, PICKUP)
+ 
+ //  Creating Dr.Labrat
+	scie_car_fm = CREATE_CAR (188.50, 235.50, 2.00) 2 180 STRATOSB END
+	scientists_leader_fm = CREATE_CHAR_INSIDE_CAR (scie_car_fm) 13 CRIMINAL END
+	SET_CHAR_THREAT_REACTION (scientists_leader_fm, REACT_AS_NORMAL)
+	SET_CHAR_THREAT_SEARCH (scientists_leader_fm, AREA_PLAYER_ONLY)
+	GIVE_WEAPON (scientists_leader_fm, FLAME_THROWER)
+	SET_CHAR_OBJECTIVE (scientists_leader_fm, KILL_CHAR_ANY_MEANS, p1)
+	SET_FAVOURITE_MODEL (scientists_leader_fm, STRATOSB)
+ 
+	DISPLAY_BRIEF_NOW (6000)                       //  "Nice work, kiddo! Now the Redneck, SRS AND Zaibatsu Bosses are ALL out for your ass!"
+ 
+ //  While all gang bosses are not died
+ WHILE_EXEC ( NOT ( number_bosses_died_fm = 3 ) )
+    
+    //  Red Valdez died
+    IF ( ( flag_zaibatsu_leader_fm_died = 0 ) AND ( HAS_CHARACTER_DIED(zaibatsu_leader_fm) ) )
+       CLEAR_ALL_BRIEFS ()
+	      DISPLAY_BRIEF (6003)          //  "That takes care of the Zaibatsu Corporation!"
+	      ++number_bosses_died_fm
+	      SET flag_zaibatsu_leader_fm_died = 1
+	      SET flag_zaibatsu_stage_fm = 2
+       REMOVE_ARROW (arrow1)
+    ENDIF
+    
+    //  Billy Bob Bean died
+    IF ( ( flag_redneck_leader_fm_died = 0 ) AND ( HAS_CHARACTER_DIED(redneck_leader_fm) ) )
+       CLEAR_ALL_BRIEFS ()
+	      DISPLAY_BRIEF (6004)          //  "That's one in the eye for those Redneck freaks!"
+	      ++number_bosses_died_fm
+	      SET flag_redneck_leader_fm_died = 1
+	      SET flag_redneck_stage_fm = 2
+       REMOVE_ARROW (arrow4)
+    ENDIF
+    
+    //  Dr.Labrat died
+    IF ( ( flag_scientist_leader_fm_died = 0 ) AND ( HAS_CHARACTER_DIED(scientists_leader_fm) ) )
+       CLEAR_ALL_BRIEFS ()
+	      DISPLAY_BRIEF (6005)          //  "Ha! That's put a fly in the Scientists' ointment!"
+	      ++number_bosses_died_fm
+	      SET flag_scientist_leader_fm_died = 1
+	      SET flag_scientist_stage_fm = 2
+       REMOVE_ARROW (arrow3)
+    ENDIF
+    
+    
+    /////////////              Zaibatsu leader: arrows, drivespeed and brief
+    
+    //  If Red Valdez isn't on player screen
+    IF ( ( flag_zaibatsu_stage_fm = 1 ) AND ( NOT ( IS_ITEM_ONSCREEN(zaibatsu_leader_fm) ) ) )
+       IF ( flag_arrow_zaibatsu_fm = 1 )                         //  If he has an arrow
+          SET flag_arrow_zaibatsu_fm = 0                         //  Lock this IF and unlocks the next IF
+	         REMOVE_ARROW (arrow1)                                  //  Remove his arrow
+	         SET_CHAR_MAX_DRIVESPEED (zaibatsu_leader_fm, 0.40)     //  Speed!
+       ENDIF
+    ENDIF
+        
+    //  If Red Valdez is on player screen (and not died)
+    IF ( flag_zaibatsu_stage_fm = 1 )
+    
+       IF ( ( IS_ITEM_ONSCREEN(zaibatsu_leader_fm) ) AND ( flag_arrow_zaibatsu_fm = 0 ) )
+          SET flag_arrow_zaibatsu_fm = 1                            //  Lock this IF
+	         POINT_ARROW_AT (arrow1, zaibatsu_leader_fm)               //  Set an arrow at him
+       
+          IF ( flag_brief_zaibatsu_fm = 0 )                         //  If it is the first time Red Valdez is on player screen
+	            DISPLAY_BRIEF_NOW (6006)                               //  "There's the new Zaibatsu Boss, Red Valdex! Kill him!"    (sic)
+	            SET flag_brief_zaibatsu_fm = 1                         //  Lock this IF forever
+          ENDIF
+       
+          IF ( IS_CHARACTER_IN_ANY_CAR(p1) )                        //  If the player is in a car, set a high drive speed, or else force Red Valdez to stop
+             SET_CHAR_MAX_DRIVESPEED (zaibatsu_leader_fm, 0.40)
+          ELSE
+             SET_CHAR_MAX_DRIVESPEED (zaibatsu_leader_fm, 0.00)
+          ENDIF
+       
+       ENDIF
+    
+    ENDIF
+    
+    /////////////              Scientist leader: arrows, drivespeed and brief
+    
+    //  If Dr.Labrat isn't on player screen
+    IF ( ( flag_scientist_stage_fm = 1 ) AND ( NOT ( IS_ITEM_ONSCREEN(scientists_leader_fm) ) ) )
+       IF ( flag_arrow_scientist_fm = 1 )                         //  If he has an arrow
+          SET flag_arrow_scientist_fm = 0                         //  Lock this IF and unlocks the next IF
+	         REMOVE_ARROW (arrow3)                                   //  Remove his arrow
+	         SET_CHAR_MAX_DRIVESPEED (scientists_leader_fm, 0.40)    //  Speed!
+       ENDIF
+    ENDIF
+    
+    //  If Dr.Labrat is on player screen (and not died)
+    IF ( flag_scientist_stage_fm = 1 )
+    
+       IF ( ( IS_ITEM_ONSCREEN(scientists_leader_fm) ) AND ( flag_arrow_scientist_fm = 0 ) )
+          SET flag_arrow_scientist_fm = 1                             //  Lock this IF
+	         POINT_ARROW_AT (arrow3, scientists_leader_fm)               //  Set an arrow at him
+       
+          IF ( flag_brief_scientist_fm = 0 )                          //  If it is the first time Dr.Labrat is on player screen
+             DISPLAY_BRIEF_NOW (6008)                                 //  "That's the SRS Boss - Doctor LaBrat! Waste him!"
+	            SET flag_brief_scientist_fm = 1                          //  Lock this IF forever
+          ENDIF
+       
+          IF ( IS_CHARACTER_IN_ANY_CAR(p1) )                          //  If the player is in a car, set a high drive speed, or else force Dr.Labrat to stop
+             SET_CHAR_MAX_DRIVESPEED (scientists_leader_fm, 0.40)
+          ELSE
+             SET_CHAR_MAX_DRIVESPEED (scientists_leader_fm, 0.00)
+          ENDIF
+       
+       ENDIF
+    
+    ENDIF
+    
+    /////////////              Redneck leader: arrows, drivespeed and brief
+    
+    //  If Billy isn't on player screen
+    IF ( ( flag_redneck_stage_fm = 1 ) AND ( NOT ( IS_ITEM_ONSCREEN(redneck_leader_fm) ) ) )
+       IF ( flag_arrow_redneck_fm = 1 )                             //  If he has an arrow
+          SET flag_arrow_redneck_fm = 0                             //  Lock this IF and unlocks the next IF
+	         REMOVE_ARROW (arrow4)                                     //  Remove his arrow
+	         SET_CHAR_MAX_DRIVESPEED (redneck_leader_fm, 0.40)         //  Speed!
+       ENDIF
+    ENDIF
+    
+    //  If Billy is on player screen (and not died)
+    IF ( flag_redneck_stage_fm = 1 )
+    
+       IF ( ( IS_ITEM_ONSCREEN(redneck_leader_fm) ) AND ( flag_arrow_redneck_fm = 0 ) )
+          SET flag_arrow_redneck_fm = 1                                //  Lock this IF
+	         POINT_ARROW_AT (arrow4, redneck_leader_fm)                   //  Set an arrow at him
+       
+          IF ( flag_brief_redneck_fm = 0 )                             //  If it is the first time Billy is on player screen
+             DISPLAY_BRIEF_NOW (6007)                                  //  "It's the Redneck Boss, Billy Bob Bean. Quick! Get him!"
+	            SET flag_brief_redneck_fm = 1                             //  Lock this IF forever
+          ENDIF
+       
+          IF ( IS_CHARACTER_IN_ANY_CAR(p1) )                           //  If the player is in a car, set a high drive speed, or else force Billy to stop
+             SET_CHAR_MAX_DRIVESPEED (redneck_leader_fm, 0.40)
+          ELSE
+             SET_CHAR_MAX_DRIVESPEED (redneck_leader_fm, 0.00)
+          ENDIF
+       
+       ENDIF
+    
+    ENDIF
+    
+ ENDWHILE
+ 
+ //  The player killed all bosses
+ 
+ IF ( savecount95 = 0 )
+	   CLEAR_ALL_BRIEFS ()
+	   DISPLAY_BRIEF (6009)            //  "Incredible! You beat all three of them! You'd better move your sorry ass out to the city's Industrial District before things get any worse."
+	   ADD_SCORE (p1, 3000000)
+	   ADD_MULTIPLIER (p1, 1)
+	   SET savecount95 = 1
+	ENDIF
+ 
+RETURN
+
+
+clean_up_final_mission:             //  Clean up
+
+	MAKE_ALL_CHARS_MUGGERS (ON)        //  RIOT!
+ 
+	REMOVE_ARROW (arrow1)
+ REMOVE_ARROW (arrow3)
+ REMOVE_ARROW (arrow4)          
+     
+	SET savecount81 = 0
+	SET savecount82 = 0
+ 
+	CLEAR_WANTED_LEVEL (p1)
+ 
+ IF ( savecount95 = 1 )
+	   ++savecount91
+	ENDIF
+ 
+ IF ( CHECK_DEATHARREST_EXECUTED() )
+	   ++savecount92
+	ENDIF
+ 
+	MISSION_HAS_FINISHED ()
+ 
+RETURN
+
+MISSIONSTART
+GOSUB start_final_mission:
+GOSUB clean_up_final_mission:
+MISSIONEND

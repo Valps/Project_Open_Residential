@@ -1,0 +1,247 @@
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Labrat's Plan! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+// Decompiled from "ste_sm1.scr" Using Epic GTA2 Script Decompiler by T.M.
+
+//  I have changed the spawn points of the three zaibatsu assassins, so they can finally attack the player instead of being stuck in their garages.
+//  You can restore the original behavior by copying and paste the coordinates of "Original spawn point" to their respective CREATE_GANG_CAR commands.
+
+//FORWARD scie_med_phone1_m1:
+//FORWARD clean_up_scie_med_phone1_m1:
+
+COUNTER s_m_1_while_loop = 0
+COUNTER s_m_1_player_in_the_village = 0
+COUNTER s_m_1_hunting_zaibatsu = 0
+COUNTER s_m_1_zaib_assassin_1_created = 0
+COUNTER s_m_1_zaib_assassin_2_created = 0
+COUNTER s_m_1_zaib_assassin_3_created = 0
+//COUNTER count8 = 0
+//COUNTER count9 = 0
+//COUNTER count10 = 0
+
+CHAR_DATA s_m_1_zaib_assassin_1_char
+CHAR_DATA s_m_1_zaib_assassin_2_char
+CHAR_DATA s_m_1_zaib_assassin_3_char
+
+CAR_DATA s_m_1_zaib_assassin_1_car
+CAR_DATA s_m_1_zaib_assassin_2_car
+CAR_DATA s_m_1_zaib_assassin_3_car
+
+ONSCREEN_COUNTER s_m_1_onscreen1
+ONSCREEN_COUNTER s_m_1_onscreen2
+
+COUNTER s_m_1_zaib_remaining = 0
+//COUNTER count12 = 0
+COUNTER s_m_1_zaib_kill_goal = 47
+COUNTER s_m_1_zaib_members_killed = 0
+//COUNTER count15 = 0
+COUNTER s_m_1_has_bonus_started = 0
+
+CHAR_DATA s_m_1_srs_clones
+//CHAR_DATA chr11
+
+BONUS s_m_1_bonus
+
+scie_med_phone1_m1:
+ 
+	SET savecount6 = 0
+ 
+	DISPLAY_MESSAGE (2959)          //  LABRAT'S PLAN!
+ 
+	SET savecount81 = 1
+	SET savecount82 = 1
+                                                   //  "Ah, THC-303! Dr LaBrat here. SRS research suggests the Zaibatsu population is on the rise.
+	DISPLAY_BRIEF (2351)                              //  Please visit The Village and reduce their number to a more acceptable statistical median."
+	POINT_ARROW_AT (arrow1, 224.50, 20.50, 3.00)      //  Point arrow at The Village
+ 
+ //  Creating the SRS clones to help the player
+	s_m_1_srs_clones = CREATE_CHAR (202.50, 232.50, 2.00) 7 90 CRIMINAL END
+	ADD_CHAR_TO_GANG (s_m_1_srs_clones, sciegang)
+	GIVE_WEAPON (s_m_1_srs_clones, MACHINE_GUN)
+	SET_CHAR_SHOOTING_SKILL (s_m_1_srs_clones, CRACK_SHOT)
+	ADD_GROUP_TO_CHARACTER (s_m_1_srs_clones, 8)
+	SET_CHAR_OBJECTIVE (s_m_1_srs_clones, WAIT_ON_FOOT)
+	SET_CHAR_THREAT_REACTION (s_m_1_srs_clones, NO_REACTION)
+	MAKE_NEW_LEADER_OF_GROUP (s_m_1_srs_clones, p1)
+ 
+ WHILE_EXEC ( s_m_1_while_loop = 0 )
+    
+    //  If the player is in The Village          ( m18 = The Village zone )
+    IF ( ( IS_CHAR_IN_ZONE(p1, m18) ) AND ( s_m_1_hunting_zaibatsu = 0 ) )
+       DISPLAY_BRIEF (2353)                                //  "Here you are at The Village, THC-303. Now I don't care which ones you kill - just so long as you kill 47 of them."
+      	s_m_1_bonus = START_BONUS_CHECK (m18, 65535, 47, 0, CHAR, NOT_EXCLUSIVE, BY_ANY_WEAPON, NONE, zaibgang)
+       SET s_m_1_hunting_zaibatsu = 1
+       SET s_m_1_zaib_remaining = 47
+	      SET s_m_1_has_bonus_started = 1
+	      ADD_ONSCREEN_COUNTER (s_m_1_onscreen1, s_m_1_zaib_remaining)
+	      REMOVE_ARROW (arrow1)
+    ENDIF
+    
+    //  Store the number of zaibatsu members killed
+    IF ( s_m_1_has_bonus_started = 1 )
+       STORE_BONUS_COUNT (s_m_1_bonus, s_m_1_zaib_members_killed)
+    ENDIF
+    
+    //  Compute the number of zaibatsu remaining
+    IF ( s_m_1_has_bonus_started = 1 )
+       SET s_m_1_zaib_remaining = (s_m_1_zaib_kill_goal - s_m_1_zaib_members_killed)
+    ENDIF
+    
+    //  If the player is in The Village, update flag
+    IF ( ( IS_CHAR_IN_ZONE(p1, m18) ) AND ( s_m_1_player_in_the_village = 0 ) )
+       SET s_m_1_player_in_the_village = 1
+	      REMOVE_ARROW (arrow1)
+    ENDIF
+    
+    //  If the player isn't in The Village
+    IF ( ( NOT ( IS_CHAR_IN_ZONE(p1, m18) ) ) AND ( s_m_1_player_in_the_village = 1 ) )
+       DISPLAY_BRIEF (2354)                                          //  "What are you doing, THC-303? You haven't killed enough Zaibatsu yet. Get back in The Village."
+	      POINT_ARROW_AT (arrow1, 224.50, 20.50, 3.00)                  //  Point arrow at The Village again
+	      SET s_m_1_player_in_the_village = 0                                                //  Lock this IF
+    ENDIF
+    
+    //  If the player killed 17 zaib members, spawn an assassin
+    IF ( ( s_m_1_zaib_remaining = 30 ) AND ( s_m_1_zaib_assassin_1_created = 0 ) )
+       s_m_1_zaib_assassin_1_car = CREATE_GANG_CAR (217.50, 6.00, 3.00) 2 0 VTYPE END                     //  Original spawn point:   (214.50, 7.50, 3.00)
+	      s_m_1_zaib_assassin_1_char = CREATE_CHAR_INSIDE_CAR (s_m_1_zaib_assassin_1_car) 8 CRIMINAL END
+	      SET_CHAR_OBJECTIVE (s_m_1_zaib_assassin_1_char, KILL_CHAR_ANY_MEANS, p1)
+	      SET_CHAR_THREAT_REACTION (s_m_1_zaib_assassin_1_char, NO_REACTION)
+	      SET_CHAR_THREAT_SEARCH (s_m_1_zaib_assassin_1_char, LINE_OF_SIGHT)
+	      GIVE_WEAPON (s_m_1_zaib_assassin_1_char, SILENCED_MACHINE_GUN)
+	      SET_CHAR_SHOOTING_SKILL (s_m_1_zaib_assassin_1_char, CRACK_SHOT)
+	      ADD_CHAR_TO_GANG (s_m_1_zaib_assassin_1_char, zaibgang)
+	      REMOVE_ARROW (arrow1)
+	      SET s_m_1_zaib_assassin_1_created = 1
+    ENDIF
+    
+    //  If the player killed 27 zaib members, spawn a second assassin
+    IF ( ( s_m_1_zaib_remaining = 20 ) AND ( s_m_1_zaib_assassin_2_created = 0 ) )
+       DISPLAY_BRIEF (2356)                                                                               //  "Come on, THC-303! Kill! Kill! Kill!"
+	      s_m_1_zaib_assassin_2_car = CREATE_GANG_CAR (188.50, 6.00, 3.00) 2 0 VTYPE END                     //  Original spawn point:  (190.50, 7.50, 3.00)
+	      s_m_1_zaib_assassin_2_char = CREATE_CHAR_INSIDE_CAR (s_m_1_zaib_assassin_2_car) 8 CRIMINAL END
+	      SET_CHAR_OBJECTIVE (s_m_1_zaib_assassin_2_char, KILL_CHAR_ANY_MEANS, p1)
+	      SET_CHAR_THREAT_REACTION (s_m_1_zaib_assassin_2_char, NO_REACTION)
+	      SET_CHAR_THREAT_SEARCH (s_m_1_zaib_assassin_2_char, LINE_OF_SIGHT)
+	      GIVE_WEAPON (s_m_1_zaib_assassin_2_char, FLAME_THROWER)
+	      SET_CHAR_SHOOTING_SKILL (s_m_1_zaib_assassin_2_char, CRACK_SHOT)
+	      ADD_CHAR_TO_GANG (s_m_1_zaib_assassin_2_char, zaibgang)
+	      REMOVE_ARROW (arrow1)
+	      SET s_m_1_zaib_assassin_2_created = 1
+    ENDIF
+    
+    //  If the player killed 37 zaib members, spawn a third assassin
+    IF ( ( s_m_1_zaib_remaining = 10 ) AND ( s_m_1_zaib_assassin_3_created = 0 ) )
+       DISPLAY_BRIEF (2357)                                                                               //  "Keep it up, THC-303!"
+	      s_m_1_zaib_assassin_3_car = CREATE_GANG_CAR (200.50, 53.00, 3.00) 2 180 VTYPE END                  //  Original spawn point:  (203.50, 52.50, 3.00)
+	      s_m_1_zaib_assassin_3_char = CREATE_CHAR_INSIDE_CAR (s_m_1_zaib_assassin_3_car) 8 CRIMINAL END
+	      SET_CHAR_OBJECTIVE (s_m_1_zaib_assassin_3_char, KILL_CHAR_ANY_MEANS, p1)
+	      SET_CHAR_THREAT_REACTION (s_m_1_zaib_assassin_3_char, NO_REACTION)
+	      SET_CHAR_THREAT_SEARCH (s_m_1_zaib_assassin_3_char, LINE_OF_SIGHT)
+	      GIVE_WEAPON (s_m_1_zaib_assassin_3_char, ROCKET_LAUNCHER)
+	      SET_CHAR_SHOOTING_SKILL (s_m_1_zaib_assassin_3_char, CRACK_SHOT)
+	      ADD_CHAR_TO_GANG (s_m_1_zaib_assassin_3_char, zaibgang)
+	      REMOVE_ARROW (arrow1)
+	      SET s_m_1_zaib_assassin_3_created = 1
+    ENDIF
+    
+    //  If the player is driving, speed up the first assassin if it is alive, or else make him stop his car.
+    IF ( ( IS_CHARACTER_IN_ANY_CAR(p1) ) AND ( s_m_1_zaib_assassin_1_created = 1 ) )
+       SET_CHAR_MAX_DRIVESPEED (s_m_1_zaib_assassin_1_char, 0.40)
+    ELSE
+       IF ( s_m_1_zaib_assassin_1_created = 1 )
+          SET_CHAR_MAX_DRIVESPEED (s_m_1_zaib_assassin_1_char, 0.00)
+       ENDIF
+    ENDIF
+    
+    //  If the player is driving, speed up the second assassin if it is alive, or else make him stop his car.
+    IF ( ( IS_CHARACTER_IN_ANY_CAR(p1) ) AND ( s_m_1_zaib_assassin_2_created = 1 ) )
+       SET_CHAR_MAX_DRIVESPEED (s_m_1_zaib_assassin_2_char, 0.40)
+    ELSE
+       IF ( s_m_1_zaib_assassin_2_created = 1 )
+          SET_CHAR_MAX_DRIVESPEED (s_m_1_zaib_assassin_2_char, 0.00)
+       ENDIF
+    ENDIF
+    
+    //  If the player is driving, speed up the third assassin if it is alive, or else make him stop his car.
+    IF ( ( IS_CHARACTER_IN_ANY_CAR(p1) ) AND ( s_m_1_zaib_assassin_3_created = 1 ) )
+       SET_CHAR_MAX_DRIVESPEED (s_m_1_zaib_assassin_3_char, 0.40)
+    ELSE
+       IF ( s_m_1_zaib_assassin_3_created = 1 )
+          SET_CHAR_MAX_DRIVESPEED (s_m_1_zaib_assassin_3_char, 0.00)
+       ENDIF
+    ENDIF
+    
+    //  If the player has killed all 47 zaibatsu members
+    IF ( ( s_m_1_hunting_zaibatsu = 1 ) AND ( HAS_BONUS_PASSED(s_m_1_bonus) ) )
+       SET s_m_1_while_loop = 1
+    ENDIF
+    
+    //  If the player has failed the bonus
+    IF ( ( s_m_1_hunting_zaibatsu = 1 ) AND ( HAS_BONUS_FAILED(s_m_1_bonus) ) )
+       DISPLAY_BRIEF (2364)                                      //  "Mmm... The Zaibatsu were too tough for you after all, THC-303. I miscalculated the odds."
+	      SET savecount6 = 1
+	      DISPLAY_MESSAGE (2998)                                    //  Mission Failed!
+       RETURN
+    ENDIF
+ 
+ ENDWHILE
+ 
+	//  The player has killed all 47 zaibatsu members
+ 
+ CLEAR_ALL_BRIEFS ()
+ DISPLAY_BRIEF (2365)             //  "Wonderful work, THC-303 - worthy of $50,000."
+ ADD_SCORE (p1, 50000)
+ SET savecount48 = 1
+ DISPLAY_MESSAGE (2999)           //  Mission Complete!
+ CLEAR_WANTED_LEVEL (p1)
+ ADD_MULTIPLIER (p1, 1)
+ CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (sciegang, p1, 1)
+ 
+ //  If the player has already completed the Scientist Medium Mission 3, disable Scientist Medium Phone 1
+ IF ( savecount61 = 1 )
+    SET_PHONE_DEAD (obj3)
+    DISABLE_THREAD_TRIGGER (trigger3)
+ ENDIF
+ 
+RETURN
+
+
+
+clean_up_scie_med_phone1_m1:
+ 
+ //  Destroy the SRS clones group if they still alive
+ IF ( NOT ( HAS_CHARACTER_DIED(s_m_1_srs_clones) ) )
+	   DESTROY_GROUP (s_m_1_srs_clones)
+	ENDIF
+ 
+	SET savecount81 = 0
+	SET savecount82 = 0
+ 
+	REMOVE_ARROW (arrow1)
+ 
+	CLEAR_ONSCREEN_COUNTER (s_m_1_onscreen1)
+	CLEAR_ONSCREEN_COUNTER (s_m_1_onscreen2)
+ 
+ IF ( savecount48 = 1 )
+	   ++savecount85
+	   ++savecount91
+	ENDIF
+ 
+ IF ( CHECK_DEATHARREST_EXECUTED() )
+	   ++savecount88
+	   ++savecount92
+	   CLEAR_TIMER (s_m_1_onscreen1)
+	   CLEAR_TIMER (s_m_1_onscreen2)
+	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (sciegang, p1, -1)
+	   CLEAR_WANTED_LEVEL (p1)
+	ENDIF
+ 
+	MISSION_HAS_FINISHED ()
+ 
+RETURN
+
+MISSIONSTART
+GOSUB scie_med_phone1_m1:
+GOSUB clean_up_scie_med_phone1_m1:
+MISSIONEND

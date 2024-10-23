@@ -1,0 +1,542 @@
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Taxi Traitor Test! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+// Decompiled from "ste_sh1.scr" Using Epic GTA2 Script Decompiler by T.M.
+
+//FORWARD scie_hard_phone_m1:
+//FORWARD clean_up_scie_hard_phone_m1:
+
+CAR_DATA s_h_1_remote_taxi
+CAR_DATA s_h_1_time_trial_taxi
+
+CHAR_DATA s_h_1_traitor_1_char
+CHAR_DATA s_h_1_traitor_2_char
+CHAR_DATA s_h_1_traitor_3_char
+
+//CHAR_DATA chr10
+//CHAR_DATA chr11
+
+OBJ_DATA s_h_1_remote_control_obj
+
+COUNTER s_h_1_while_loop = 0
+COUNTER s_h_1_time_trial_laps = 0
+COUNTER s_h_1_internal_counter = 7199
+COUNTER s_h_1_remote_control_brief = 0
+COUNTER s_h_1_player_control_tst_taxi = 0
+COUNTER s_h_1_time_trial_started = 0
+COUNTER s_h_1_lap_finished = 0
+COUNTER s_h_1_lap_started = 0
+COUNTER s_h_1_traitor_1_stage = 0
+COUNTER s_h_1_traitor_2_stage = 0
+COUNTER s_h_1_traitor_3_stage = 0
+COUNTER s_h_1_traitor_1_in_taxi = 0
+COUNTER s_h_1_traitor_2_in_taxi = 0
+COUNTER s_h_1_traitor_3_in_taxi = 0
+//COUNTER count16 = 0
+//COUNTER count17 = 0
+COUNTER s_h_1_traitor_1_perished = 0
+//COUNTER count19 = 0
+COUNTER s_h_1_traitor_3_perished = 0
+COUNTER s_h_1_player_at_remote_control = 0
+COUNTER s_h_1_test_taxi_destroyed = 0
+COUNTER s_h_1_mission_part_two = 0
+COUNTER s_h_1_wait_counter = 0
+COUNTER s_h_1_traitor_2_perished = 0
+COUNTER s_h_1_lap_1_brief = 0
+COUNTER s_h_1_lap_2_brief = 0
+COUNTER s_h_1_lap_3_brief = 0
+COUNTER s_h_1_lap_4_brief = 0
+COUNTER s_h_1_lap_5_brief = 0
+//COUNTER count31 = 0
+//COUNTER count32 = 0
+//COUNTER count33 = 0
+//COUNTER count34 = 0
+//COUNTER count35 = 0
+//COUNTER count36 = 0
+
+scie_hard_phone_m1:
+ 
+	SET savecount8 = 0
+ 
+	SET savecount81 = 1
+	SET savecount82 = 1
+ 
+	DISPLAY_MESSAGE (2462)          //  TAXI TRAITOR TEST!
+ 
+	s_h_1_remote_control_obj = CREATE_OBJ (215.50, 242.50, 4.00) 0 REMOTE END
+	s_h_1_time_trial_taxi = CREATE_CAR (217.50, 245.50, 2.00) 0 270 STYPECAB END
+ 
+	DISPLAY_BRIEF (2471)
+	POINT_ARROW_AT (arrow1, s_h_1_remote_control_obj)
+ 
+ WHILE_EXEC ( s_h_1_while_loop = 0 )
+    
+    //  If the test taxi has been destroyed before the player did 5 laps
+    IF ( ( s_h_1_test_taxi_destroyed = 0 ) AND ( IS_CAR_WRECKED(s_h_1_time_trial_taxi) ) )
+       SET s_h_1_test_taxi_destroyed = 1
+       CLEAR_ALL_BRIEFS ()
+       DISPLAY_BRIEF (2485)          //  "Bad luck, THC-303. You gave it your best shot - but your best just wasn't good enough."
+       SET savecount8 = 1
+       DISPLAY_MESSAGE (2998)        //  Mission Failed!
+       RETURN
+    ENDIF
+    
+    //  If the player has arrived at the remote controller
+    IF ( ( LOCATE_CHARACTER_ON_FOOT(p1, 215.50, 242.50, 4.00, 0.30, 0.20) ) AND ( s_h_1_remote_control_brief = 0 ) )
+       IF ( s_h_1_test_taxi_destroyed = 0 )
+          POINT_ARROW_AT (arrow1, s_h_1_time_trial_taxi)
+          DELETE_ITEM (s_h_1_remote_control_obj)
+          DISPLAY_BRIEF (2472)                  //  "Take the #Taxi# around the Test Track for FIVE laps - and if you beat the record the job is yours."
+          SET s_h_1_player_at_remote_control = 1
+          SET s_h_1_remote_control_brief = 1                        //  Lock this IF
+       ENDIF
+    ENDIF
+    
+    //  After the initial briefs ended, give the player the remote taxi controls
+    IF ( ( ( s_h_1_test_taxi_destroyed = 0 ) AND ( s_h_1_player_at_remote_control = 1 ) ) AND ( NOT ( IS_BRIEF_ONSCREEN() ) ) )
+       IF ( s_h_1_player_control_tst_taxi = 0 )
+          TAKE_REMOTE_CONTROL_OF_CAR (p1, s_h_1_time_trial_taxi)
+          SET s_h_1_remote_control_brief = 2
+          SET s_h_1_player_control_tst_taxi = 1                             //  Lock this IF
+          REMOVE_ARROW (arrow1)
+       ENDIF
+    ENDIF
+    
+    //  If the player has already take control of the test remote taxi
+    IF ( ( s_h_1_player_at_remote_control = 1 ) AND ( s_h_1_test_taxi_destroyed = 0 ) )
+       IF ( ( IS_ITEM_ONSCREEN(s_h_1_time_trial_taxi) ) AND ( NOT ( IS_BRIEF_ONSCREEN() ) ) )     //  IS_ITEM_ONSCREEN = True if the camera has already moved at the test remote taxi
+          IF ( s_h_1_time_trial_started = 0 )
+             DISPLAY_MESSAGE (2473)       //  "GO!"
+             SET s_h_1_player_control_tst_taxi = 1
+             SET s_h_1_time_trial_started = 1
+             DISPLAY_TIMER (timer1, 120)
+             SET s_h_1_internal_counter = 3600            //  3600 = ( 120 seconds )*( 30 cycles per second )
+          ENDIF
+       ENDIF
+    ENDIF
+    
+    //  Internal Countdown
+    IF ( s_h_1_time_trial_started = 1 )
+       --s_h_1_internal_counter
+    ENDIF
+    
+    //  Count +1 lap     (right before jumping the water)
+    IF ( ( s_h_1_test_taxi_destroyed = 0 ) AND ( IS_CAR_IN_BLOCK(s_h_1_time_trial_taxi, 225.50, 243.50, 2.00, 3.00, 4.00) ) )
+       IF ( s_h_1_lap_finished = 0 )
+          ++s_h_1_time_trial_laps
+          SET s_h_1_lap_finished = 1
+          SET s_h_1_lap_started = 0
+       ENDIF
+    ENDIF
+    
+    //  Laps messages
+    
+    IF ( ( s_h_1_time_trial_laps = 1 ) AND ( s_h_1_lap_1_brief = 0 ) )
+       DISPLAY_MESSAGE (2474)                           //  (lap) 1
+       SET s_h_1_lap_1_brief = 1
+    ENDIF
+    
+    IF ( ( s_h_1_time_trial_laps = 2 ) AND ( s_h_1_lap_2_brief = 0 ) )
+       DISPLAY_MESSAGE (2475)                           //  (lap) 2
+       SET s_h_1_lap_2_brief = 1
+    ENDIF
+    
+    IF ( ( s_h_1_time_trial_laps = 3 ) AND ( s_h_1_lap_3_brief = 0 ) )
+       DISPLAY_MESSAGE (2476)                           //  (lap) 3
+       SET s_h_1_lap_3_brief = 1
+    ENDIF
+    
+    IF ( ( s_h_1_time_trial_laps = 4 ) AND ( s_h_1_lap_4_brief = 0 ) )
+       DISPLAY_MESSAGE (2477)                           //  (lap) 4
+       SET s_h_1_lap_4_brief = 1
+    ENDIF
+    
+    IF ( ( s_h_1_time_trial_laps = 5 ) AND ( s_h_1_lap_5_brief = 0 ) )
+       DISPLAY_MESSAGE (2478)                           //  (lap) 5
+       SET s_h_1_lap_5_brief = 1
+    ENDIF
+    
+    //  Reseting lap checkpoint     (right after jumping the water)
+    IF ( ( s_h_1_test_taxi_destroyed = 0 ) AND ( IS_CAR_IN_BLOCK(s_h_1_time_trial_taxi, 218.50, 244.50, 2.00, 5.00, 4.00) ) )
+       IF ( s_h_1_lap_started = 0 )
+          SET s_h_1_lap_finished = 0
+          SET s_h_1_lap_started = 1
+       ENDIF
+    ENDIF
+    
+    //  If the player completed all five laps before the timer runs out
+    IF ( ( s_h_1_internal_counter > 0 ) AND ( s_h_1_time_trial_laps = 5 ) )
+       DISPLAY_BRIEF (2484)                    //  "Excellent, THC-303! You beat the time. Don't worry about the mess - we haven't had time to test the system properly."
+       SET s_h_1_time_trial_laps = 6                          //  Lock this IF
+       SET s_h_1_while_loop = 1
+    ENDIF
+    
+    //  Time out!
+    IF ( s_h_1_internal_counter = 0 )
+       CLEAR_ALL_BRIEFS ()
+       DISPLAY_BRIEF (2494)          //  "Oh, so slow, THC-303. Have you been up all night? No jobs for the sleepy snail!"
+       SET savecount8 = 1
+       DISPLAY_MESSAGE (2998)        //  Mission Failed!
+       RETURN
+    ENDIF
+    
+ ENDWHILE
+ 
+ //  The player completed all five laps
+ 
+ CLEAR_TIMER (timer1)
+ EXPLODE (s_h_1_time_trial_taxi)        //  BOOM!
+ DELAY_HERE (100)
+ DISPLAY_BRIEF (2486)     //  "Think you can handle test-driving the remote-control Taxi around town? Well that's the job."
+ DELAY_HERE (100)
+ 
+ //  Creating the remote taxi
+ s_h_1_remote_taxi = CREATE_CAR (214.00, 228.50, 2.00) 0 180 STYPECAB END
+ SET s_h_1_mission_part_two = 1
+ 
+ CHANGE_CAR_LOCK (s_h_1_remote_taxi, LOCKOUT_PLAYER)
+ 
+ //  The first traitor
+ s_h_1_traitor_1_char = CREATE_CHAR (107.50, 231.50, 2.00) 19 0 DUMMY END
+ SET_CHAR_OBJECTIVE (s_h_1_traitor_1_char, WAIT_ON_FOOT)
+ SET_CHAR_THREAT_REACTION (s_h_1_traitor_1_char, NO_REACTION)
+ 
+ DELAY_HERE (100)
+ DISPLAY_BRIEF (2487)                         //  "We need you to pick up THREE suspected SRS Traitors, THC-303. Off you go - get the first one."
+ TAKE_REMOTE_CONTROL_OF_CAR (p1, s_h_1_remote_taxi)
+ POINT_ARROW_AT (arrow1, s_h_1_traitor_1_char)
+ 
+ WHILE_EXEC ( s_h_1_traitor_1_perished = 0 )
+    
+    //  If the first traitor isn't in the taxi yet
+    IF ( s_h_1_traitor_1_in_taxi = 0 )
+       
+       //  The taxi has been destroyed
+       IF ( IS_CAR_WRECKED(s_h_1_remote_taxi) )
+       
+          SET s_h_1_wait_counter = 0
+          
+          WHILE_EXEC ( s_h_1_wait_counter < 70 )    //  Wait 2.333 seconds
+             ++s_h_1_wait_counter
+             ENDEXEC
+          ENDWHILE
+          
+          CLEAR_ALL_BRIEFS ()
+          SET savecount8 = 1
+          DISPLAY_MESSAGE (2998)         //  Mission Failed!
+          RETURN
+          
+       ENDIF
+       
+       //  If the first traitor has been seen, unlock the taxi
+       IF ( ( s_h_1_traitor_1_stage = 0 ) AND ( IS_ITEM_ONSCREEN(s_h_1_traitor_1_char) ) )
+          DISPLAY_BRIEF (2489)                                 //  "Ah, just what I need - a Taxi."
+          SET s_h_1_traitor_1_stage = 1
+          CHANGE_CAR_LOCK (s_h_1_remote_taxi, UNLOCKED)
+       ENDIF
+       
+       //  If the first traitor has been seen, set the traitor to enter the taxi
+       IF ( ( s_h_1_traitor_1_stage = 1 ) AND ( IS_ITEM_ONSCREEN(s_h_1_traitor_1_char) ) )
+          SET_CHAR_OBJECTIVE (s_h_1_traitor_1_char, ENTER_CAR_AS_PASSENGER, s_h_1_remote_taxi)
+          SET s_h_1_traitor_1_stage = 2
+       ENDIF
+       
+       //  If the first traitor has died by other means
+       IF ( HAS_CHARACTER_DIED(s_h_1_traitor_1_char) )
+          CLEAR_ALL_BRIEFS ()
+          DISPLAY_BRIEF (2491)                                   //  "It should always look like an accident, THC-303. Sometimes your enthusiasm overtakes you."
+          SET savecount8 = 1
+          DISPLAY_MESSAGE (2998)                                 //  Mission Failed!
+          RETURN
+       ENDIF
+       
+       //  If the first traitor has entered the taxi
+       IF ( ( s_h_1_traitor_1_stage = 2 ) AND ( IS_CHAR_OBJECTIVE_PASSED(s_h_1_traitor_1_char) ) )
+          SET s_h_1_traitor_1_in_taxi = 1
+          SET s_h_1_traitor_1_stage = 3
+          REMOVE_ARROW (arrow1)
+          DISPLAY_BRIEF (2488)                                   //  "Now the SRS Traitor is in the Taxi, THC-303 - DESTROY IT!"
+       ENDIF
+       
+       
+    ENDIF
+    
+    
+    //  If the first traitor is in the taxi
+    IF ( s_h_1_traitor_1_in_taxi = 1 )
+       
+       //  If the taxi is damaged a bit, destroy it
+       IF ( CHECK_CAR_DAMAGE_LEVEL(s_h_1_remote_taxi, 20) )
+          EXPLODE (s_h_1_remote_taxi)
+       ENDIF
+       
+       //  If the taxi has been destroyed
+       IF ( ( IS_CAR_WRECKED(s_h_1_remote_taxi) ) AND ( s_h_1_traitor_1_perished = 0 ) )
+       
+          SET s_h_1_wait_counter = 0
+          
+          WHILE_EXEC ( s_h_1_wait_counter < 70 )    //  Wait 2.333 seconds
+             ++s_h_1_wait_counter
+             ENDEXEC
+          ENDWHILE
+          
+          SET s_h_1_traitor_1_perished = 1
+          DISPLAY_BRIEF (2490)                          //  "This SRS Traitor must also die!"
+          s_h_1_remote_taxi = CREATE_CAR (214.00, 228.50, 2.00) 0 180 STYPECAB END
+          SET s_h_1_mission_part_two = 1
+          CHANGE_CAR_LOCK (s_h_1_remote_taxi, LOCKOUT_PLAYER)
+          TAKE_REMOTE_CONTROL_OF_CAR (p1, s_h_1_remote_taxi)
+          s_h_1_traitor_2_char = CREATE_CHAR (21.50, 92.50, 2.00) 15 180 DUMMY END
+          SET_CHAR_OBJECTIVE (s_h_1_traitor_2_char, WAIT_ON_FOOT)
+          SET_CHAR_THREAT_REACTION (s_h_1_traitor_2_char, NO_REACTION)
+          
+       ENDIF
+       
+    ENDIF
+
+ ENDWHILE
+ 
+ //  The first SRS traitor has died in a accident
+ 
+ POINT_ARROW_AT (arrow1, s_h_1_traitor_2_char)
+ 
+ 
+ WHILE_EXEC ( s_h_1_traitor_2_perished = 0 )
+    
+    //  If the second traitor isn't in the taxi yet
+    IF ( s_h_1_traitor_2_in_taxi = 0 )
+       
+       //  The taxi has been destroyed
+       IF ( IS_CAR_WRECKED(s_h_1_remote_taxi) )
+       
+          SET s_h_1_wait_counter = 0
+          
+          WHILE_EXEC ( s_h_1_wait_counter < 70 )      //  Wait 2.333 seconds
+             ++s_h_1_wait_counter
+             ENDEXEC
+          ENDWHILE
+          
+          CLEAR_ALL_BRIEFS ()
+          SET savecount8 = 1
+          DISPLAY_MESSAGE (2998)     //  Mission Failed!
+          RETURN
+       
+       ENDIF
+       
+       //  If the second traitor has been seen, unlock the taxi
+       IF ( ( s_h_1_traitor_2_stage = 0 ) AND ( IS_ITEM_ONSCREEN(s_h_1_traitor_2_char) ) )
+          DISPLAY_BRIEF (2489)                                 //  "Ah, just what I need - a Taxi."
+          SET s_h_1_traitor_2_stage = 1
+          CHANGE_CAR_LOCK (s_h_1_remote_taxi, UNLOCKED)
+       ENDIF
+       
+       //  If the second traitor has been seen, set the traitor to enter the taxi
+       IF ( ( s_h_1_traitor_2_stage = 1 ) AND ( IS_ITEM_ONSCREEN(s_h_1_traitor_2_char) ) )
+          SET_CHAR_OBJECTIVE (s_h_1_traitor_2_char, ENTER_CAR_AS_PASSENGER, s_h_1_remote_taxi)
+          SET s_h_1_traitor_2_stage = 2
+       ENDIF
+       
+       //  If the second traitor has died by other means
+       IF ( HAS_CHARACTER_DIED(s_h_1_traitor_2_char) )
+          CLEAR_ALL_BRIEFS ()
+          DISPLAY_BRIEF (2491)        //  "It should always look like an accident, THC-303. Sometimes your enthusiasm overtakes you."
+          SET savecount8 = 1
+          DISPLAY_MESSAGE (2998)      //  Mission Failed!
+          RETURN
+       ENDIF
+       
+       //  If the second traitor has entered the taxi
+       IF ( ( s_h_1_traitor_2_stage = 2 ) AND ( IS_CHAR_OBJECTIVE_PASSED(s_h_1_traitor_2_char) ) )
+          SET s_h_1_traitor_2_in_taxi = 1
+          SET s_h_1_traitor_2_stage = 3
+          REMOVE_ARROW (arrow1)
+          DISPLAY_BRIEF (2488)                                   //  "Now the SRS Traitor is in the Taxi, THC-303 - DESTROY IT!"
+       ENDIF
+       
+       
+    
+    ENDIF
+    
+    
+    //  If the first traitor is in the taxi
+    IF ( s_h_1_traitor_2_in_taxi = 1 )
+       
+       //  If the taxi is damaged a bit, destroy it
+       IF ( CHECK_CAR_DAMAGE_LEVEL(s_h_1_remote_taxi, 20) )
+          EXPLODE (s_h_1_remote_taxi)
+       ENDIF
+       
+       //  If the taxi has been destroyed
+       IF ( ( IS_CAR_WRECKED(s_h_1_remote_taxi) ) AND ( s_h_1_traitor_2_perished = 0 ) )
+          
+          SET s_h_1_wait_counter = 0
+          
+          WHILE_EXEC ( s_h_1_wait_counter < 70 )         //  Wait 2.333 seconds
+             ++s_h_1_wait_counter
+             ENDEXEC
+          ENDWHILE
+          
+          SET s_h_1_traitor_2_perished = 1
+          DISPLAY_BRIEF (2492)                        //  "Come on, THC-303!"
+          s_h_1_remote_taxi = CREATE_CAR (214.00, 228.50, 2.00) 0 180 STYPECAB END
+          SET s_h_1_mission_part_two = 1
+          CHANGE_CAR_LOCK (s_h_1_remote_taxi, LOCKOUT_PLAYER)
+          TAKE_REMOTE_CONTROL_OF_CAR (p1, s_h_1_remote_taxi)
+          s_h_1_traitor_3_char = CREATE_CHAR (179.50, 75.50, 2.00) 20 0 DUMMY END
+          SET_CHAR_OBJECTIVE (s_h_1_traitor_3_char, WAIT_ON_FOOT)
+          SET_CHAR_THREAT_REACTION (s_h_1_traitor_3_char, NO_REACTION)
+          
+       ENDIF
+       
+    
+    ENDIF
+ 
+ ENDWHILE
+ 
+ //  The second SRS traitor has died in a accident
+
+ POINT_ARROW_AT (arrow1, s_h_1_traitor_3_char)
+
+ WHILE_EXEC ( s_h_1_traitor_3_perished = 0 )
+    
+    //  If the third traitor isn't in the taxi yet
+    IF ( s_h_1_traitor_3_in_taxi = 0 )
+       
+       //  The taxi has been destroyed
+       IF ( IS_CAR_WRECKED(s_h_1_remote_taxi) )
+       
+          SET s_h_1_wait_counter = 0
+          
+          WHILE_EXEC ( s_h_1_wait_counter < 70 )     //  Wait 2.333 seconds
+             ++s_h_1_wait_counter
+             ENDEXEC
+          ENDWHILE
+          
+          CLEAR_ALL_BRIEFS ()
+          SET savecount8 = 1
+          DISPLAY_MESSAGE (2998)        //  Mission Failed!
+          RETURN
+       
+       ENDIF
+       
+       //  If the third traitor has been seen, unlock the taxi
+       IF ( ( s_h_1_traitor_3_stage = 0 ) AND ( IS_ITEM_ONSCREEN(s_h_1_traitor_3_char) ) )
+          DISPLAY_BRIEF (2489)                                //  "Ah, just what I need - a Taxi."
+          SET s_h_1_traitor_3_stage = 1
+          CHANGE_CAR_LOCK (s_h_1_remote_taxi, UNLOCKED)
+       ENDIF
+       
+       //  If the third traitor has been seen, set the traitor to enter the taxi
+       IF ( ( s_h_1_traitor_3_stage = 1 ) AND ( IS_ITEM_ONSCREEN(s_h_1_traitor_3_char) ) )
+          SET_CHAR_OBJECTIVE (s_h_1_traitor_3_char, ENTER_CAR_AS_PASSENGER, s_h_1_remote_taxi)
+          SET s_h_1_traitor_3_stage = 2
+       ENDIF
+       
+       //  If the third traitor has died by other means
+       IF ( HAS_CHARACTER_DIED(s_h_1_traitor_3_char) )
+          CLEAR_ALL_BRIEFS ()
+          DISPLAY_BRIEF (2491)            //  "It should always look like an accident, THC-303. Sometimes your enthusiasm overtakes you."
+          SET savecount8 = 1
+          DISPLAY_MESSAGE (2998)          //  Mission Failed!
+          EXPLODE (s_h_1_remote_taxi)
+          RETURN
+       ENDIF
+       
+       //  If the third traitor has entered the taxi
+       IF ( ( s_h_1_traitor_3_stage = 2 ) AND ( IS_CHAR_OBJECTIVE_PASSED(s_h_1_traitor_3_char) ) )
+          SET s_h_1_traitor_3_in_taxi = 1
+          SET s_h_1_traitor_3_stage = 3
+          REMOVE_ARROW (arrow1)
+          DISPLAY_BRIEF (2488)            //  "Now the #SRS Traitor# is in the Taxi, THC-303 - DESTROY IT!"
+       ENDIF
+    
+    ENDIF
+    
+    
+    //  If the third traitor is in the taxi
+    IF ( s_h_1_traitor_3_in_taxi = 1 )
+       
+       //  If the taxi is damaged a bit, destroy it
+       IF ( CHECK_CAR_DAMAGE_LEVEL(s_h_1_remote_taxi, 20) )
+          EXPLODE (s_h_1_remote_taxi)
+       ENDIF
+       
+       //  If the taxi has been destroyed
+       IF ( ( IS_CAR_WRECKED(s_h_1_remote_taxi) ) AND ( s_h_1_traitor_3_perished = 0 ) )
+          SET s_h_1_traitor_3_perished = 1
+       ENDIF
+    
+    ENDIF
+ 
+ ENDWHILE
+ 
+ //  The third SRS traitor has died in a accident
+
+ CLEAR_ALL_BRIEFS ()
+ ADD_SCORE (p1, 70000)
+ SET savecount50 = 1
+ DISPLAY_MESSAGE (2999)        //  Mission Complete!
+ DISPLAY_BRIEF (2493)          //  "It's a pleasure to watch you work, THC-303. You deserve this $70,000."
+ CLEAR_WANTED_LEVEL (p1)
+ ADD_MULTIPLIER (p1, 1)
+ CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (sciegang, p1, 1)
+ 
+RETURN
+
+clean_up_scie_hard_phone_m1:                          //  Clean up
+ 
+	SET savecount81 = 0
+	SET savecount82 = 0
+	REMOVE_ARROW (arrow1)
+	CLEAR_TIMER (timer1)
+ 
+ //  If the test taxi hasn't been destroyed
+ IF ( ( s_h_1_mission_part_two = 0 ) AND ( s_h_1_test_taxi_destroyed = 0 ) )
+    IF ( NOT ( IS_CAR_WRECKED(s_h_1_time_trial_taxi) ) )
+       EXPLODE (s_h_1_time_trial_taxi)
+    ENDIF
+	ENDIF
+ 
+ //  If the first taxi hasn't been destroyed
+ IF ( ( s_h_1_mission_part_two = 1 ) AND ( s_h_1_traitor_1_perished = 0 ) )
+    IF ( NOT ( IS_CAR_WRECKED(s_h_1_remote_taxi) ) )
+       EXPLODE (s_h_1_remote_taxi)
+    ENDIF
+ ENDIF
+ 
+ //  If the second taxi hasn't been destroyed
+ IF ( ( s_h_1_mission_part_two = 1 ) AND ( s_h_1_traitor_2_perished = 0 ) )
+    IF ( NOT ( IS_CAR_WRECKED(s_h_1_remote_taxi) ) )
+       EXPLODE (s_h_1_remote_taxi)
+    ENDIF
+ ENDIF
+	
+ //  If the third taxi hasn't been destroyed
+	IF ( ( s_h_1_mission_part_two = 1 ) AND ( s_h_1_traitor_3_perished = 0 ) )
+    IF ( NOT ( IS_CAR_WRECKED(s_h_1_remote_taxi) ) )
+       EXPLODE (s_h_1_remote_taxi)
+    ENDIF
+ ENDIF
+	
+	IF ( savecount50 = 1 )
+	   ++savecount85
+    ++savecount91
+	   CLEAR_TIMER (timer1)
+	ENDIF
+ 
+ IF ( CHECK_DEATHARREST_EXECUTED() )
+	   ++savecount88
+	   ++savecount92
+	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (sciegang, p1, -1)
+	   CLEAR_WANTED_LEVEL (p1)
+	ENDIF
+ 
+	MISSION_HAS_FINISHED ()
+ 
+RETURN
+
+MISSIONSTART
+GOSUB scie_hard_phone_m1:
+GOSUB clean_up_scie_hard_phone_m1:
+MISSIONEND

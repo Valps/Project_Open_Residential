@@ -1,0 +1,491 @@
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Operation Z! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+// Decompiled from "ste_zm1.scr" Using Epic GTA2 Script Decompiler by T.M.
+
+//FORWARD zaib_med_phone1_m1:
+//FORWARD clean_up_zaib_med_phone1_m1:
+
+CAR_DATA z_m_1_pickup
+CAR_DATA z_m_1_srs_meteor
+CAR_DATA z_m_1_red_limo
+CAR_DATA z_m_1_crane_car
+CAR_DATA z_m_1_parked_car_1
+CAR_DATA z_m_1_parked_car_2
+CAR_DATA z_m_1_parked_car_3
+CAR_DATA z_m_1_parked_car_4
+CAR_DATA z_m_1_parked_car_5
+CAR_DATA z_m_1_truck_cab
+CAR_DATA z_m_1_trailer
+CAR_DATA z_m_1_cop_car
+
+CHAR_DATA z_m_1_redn_guard_1
+CHAR_DATA z_m_1_redn_guard_2
+CHAR_DATA z_m_1_redn_guard_3
+CHAR_DATA z_m_1_redn_guard_4
+
+CHAR_DATA z_m_1_meteor_driver
+
+COUNTER z_m_1_while_loop_1 = 0
+COUNTER z_m_1_is_player_in_car = 0
+COUNTER z_m_1_is_pickup_parking = 0
+COUNTER z_m_1_while_loop_2 = 0
+COUNTER z_m_1_meteor_driver_exists = 0
+//COUNTER count7 = 0
+COUNTER z_m_1_is_meteor_parking = 0
+COUNTER z_m_1_is_limo_parking = 0
+COUNTER z_m_1_while_loop_3 = 0
+COUNTER z_m_1_player_in_truck_cab = 0
+COUNTER z_m_1_is_trailer_attached = 0
+COUNTER z_m_1_car_crane_stored = 0
+COUNTER z_m_1_is_cop_car_parking = 0
+COUNTER z_m_1_garage_brief_flag = 0
+COUNTER z_m_1_has_cop_car_jacked = 0
+COUNTER z_m_1_while_loop_4 = 0
+COUNTER z_m_1_has_truck_arrived = 0
+COUNTER z_m_1_trailer_brief_flag = 0
+
+zaib_med_phone1_m1:
+ 
+	MAKE_DOOR_AUTOMATIC (door1)
+ 
+	SET savecount16 = 0
+ 
+	SET savecount81 = 1
+	SET savecount84 = 1
+ 
+	DISPLAY_MESSAGE (2466)        //  OPERATION Z!
+ 
+	DISPLAY_BRIEF (2641)          //  "Gecko - it's Red Valdez. The Rednecks and Scientists are moving new contraband around this city [...] I want you to bring me FOUR loaded vehicles."
+	DISPLAY_BRIEF (2642)          //  "There's a Pickup full of pills at the Redneck Bowling Alley. Go get it, Gecko."
+ 
+	z_m_1_pickup = CREATE_GANG_CAR (6.00, 108.50, 2.00) 3 105 PICKUP END
+ 
+ //  Creating the redneck guards
+	z_m_1_redn_guard_1 = CREATE_CHAR (7.10, 107.50, 2.00) 5 80 GUARD END
+	SET_CHAR_THREAT_SEARCH (z_m_1_redn_guard_1, LINE_OF_SIGHT_PLAYER_ONLY)
+	SET_CHAR_THREAT_REACTION (z_m_1_redn_guard_1, REACT_AS_NORMAL)
+	GIVE_WEAPON (z_m_1_redn_guard_1, MACHINE_GUN)
+	ADD_CHAR_TO_GANG (z_m_1_redn_guard_1, redngang)
+	SET_CHAR_OBJECTIVE (z_m_1_redn_guard_1, WAIT_ON_FOOT)
+ 
+	z_m_1_redn_guard_2 = CREATE_CHAR (7.70, 107.80, 2.00) 5 75 GUARD END
+	SET_CHAR_THREAT_SEARCH (z_m_1_redn_guard_2, LINE_OF_SIGHT_PLAYER_ONLY)
+	SET_CHAR_THREAT_REACTION (z_m_1_redn_guard_2, REACT_AS_NORMAL)
+	GIVE_WEAPON (z_m_1_redn_guard_2, MACHINE_GUN)
+	ADD_CHAR_TO_GANG (z_m_1_redn_guard_2, redngang)
+	SET_CHAR_OBJECTIVE (z_m_1_redn_guard_2, WAIT_ON_FOOT)
+ 
+	z_m_1_redn_guard_3 = CREATE_CHAR (7.50, 108.20, 2.00) 5 100 GUARD END
+	SET_CHAR_THREAT_SEARCH (z_m_1_redn_guard_3, LINE_OF_SIGHT_PLAYER_ONLY)
+	SET_CHAR_THREAT_REACTION (z_m_1_redn_guard_3, REACT_AS_NORMAL)
+	GIVE_WEAPON (z_m_1_redn_guard_3, MACHINE_GUN)
+	ADD_CHAR_TO_GANG (z_m_1_redn_guard_3, redngang)
+	SET_CHAR_OBJECTIVE (z_m_1_redn_guard_3, WAIT_ON_FOOT)
+ 
+	z_m_1_redn_guard_4 = CREATE_CHAR (7.50, 108.50, 2.00) 5 105 GUARD END
+	SET_CHAR_THREAT_SEARCH (z_m_1_redn_guard_4, LINE_OF_SIGHT_PLAYER_ONLY)
+	SET_CHAR_THREAT_REACTION (z_m_1_redn_guard_4, REACT_AS_NORMAL)
+	GIVE_WEAPON (z_m_1_redn_guard_4, MACHINE_GUN)
+	ADD_CHAR_TO_GANG (z_m_1_redn_guard_4, redngang)
+	SET_CHAR_OBJECTIVE (z_m_1_redn_guard_4, WAIT_ON_FOOT)
+ 
+	POINT_ARROW_AT (arrow1, z_m_1_pickup)
+ 
+ WHILE_EXEC ( z_m_1_while_loop_1 = 0 )
+    
+    //  If the player has entered the pickup (first car)
+    IF ( ( IS_CHARACTER_IN_CAR(p1, z_m_1_pickup) ) AND ( z_m_1_is_player_in_car = 0 ) )
+       SET z_m_1_is_player_in_car = 1
+	      UPDATE_DOOR_TARGET (door1, z_m_1_pickup)
+	      DISPLAY_BRIEF_NOW (2643)                     //  "Well stolen, Gecko! Now park the Pickup in my Garage in The Village."
+	      POINT_ARROW_AT (arrow1, 211.00, 31.00, 3.00)
+    ENDIF
+    
+    //  If the player has left the pickup
+    IF ( ( NOT ( IS_CHARACTER_IN_CAR(p1, z_m_1_pickup) ) ) AND ( z_m_1_is_player_in_car = 1 ) )
+       SET z_m_1_is_player_in_car = 0
+	      DISPLAY_BRIEF_NOW (2644)                     //  "No time for screwing around, Gecko. Bring the Pickup to The Village."
+	      POINT_ARROW_AT (arrow1, z_m_1_pickup)
+    ENDIF
+    
+    //  If the pickup has been destroyed
+    IF ( ( z_m_1_is_pickup_parking = 0 ) AND ( IS_CAR_WRECKED(z_m_1_pickup) ) )
+       IF ( savecount16 = 0 )
+          CLEAR_ALL_BRIEFS ()
+	         DISPLAY_BRIEF (2645)                      //  "The Pickup is trashed! You are OFF the job, Gecko!"
+	         SET savecount16 = 1
+	         DISPLAY_MESSAGE (2998)                    //  Mission Failed!
+          RETURN
+       ENDIF
+    ENDIF
+    
+    //  If the pickup is in front of the zaibatsu garage
+    IF ( ( IS_CAR_IN_BLOCK(z_m_1_pickup, 211.00, 31.00, 3.00, 2.00, 2.00) ) AND ( z_m_1_is_pickup_parking = 0 ) )
+       PARK (z_m_1_pickup, door1)
+       SET z_m_1_is_pickup_parking = 1
+       REMOVE_ARROW (arrow1)
+    ENDIF
+    
+    //  If the pickup has been parked
+    IF ( ( z_m_1_is_pickup_parking = 1 ) AND ( HAS_PARK_FINISHED() ) )
+       SET z_m_1_is_player_in_car = 2
+       SET z_m_1_is_pickup_parking = 1
+       SET z_m_1_while_loop_1 = 1
+       DISPLAY_BRIEF (2646)                 //  "A Meteor driving across the city contains Clone Serum and two hot Bio-Bitches. Stop it and steal it."
+    ENDIF
+ 
+ ENDWHILE
+	
+	//  The pickup has been parked
+ 
+ SET z_m_1_is_player_in_car = 0
+ 
+ //  Creating the SRS Meteor and its driver
+ z_m_1_srs_meteor = CREATE_GANG_CAR (12.00, 173.50, 2.00) 10 0 STRATOSB END
+ POINT_ARROW_AT (arrow1, z_m_1_srs_meteor)
+ z_m_1_meteor_driver = CREATE_CHAR_INSIDE_CAR (z_m_1_srs_meteor) 7 CRIMINAL END
+ SET_CHAR_THREAT_SEARCH (z_m_1_meteor_driver, LINE_OF_SIGHT_PLAYER_ONLY)
+ SET_CHAR_THREAT_REACTION (z_m_1_meteor_driver, NO_REACTION)
+ GIVE_WEAPON (z_m_1_meteor_driver, MACHINE_GUN)
+ ADD_CHAR_TO_GANG (z_m_1_meteor_driver, sciegang)
+ 
+ SET z_m_1_meteor_driver_exists = 1
+ 
+ WHILE_EXEC ( z_m_1_while_loop_2 = 0 )
+    
+    //  If the meteor driver has spotted the player
+    IF ( ( NOT ( IS_CHARACTER_IN_CAR(z_m_1_meteor_driver, z_m_1_srs_meteor) ) ) AND ( z_m_1_meteor_driver_exists = 1 ) )  //  ORIGINAL:  This IF doesn't exist
+    IF ( HAS_CHAR_SPOTTED_PLAYER(z_m_1_meteor_driver) )                                                                   //  ORIGINAL:   HAS_CHAR_SPOTTED_PLAYER(p1)     (has the player spotted himself? lol)
+       DISPLAY_BRIEF (2647)                                                                                               //  "What are you doing? This car is OURS."
+       SET_CHAR_OBJECTIVE (z_m_1_meteor_driver, KILL_CHAR_ANY_MEANS, p1)                                                  //  ORIGINAL:  SET_CHAR_OBJECTIVE (z_m_1_meteor_driver, KILL_CHAR_ANY_MEANS)   (it's missing the last parameter and crashing the game)
+       SET z_m_1_meteor_driver_exists = 2
+    ENDIF
+    ENDIF
+    
+    //  If the SRS meteor has been destroyed
+    IF ( ( z_m_1_is_meteor_parking = 0 ) AND ( IS_CAR_WRECKED(z_m_1_srs_meteor) ) )
+       IF ( savecount16 = 0 )
+          CLEAR_ALL_BRIEFS ()
+          DISPLAY_BRIEF (2648)       //  "Incompetence, Gecko! The Meteor is smashed, the Clone Serum is lost and I have balls like water-filled balloons. Disappear!"
+          SET savecount16 = 1
+          DISPLAY_MESSAGE (2998)     //  Mission Failed!
+          RETURN
+       ENDIF
+    ENDIF
+    
+    //  If the player has entered the SRS Meteor
+    IF ( ( IS_CHARACTER_IN_CAR(p1, z_m_1_srs_meteor) ) AND ( z_m_1_is_player_in_car = 0 ) )
+       UPDATE_DOOR_TARGET (door1, z_m_1_srs_meteor)
+       SET z_m_1_is_player_in_car = 1
+       DISPLAY_BRIEF_NOW (2649)                            //  "Storming, Gecko! Park the Meteor in my Garage in The Village."
+       POINT_ARROW_AT (arrow1, 211.00, 31.00, 3.00)
+    ENDIF
+    
+    //  If the player has left the SRS Meteor
+    IF ( ( NOT ( IS_CHARACTER_IN_CAR(p1, z_m_1_srs_meteor) ) ) AND ( z_m_1_is_player_in_car = 1 ) )
+       SET z_m_1_is_player_in_car = 0
+       DISPLAY_BRIEF_NOW (2650)                   //  "That Meteor has a massive Street Value, Gecko. Get in it and get it to the The Village NOW!"
+       POINT_ARROW_AT (arrow1, z_m_1_srs_meteor)
+    ENDIF
+    
+    //  If the SRS Meteor is in front of the Zaibatsu garage
+    IF ( ( IS_CAR_IN_BLOCK(z_m_1_srs_meteor, 211.00, 31.00, 3.00, 2.00, 2.00) ) AND ( z_m_1_is_meteor_parking = 0 ) )
+       PARK (z_m_1_srs_meteor, door1)
+       SET z_m_1_is_meteor_parking = 1
+       REMOVE_ARROW (arrow1)
+    ENDIF
+    
+    //  If the SRS Meteor has been parked
+    IF ( ( z_m_1_is_meteor_parking = 1 ) AND ( HAS_PARK_FINISHED() ) )
+       SET z_m_1_is_player_in_car = 2
+       SET z_m_1_is_meteor_parking = 1
+       SET z_m_1_while_loop_2 = 1
+       DISPLAY_BRIEF (2651)                   //  "Tricky one next, Gecko. Steal Bean's Red Limousine from Disgracelands."
+    ENDIF
+ 
+ ENDWHILE
+ 
+ //  The SRS Meteor has been parked
+ 
+ DISPLAY_BRIEF (2652)        //  "The guards are wasted on Beany Liquor, Gecko, but #Disgracelands# is still tough to breach."
+ 
+ SET z_m_1_is_player_in_car = 0
+ 
+ //  Creating the Disgracelands parked cars
+ z_m_1_red_limo = CREATE_CAR (56.00, 70.50, 2.00) 26 94 LIMO END
+ z_m_1_parked_car_1 = CREATE_GANG_CAR (55.00, 71.50, 2.00) 3 3 PICKUP END
+ z_m_1_parked_car_2 = CREATE_CAR (53.00, 71.50, 2.00) 3 170 FIAT END
+ z_m_1_parked_car_3 = CREATE_CAR (50.00, 71.50, 2.00) 26 185 PICKUP END
+ z_m_1_parked_car_4 = CREATE_GANG_CAR (52.00, 71.50, 2.00) 3 8 PICKUP END
+ z_m_1_parked_car_5 = CREATE_CAR (51.00, 71.50, 2.00) 0 357 EDSEL END
+ 
+ POINT_ARROW_AT (arrow1, z_m_1_red_limo)
+ 
+ WHILE_EXEC ( z_m_1_while_loop_3 = 0 )
+    
+    //  If the red limo has been destroyed
+    IF ( ( z_m_1_is_limo_parking = 0 ) AND ( IS_CAR_WRECKED(z_m_1_red_limo) ) )
+       IF ( savecount16 = 0 )
+          CLEAR_ALL_BRIEFS ()
+          DISPLAY_BRIEF (2653)                //  "Bean only had one Red Limousine and you smoked it. Back to the phones, Gecko."
+          SET savecount16 = 1
+          DISPLAY_MESSAGE (2998)              //  Mission Failed!
+          RETURN
+       ENDIF
+    ENDIF
+    
+    //  If the player has entered the red limo
+    IF ( ( IS_CHARACTER_IN_CAR(p1, z_m_1_red_limo) ) AND ( z_m_1_is_player_in_car = 0 ) )
+       UPDATE_DOOR_TARGET (door1, z_m_1_red_limo)
+       SET z_m_1_is_player_in_car = 1
+       DISPLAY_BRIEF_NOW (2654)                            //  "A few fat lines and I will feel like The King in this baby. Park it in the The Village - fast!"
+       POINT_ARROW_AT (arrow1, 211.00, 31.00, 3.00)
+    ENDIF
+    
+    //  If the player has left the red limo
+    IF ( ( NOT ( IS_CHARACTER_IN_CAR(p1, z_m_1_red_limo) ) ) AND ( z_m_1_is_player_in_car = 1 ) )
+       SET z_m_1_is_player_in_car = 0
+       DISPLAY_BRIEF_NOW (2655)                       //  "The car is vintage but your style is geriatric, Gecko! Get in Bean's Limousine and get to The Village."
+       POINT_ARROW_AT (arrow1, z_m_1_red_limo)
+    ENDIF
+    
+    //  If the red limo is in front of the zaibatsu garage
+    IF ( ( IS_CAR_IN_BLOCK(z_m_1_red_limo, 211.00, 31.00, 3.00, 2.00, 2.00) ) AND ( z_m_1_is_limo_parking = 0 ) )
+       PARK (z_m_1_red_limo, door1)
+       SET z_m_1_is_limo_parking = 1
+       REMOVE_ARROW (arrow1)
+    ENDIF
+    
+    //  If the red limo has been parked
+    IF ( ( z_m_1_is_limo_parking = 1 ) AND ( HAS_PARK_FINISHED() ) )
+       SET z_m_1_is_player_in_car = 2
+       SET z_m_1_is_limo_parking = 1
+       SET z_m_1_while_loop_3 = 1
+       DISPLAY_BRIEF (2656)                       //  "Now I need a certain Cop Car, Gecko. But first you need to get a Truck Cab."
+    ENDIF
+ 
+ ENDWHILE
+
+ //  The red limo has been parked
+
+ SET z_m_1_is_player_in_car = 0
+ 
+ z_m_1_trailer = CREATE_CAR (86.00, 224.50, 2.00) 0 180 TRUKTRNS END
+ z_m_1_cop_car = CREATE_CAR (88.00, 224.50, 2.00) 0 180 COPCAR END
+ 
+ PUT_CAR_ON_TRAILER (z_m_1_cop_car, z_m_1_trailer)
+ 
+ WHILE_EXEC ( z_m_1_while_loop_4 = 0 )
+    
+    //  If the player has entered a truck cab
+    IF( ( IS_CHARACTER_IN_MODEL(p1, TRUKCAB1) ) OR ( IS_CHARACTER_IN_MODEL(p1, TRUKCAB2) ) )
+    
+       STORE_CAR_CHARACTER_IS_IN (p1, z_m_1_truck_cab)
+       
+       IF ( z_m_1_player_in_truck_cab = 0 )
+          
+          SET z_m_1_player_in_truck_cab = 1
+          POINT_ARROW_AT (arrow1, z_m_1_trailer)
+          
+          IF ( z_m_1_trailer_brief_flag = 0 )
+             DISPLAY_BRIEF (2667)                    //  "Good, Gecko. Now collect the Trailer from behind the Cop Station."
+             SET z_m_1_trailer_brief_flag = 1
+          ENDIF
+          
+       ENDIF
+       
+    ENDIF
+    
+    //  If the player has left the truck cab (without the trailer attached)
+    IF ( z_m_1_player_in_truck_cab = 1 )
+       IF ( ( z_m_1_is_trailer_attached = 0 ) AND ( NOT ( IS_CHARACTER_IN_CAR(p1, z_m_1_truck_cab) ) ) )
+          SET z_m_1_player_in_truck_cab = 0
+          DISPLAY_BRIEF_NOW (2657)              //  "You are collecting a Trailer, Gecko, so you need a Truck Cab."
+          REMOVE_ARROW (arrow1)
+       ENDIF
+    ENDIF
+    
+    //  If the player has left the truck cab (with the trailer attached)
+    IF ( z_m_1_has_cop_car_jacked = 0 )
+       IF ( z_m_1_player_in_truck_cab = 1 )
+          IF ( ( z_m_1_is_trailer_attached = 1 ) AND ( NOT ( IS_CHARACTER_IN_CAR(p1, z_m_1_truck_cab) ) ) )
+             SET z_m_1_player_in_truck_cab = 0
+             DISPLAY_BRIEF_NOW (2658)           //  "Back in the Truck Cab, Gecko, and get to that Crane!"
+             POINT_ARROW_AT (arrow1, z_m_1_truck_cab)
+          ENDIF
+       ENDIF
+    ENDIF
+    
+    //  If the cop car has been destroyed
+    IF ( z_m_1_has_cop_car_jacked = 0 )
+       IF ( IS_CAR_WRECKED(z_m_1_trailer) )
+          IF ( savecount16 = 0 )
+             CLEAR_ALL_BRIEFS ()
+             DISPLAY_BRIEF (2659)            //  "That's the only Cop Car I ever needed in one piece, Gecko, and you mess it up. Call me when you learn the rules."
+             SET savecount16 = 1
+             DISPLAY_MESSAGE (2998)          //  Mission Failed!
+             RETURN
+          ENDIF
+       ENDIF
+    ENDIF
+    
+    //  If the player has detached the trailer
+    IF ( ( z_m_1_is_trailer_attached = 1 ) AND ( NOT ( IS_TRAILER_ATTACHED(z_m_1_truck_cab, z_m_1_trailer) ) ) )
+       IF ( z_m_1_has_cop_car_jacked = 0 )
+          DISPLAY_BRIEF (2660)                  //  "You are like a clown in a cheap Circus, Gecko. Hook up the Trailer to the Truck Cab."
+          POINT_ARROW_AT (arrow1, z_m_1_trailer)
+          SET z_m_1_is_trailer_attached = 0
+       ENDIF
+    ENDIF
+    
+    //  If the player attached his truck cab with the trailer
+    IF ( z_m_1_player_in_truck_cab = 1 )
+       IF ( IS_TRAILER_ATTACHED(z_m_1_truck_cab, z_m_1_trailer) )
+       
+          SET z_m_1_is_trailer_attached = 1
+          POINT_ARROW_AT (arrow1, 250.50, 39.50, 3.00)       //  Point at the zaibatsu car crane
+          
+          IF ( z_m_1_garage_brief_flag = 0 )
+             DISPLAY_BRIEF (2661)                            //  "Head up over to The Village where our Crane will unload the Cop Car."
+             SET z_m_1_garage_brief_flag = 1                 //  Do this brief once
+          ENDIF
+          
+       ENDIF
+    ENDIF
+    
+    //  If the truck cab has reached the car crane
+    IF ( z_m_1_player_in_truck_cab = 1 )
+       IF ( ( IS_CAR_IN_BLOCK(z_m_1_truck_cab, 250.50, 39.50, 3.00, 3.00, 3.00) ) AND ( z_m_1_has_truck_arrived = 0 ) )
+          REMOVE_ARROW (arrow1)
+          SET z_m_1_has_truck_arrived = 1
+          SET z_m_1_player_in_truck_cab = 3
+       ENDIF
+    ENDIF
+    
+    //  If the car on the crane is the cop car
+    //  OBSERVATION:   the command GET_CAR_INFO_FROM_CRANE also stores the current car the crane is jacking up, so it explain the glitch the speedrunners uses
+    IF ( ( z_m_1_car_crane_stored = 0 ) AND ( GET_CAR_INFO_FROM_CRANE(z_m_1_crane_car, crane7) ) )
+       SET z_m_1_car_crane_stored = 1
+       UPDATE_DOOR_TARGET (door1, z_m_1_crane_car)
+    ENDIF
+    
+    //  If the cop car isn't on the trailer (so it was jacked up)
+    IF ( ( z_m_1_car_crane_stored = 1 ) AND ( z_m_1_has_cop_car_jacked = 0 ) )
+       IF ( NOT ( IS_CAR_ON_TRAILER(z_m_1_crane_car, z_m_1_trailer) ) )
+          SET z_m_1_has_cop_car_jacked = 1
+          POINT_ARROW_AT (arrow1, z_m_1_crane_car)
+          DISPLAY_BRIEF (2662)               //  "Park the Cop Car, Gecko. I'm looking forward to playing Cops And Robbers. Ha ha ha."
+       ENDIF
+    ENDIF
+    
+    //  ?????????????????????      It is triggered if you let other crane than the zaibatsu one to jack the cop car up   (e.g. redneck crane)
+    IF ( ( ( z_m_1_car_crane_stored = 0 ) AND ( z_m_1_has_cop_car_jacked = 0 ) ) AND ( z_m_1_is_trailer_attached = 1 ) )
+       IF ( NOT ( IS_CAR_ON_TRAILER(z_m_1_cop_car, z_m_1_trailer) ) )
+          CLEAR_ALL_BRIEFS ()
+          DISPLAY_BRIEF (2664)               //  "Stealing the Trailer was tough, Gecko, but I expected more from you."
+          SET savecount16 = 1
+          DISPLAY_MESSAGE (2998)             //  Mission Failed!
+          RETURN
+       ENDIF
+    ENDIF
+    
+    //  If the cop car is in front of the zaibatsu garage
+    IF ( z_m_1_car_crane_stored = 1 )
+       IF ( ( IS_CAR_IN_BLOCK(z_m_1_crane_car, 211.00, 31.00, 3.00, 2.00, 2.00) ) AND ( z_m_1_is_cop_car_parking = 0 ) )
+          PARK (z_m_1_crane_car, door1)
+          SET z_m_1_is_cop_car_parking = 1
+          REMOVE_ARROW (arrow1)
+       ENDIF
+    ENDIF
+    
+    //  If the cop car has been parked
+    IF ( ( z_m_1_is_cop_car_parking = 1 ) AND ( HAS_PARK_FINISHED() ) )
+       CLEAR_ALL_BRIEFS ()
+       SET z_m_1_is_player_in_car = 2
+       SET z_m_1_is_cop_car_parking = 1
+       SET z_m_1_while_loop_4 = 1
+       DISPLAY_BRIEF (2663)  //  "You exude Zaibatsu style as our Number One Covert Operative, Gecko. Your performance was well worth $50,000. Fancy joining me to bang a Bio-Bitch?"
+    ENDIF
+    
+    //  If the cop car has been destroyed
+    IF ( z_m_1_car_crane_stored = 1 )
+       IF ( ( z_m_1_is_cop_car_parking = 0 ) AND ( IS_CAR_WRECKED(z_m_1_crane_car) ) )
+          IF ( savecount16 = 0 )
+             CLEAR_ALL_BRIEFS ()
+             DISPLAY_BRIEF (2664)            //  "Stealing the Trailer was tough, Gecko, but I expected more from you."
+             SET savecount16 = 1
+             DISPLAY_MESSAGE (2998)          //  Mission Failed!
+             RETURN
+          ENDIF
+       ENDIF
+    ENDIF
+    
+    //  If the player has entered the cop car
+    IF ( z_m_1_car_crane_stored = 1 )
+       IF ( ( IS_CHARACTER_IN_CAR(p1, z_m_1_crane_car) ) AND ( z_m_1_is_player_in_car = 0 ) )
+          UPDATE_DOOR_TARGET (door1, z_m_1_crane_car)
+          SET z_m_1_is_player_in_car = 1
+          POINT_ARROW_AT (arrow1, 211.00, 33.00, 3.00)
+          DISPLAY_BRIEF_NOW (2665)                         //  "You know where to go, Gecko. Now park it!"
+       ENDIF
+    ENDIF
+    
+    //  If the player has left the cop car
+    IF ( z_m_1_car_crane_stored = 1 )
+       IF ( ( NOT ( IS_CHARACTER_IN_CAR(p1, z_m_1_crane_car) ) ) AND ( z_m_1_is_player_in_car = 1 ) )
+          SET z_m_1_is_player_in_car = 0
+          DISPLAY_BRIEF_NOW (2666)                   //  "Park the damn Cop Car!"
+          POINT_ARROW_AT (arrow1, z_m_1_crane_car)
+       ENDIF
+    ENDIF
+ 
+ ENDWHILE
+
+ //  The cop car has been parked
+
+ ADD_SCORE (p1, 50000)
+ SET savecount58 = 1
+ DISPLAY_MESSAGE (2999)         //  Mission Complete!
+ CLEAR_WANTED_LEVEL (p1)
+ ADD_MULTIPLIER (p1, 1)
+ CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (zaibgang, p1, 1)
+ 
+ IF ( savecount65 = 1 )
+    SET_PHONE_DEAD (obj13)
+    DISABLE_THREAD_TRIGGER (trigger8)
+ ENDIF
+ 
+RETURN
+
+
+
+clean_up_zaib_med_phone1_m1:                //  Clean up
+ 
+	REMOVE_ARROW (arrow1)
+	MAKE_DOOR_MANUAL (door1)
+ 
+ IF ( savecount58 = 1 )
+	   ++savecount86
+	   ++savecount91
+	ENDIF
+ 
+ IF ( CHECK_DEATHARREST_EXECUTED() )
+	   ++savecount89
+	   ++savecount92
+	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (zaibgang, p1, -1)
+	   CLEAR_WANTED_LEVEL (p1)
+	ENDIF
+ 
+	MISSION_HAS_FINISHED ()
+ 
+	SET savecount81 = 0
+	SET savecount84 = 0
+ 
+RETURN
+
+MISSIONSTART
+GOSUB zaib_med_phone1_m1:
+GOSUB clean_up_zaib_med_phone1_m1:
+MISSIONEND

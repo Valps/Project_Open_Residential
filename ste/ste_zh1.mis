@@ -1,0 +1,212 @@
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Murder In The Mall! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+// Decompiled from "ste_zh1.scr" Using Epic GTA2 Script Decompiler by T.M.
+
+//FORWARD zaib_hard_phone_m1:
+//FORWARD clean_up_zaib_hard_phone_m1:
+
+COUNTER z_h_1_while_loop = 0
+COUNTER z_h_1_is_player_in_mall = 0
+COUNTER z_h_1_has_hunting_started = 0
+//COUNTER count5 = 0
+//COUNTER count6 = 0
+//COUNTER count7 = 0
+//COUNTER count8 = 0
+//COUNTER count9 = 0
+//COUNTER count10 = 0
+
+//CHAR_DATA chr7
+//CHAR_DATA chr8
+//CHAR_DATA chr9
+
+//CAR_DATA auto120
+//CAR_DATA auto121
+//CAR_DATA auto122
+
+ONSCREEN_COUNTER z_h_1_onscreen_2
+ONSCREEN_COUNTER z_h_1_onscreen_3
+
+COUNTER z_h_1_scie_remaining = 0
+//COUNTER count12 = 0
+COUNTER z_h_1_scie_kill_goal = 100
+
+OBJ_DATA z_h_1_health_1
+OBJ_DATA z_h_1_health_2
+OBJ_DATA z_h_1_health_3
+OBJ_DATA z_h_1_health_4
+OBJ_DATA z_h_1_armour_1
+OBJ_DATA z_h_1_armour_2
+OBJ_DATA z_h_1_armour_3
+OBJ_DATA z_h_1_invul_powerup
+OBJ_DATA z_h_1_invisible_powerup
+OBJ_DATA z_h_1_electrogun
+OBJ_DATA z_h_1_fast_reload_powerup
+OBJ_DATA z_h_1_double_damage_powerup
+
+COUNTER z_h_1_scie_members_killed = 0
+//COUNTER count15 = 0
+COUNTER z_h_1_has_bonus_started = 0
+//COUNTER count17 = 0
+
+CHAR_DATA z_h_1_zmen_group
+//CAR_DATA auto123
+
+/*
+COUNTER count18 = 0
+COUNTER count19 = 0
+COUNTER count20 = 0
+COUNTER count21 = 0
+COUNTER count22 = 0
+COUNTER count23 = 0
+COUNTER count24 = 0
+COUNTER count25 = 0
+*/
+
+BONUS z_h_1_bonus
+
+zaib_hard_phone_m1:
+ 
+	SET savecount18 = 0
+ 
+	DISPLAY_MESSAGE (2469)          //  MURDER IN THE MALL!
+ 
+	SET savecount81 = 1
+	SET savecount84 = 1
+ 
+	z_h_1_health_1 = CREATE_OBJ (166.50, 184.50, 5.00) 0 COLLECT_30 END
+	z_h_1_health_2 = CREATE_OBJ (166.50, 166.50, 6.00) 0 COLLECT_30 END
+	z_h_1_health_3 = CREATE_OBJ (154.50, 169.50, 3.00) 0 COLLECT_30 END
+	z_h_1_health_4 = CREATE_OBJ (149.50, 186.50, 3.00) 0 COLLECT_30 END
+ 
+	z_h_1_armour_1 = CREATE_OBJ (152.50, 165.50, 4.00) 0 COLLECT_31 END
+	z_h_1_armour_2 = CREATE_OBJ (164.50, 173.50, 5.00) 0 COLLECT_31 END
+	z_h_1_armour_3 = CREATE_OBJ (180.50, 180.50, 3.00) 0 COLLECT_31 END
+ 
+	z_h_1_invul_powerup = CREATE_OBJ (164.50, 175.50, 3.00) 0 COLLECT_34 END
+	z_h_1_invisible_powerup = CREATE_OBJ (161.50, 165.50, 3.00) 0 COLLECT_39 END
+	z_h_1_electrogun = CREATE_OBJ (176.50, 190.50, 4.00) 0 COLLECT_03 END
+	z_h_1_fast_reload_powerup = CREATE_OBJ (171.50, 162.50, 4.00) 0 COLLECT_36 END
+	z_h_1_double_damage_powerup = CREATE_OBJ (155.50, 184.50, 6.00) 0 COLLECT_35 END
+ 
+	FORCE_CLEANUP (z_h_1_health_1)
+	FORCE_CLEANUP (z_h_1_health_2)
+	FORCE_CLEANUP (z_h_1_health_3)
+	FORCE_CLEANUP (z_h_1_health_4)
+	FORCE_CLEANUP (z_h_1_armour_1)
+	FORCE_CLEANUP (z_h_1_armour_2)
+	FORCE_CLEANUP (z_h_1_armour_3)
+	FORCE_CLEANUP (z_h_1_invul_powerup)
+	FORCE_CLEANUP (z_h_1_invisible_powerup)
+	FORCE_CLEANUP (z_h_1_electrogun)
+	FORCE_CLEANUP (z_h_1_fast_reload_powerup)
+	FORCE_CLEANUP (z_h_1_double_damage_powerup)
+ 
+	DISPLAY_BRIEF (2940)  //  "Ah, Gecko! Red Valdez here. I'm curious to see how well you handle extreme situations. Some Z-Men will join you shortly. Your destination is The Mall."
+ 
+ //  Creating some Z-Men to help the player
+	z_h_1_zmen_group = CREATE_CHAR (207.50, 18.50, 3.00) 8 180 CRIMINAL END
+	SET_CHAR_SHOOTING_SKILL (z_h_1_zmen_group, CRACK_SHOT)
+	GIVE_WEAPON (z_h_1_zmen_group, MACHINE_GUN)
+	ADD_CHAR_TO_GANG (z_h_1_zmen_group, zaibgang)
+	ADD_GROUP_TO_CHARACTER (z_h_1_zmen_group, 6)
+	SET_CHAR_OBJECTIVE (z_h_1_zmen_group, WAIT_ON_FOOT)
+	SET_CHAR_THREAT_REACTION (z_h_1_zmen_group, NO_REACTION)
+	MAKE_NEW_LEADER_OF_GROUP (z_h_1_zmen_group, p1)
+ 
+	POINT_ARROW_AT (arrow1, 160.50, 171.50, 3.00)            //  Point at the Mall
+ 
+ WHILE_EXEC ( z_h_1_while_loop = 0 )
+    
+    //  If the player has arrived at the Mall
+    IF ( ( IS_CHAR_IN_ZONE(p1, s07) ) AND ( z_h_1_has_hunting_started = 0 ) )
+       DISPLAY_BRIEF (2944)       //  "Now here's the deal. Kill 100 Scientists in The Mall - but no vehicles, understand! I want to see how well you can handle firepower under duress."
+      	z_h_1_bonus = START_BONUS_CHECK (s07, 65535, 100, 0, CHAR, NOT_EXCLUSIVE, BY_ANY_FOOT_WEAPON, NONE, sciegang)
+	      SET z_h_1_has_hunting_started = 1
+	      SET z_h_1_scie_remaining = 100
+	      SET z_h_1_has_bonus_started = 1
+	      ADD_ONSCREEN_COUNTER (z_h_1_onscreen_2, z_h_1_scie_remaining)
+	      REMOVE_ARROW (arrow1)
+    ENDIF
+    
+    //  If the bonus has started, store the number of scientists killed
+    IF ( z_h_1_has_bonus_started = 1 )
+       STORE_BONUS_COUNT (z_h_1_bonus, z_h_1_scie_members_killed)
+    ENDIF
+    
+    //  Compute the number of scientists yet to be killed
+    IF ( z_h_1_has_bonus_started = 1 )
+       SET z_h_1_scie_remaining = (z_h_1_scie_kill_goal - z_h_1_scie_members_killed)
+    ENDIF
+    
+    //  If the player has returned to the Mall
+    IF ( ( IS_CHAR_IN_ZONE(p1, s07) ) AND ( z_h_1_is_player_in_mall = 0 ) )
+       SET z_h_1_is_player_in_mall = 1
+	      REMOVE_ARROW (arrow1)
+    ENDIF
+    
+    //  If the player has left the Mall
+    IF ( ( NOT ( IS_CHAR_IN_ZONE(p1, s07) ) ) AND ( z_h_1_is_player_in_mall = 1 ) )
+       DISPLAY_BRIEF (2945)                                            //  "Return to The Mall, Gecko, and kill the Scientists!"
+	      POINT_ARROW_AT (arrow1, 160.50, 171.50, 3.00)
+	      SET z_h_1_is_player_in_mall = 0
+    ENDIF
+    
+    //  If the player has killed 50 scientists in the Mall
+    IF ( ( z_h_1_has_hunting_started = 1 ) AND ( HAS_BONUS_PASSED(z_h_1_bonus) ) )
+       SET z_h_1_while_loop = 1
+    ENDIF
+ 
+ ENDWHILE
+	
+ //  The player has killed 50 scientists in the Mall
+ 
+	CLEAR_ALL_BRIEFS ()
+	DISPLAY_BRIEF (2947)         //  "Commendable combat skills, Gecko! Here's $70,000 in recognition of your ruthlessness."
+	ADD_SCORE (p1, 70000)
+	SET savecount60 = 1
+	DISPLAY_MESSAGE (2999)       //  Mission Complete!
+	CLEAR_WANTED_LEVEL (p1)
+	ADD_MULTIPLIER (p1, 1)
+	CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (zaibgang, p1, 1)
+ 
+RETURN
+
+
+clean_up_zaib_hard_phone_m1:                                    //  Clean up
+ 
+ //  Destroy the z-men group
+ IF ( NOT ( HAS_CHARACTER_DIED(z_h_1_zmen_group) ) )
+	   DESTROY_GROUP (z_h_1_zmen_group)
+	ENDIF
+ 
+	SET savecount81 = 0
+	SET savecount84 = 0
+ 
+	REMOVE_ARROW (arrow1)
+	CLEAR_ONSCREEN_COUNTER (z_h_1_onscreen_2)
+	CLEAR_ONSCREEN_COUNTER (z_h_1_onscreen_3)
+ 
+ IF ( savecount60 = 1 )
+	   ++savecount86
+	   ++savecount91
+	ENDIF
+ 
+ IF ( CHECK_DEATHARREST_EXECUTED() )
+	   ++savecount89
+	   ++savecount92
+	   CLEAR_TIMER (z_h_1_onscreen_2)
+	   CLEAR_TIMER (z_h_1_onscreen_3)
+	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (zaibgang, p1, -1)
+	   CLEAR_WANTED_LEVEL (p1)
+	ENDIF
+ 
+	MISSION_HAS_FINISHED ()
+ 
+RETURN
+
+MISSIONSTART
+GOSUB zaib_hard_phone_m1:
+GOSUB clean_up_zaib_hard_phone_m1:
+MISSIONEND

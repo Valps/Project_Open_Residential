@@ -1,0 +1,568 @@
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Penal Ties! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+// Decompiled from "ste_rh2.scr" Using Epic GTA2 Script Decompiler by T.M.
+
+//FORWARD redn_hard_phone_m2:
+//FORWARD clean_up_redn_hard_phone_m2:
+
+CAR_DATA r_h_2_benson_car
+
+CAR_DATA r_h_2_cop_car_1
+CAR_DATA r_h_2_cop_car_2
+CAR_DATA r_h_2_cop_car_3
+CAR_DATA r_h_2_cop_car_4
+
+CAR_DATA r_h_2_special_agent_car_1
+CAR_DATA r_h_2_special_agent_car_2
+CAR_DATA r_h_2_special_agent_car_3
+
+CHAR_DATA r_h_2_prison_guard_1
+CHAR_DATA r_h_2_prison_guard_2
+CHAR_DATA r_h_2_prison_guard_3
+CHAR_DATA r_h_2_prison_guard_4
+CHAR_DATA r_h_2_prison_guard_5
+CHAR_DATA r_h_2_prison_guard_6
+CHAR_DATA r_h_2_prison_guard_7
+CHAR_DATA r_h_2_prison_guard_8
+
+CHAR_DATA r_h_2_the_hump_char
+
+CHAR_DATA r_h_2_cop_driver_1
+CHAR_DATA r_h_2_cop_driver_2
+CHAR_DATA r_h_2_cop_driver_3
+CHAR_DATA r_h_2_cop_driver_4
+
+OBJ_DATA r_h_2_powergen_1_obj
+OBJ_DATA r_h_2_powergen_2_obj
+
+
+LIGHT r_h_2_prison_alarm_light_1
+LIGHT r_h_2_prison_alarm_light_2
+LIGHT r_h_2_prison_alarm_light_3
+LIGHT r_h_2_prison_alarm_light_4
+LIGHT r_h_2_prison_alarm_light_5
+LIGHT r_h_2_prison_alarm_light_6
+
+SOUND r_h_2_generator_1_sound
+SOUND r_h_2_generator_2_sound
+
+SOUND r_h_2_prison_alarm_sound_1
+SOUND r_h_2_prison_alarm_sound_2
+SOUND r_h_2_prison_alarm_sound_3
+SOUND r_h_2_prison_alarm_sound_4
+SOUND r_h_2_prison_alarm_sound_5
+SOUND r_h_2_prison_alarm_sound_6
+SOUND r_h_2_prison_alarm_sound_7
+SOUND r_h_2_prison_alarm_sound_8
+SOUND r_h_2_prison_alarm_sound_9
+SOUND r_h_2_prison_alarm_sound_10
+SOUND r_h_2_prison_alarm_sound_11
+SOUND r_h_2_prison_alarm_sound_12
+
+//COUNTER count2 = 0
+
+COUNTER r_h_2_player_in_benson = 0
+
+COUNTER r_h_2_while_loop_1 = 0
+COUNTER r_h_2_while_loop_2 = 0
+
+//COUNTER count6 = 0
+
+COUNTER r_h_2_generator_1_countdown = 0
+COUNTER r_h_2_generator_2_countdown = 0
+
+COUNTER r_h_2_countdown_gen_1_started = 0
+COUNTER r_h_2_countdown_gen_2_started = 0
+
+COUNTER r_h_2_generators_destroyed = 0
+
+//COUNTER count12 = 0
+//COUNTER count13 = 0
+//COUNTER count14 = 0
+COUNTER r_h_2_player_met_the_hump = 0
+COUNTER r_h_2_prison_gates_open = 0
+COUNTER r_h_2_prison_riot_started = 0
+COUNTER r_h_2_gen_1_bomb_planted = 0
+COUNTER r_h_2_gen_2_bomb_planted = 0
+COUNTER r_h_2_hunting_guards = 0
+COUNTER r_h_2_all_guards_killed = 0
+COUNTER r_h_2_sound_lights_created = 0
+
+//ONSCREEN_COUNTER onscreen2
+ONSCREEN_COUNTER r_h_2_guards_onscreen_counter
+
+//COUNTER count23 = 0
+COUNTER r_h_2_guards_to_be_killed = 0
+COUNTER r_h_2_guards_kill_goal = 8
+//COUNTER count26 = 0
+COUNTER r_h_2_guards_killed = 0
+COUNTER r_h_2_player_escaped_prison = 0
+
+redn_hard_phone_m2:
+
+	SET savecount22 = 0
+ 
+	DISPLAY_MESSAGE (2956)          //  PENAL TIES!
+ 
+	SET savecount81 = 1
+	SET savecount83 = 1
+ 
+	DISPLAY_BRIEF (2211)            //  "Hey, Rooster, it's Billy Bob. I had me some bad times with the Alma Mater Prison Guards [...] Only first we gotta get you inside..."
+	DISPLAY_BRIEF (2212)            //  "You want to get inside Alma Mater, boy, you need to get arrested. The Cops have to think you are sellin' Beany Liquor."
+	DISPLAY_BRIEF (2213)            //  "Meet our Liquor-Man outside the Strip Club and the Cops will soon find you. We will make contact inside Alma Mater."
+ 
+ //  The benson at the Strip Club
+	r_h_2_benson_car = CREATE_CAR (211.50, 190.50, 2.00) 0 200 MERC END
+	SET_CAR_NO_COLLIDE (r_h_2_benson_car)
+ 
+ //  Creating the bulletproofed special agent cars in the prison
+	r_h_2_special_agent_car_1 = CREATE_CAR (37.50, 236.00, 2.00) 0 175 EDSELFBI END
+	CHANGE_CAR_LOCK (r_h_2_special_agent_car_1, LOCKED)
+	SET_CAR_BULLETPROOF (r_h_2_special_agent_car_1, ON)
+ 
+	r_h_2_special_agent_car_2 = CREATE_CAR (35.50, 236.00, 2.00) 10 5 EDSELFBI END
+	CHANGE_CAR_LOCK (r_h_2_special_agent_car_2, LOCKED)
+	SET_CAR_BULLETPROOF (r_h_2_special_agent_car_2, ON)
+ 
+	r_h_2_special_agent_car_3 = CREATE_CAR (32.50, 236.00, 2.00) 0 185 EDSELFBI END
+	CHANGE_CAR_LOCK (r_h_2_special_agent_car_3, LOCKED)
+	SET_CAR_BULLETPROOF (r_h_2_special_agent_car_3, ON)
+ 
+ //  Point arrow at the benson
+	POINT_ARROW_AT (arrow1, r_h_2_benson_car)
+ 
+ //  Creating the prison gates generators
+	r_h_2_powergen_1_obj = CREATE_OBJ (33.50, 227.50, 5.00) 0 POWERGEN END
+	r_h_2_powergen_2_obj = CREATE_OBJ (39.50, 227.50, 5.00) 0 POWERGEN END
+ 
+ WHILE_EXEC ( r_h_2_while_loop_1 = 0 )
+    
+    //  If the player entered the benson
+    IF ( ( r_h_2_player_in_benson = 0 ) AND ( IS_CHARACTER_IN_CAR(p1, r_h_2_benson_car) ) )
+       SET r_h_2_player_in_benson = 1
+	      SET_ALL_CONTROLS_STATUS (p1, OFF)              //  Suppress any of player movements
+	      CHANGE_CAR_LOCK (r_h_2_benson_car, LOCKED)              //  Lock the benson
+	      REMOVE_ARROW (arrow1)
+	      DISPLAY_BRIEF (2214)                           //  "I heard you got some Beany Liquor for me?"
+    ENDIF
+    
+    //  If the benson has been destroyed
+    IF ( IS_CAR_WRECKED(r_h_2_benson_car) )
+       IF ( savecount22 = 0 )
+          CLEAR_ALL_BRIEFS ()
+	         DISPLAY_BRIEF (2229)
+	         SET savecount22 = 1
+	         DISPLAY_MESSAGE (2998)
+          RETURN
+       ENDIF
+    ENDIF
+    
+    //  Creating the cop cars and their drivers
+    IF ( r_h_2_player_in_benson = 1 )
+    
+       r_h_2_cop_car_1 = CREATE_CAR (205.50, 188.50, 2.00) 0 70 COPCAR END
+       r_h_2_cop_car_2 = CREATE_CAR (217.50, 188.50, 2.00) 0 285 COPCAR END
+       r_h_2_cop_car_3 = CREATE_CAR (217.50, 192.50, 2.00) 0 250 COPCAR END
+       r_h_2_cop_car_4 = CREATE_CAR (205.50, 192.50, 2.00) 0 110 COPCAR END
+       
+       r_h_2_cop_driver_1 = CREATE_CHAR_INSIDE_CAR (r_h_2_cop_car_1) 0 DUMMY END
+       r_h_2_cop_driver_2 = CREATE_CHAR_INSIDE_CAR (r_h_2_cop_car_2) 0 DUMMY END
+       r_h_2_cop_driver_3 = CREATE_CHAR_INSIDE_CAR (r_h_2_cop_car_3) 0 DUMMY END
+       r_h_2_cop_driver_4 = CREATE_CHAR_INSIDE_CAR (r_h_2_cop_car_4) 0 DUMMY END
+       
+       SET_CAR_EMERG_LIGHTS (r_h_2_cop_car_1, ON)
+       SET_CAR_EMERG_LIGHTS (r_h_2_cop_car_2, ON)
+       SET_CAR_EMERG_LIGHTS (r_h_2_cop_car_3, ON)
+       SET_CAR_EMERG_LIGHTS (r_h_2_cop_car_4, ON)
+       
+       SET_CHAR_OBJECTIVE (r_h_2_cop_driver_1, FOLLOW_CAR_IN_CAR, r_h_2_benson_car)
+       SET_CHAR_OBJECTIVE (r_h_2_cop_driver_2, FOLLOW_CAR_IN_CAR, r_h_2_benson_car)
+       SET_CHAR_OBJECTIVE (r_h_2_cop_driver_3, FOLLOW_CAR_IN_CAR, r_h_2_benson_car)
+       SET_CHAR_OBJECTIVE (r_h_2_cop_driver_4, FOLLOW_CAR_IN_CAR, r_h_2_benson_car)
+       
+       SET r_h_2_player_in_benson = 2
+       
+    ENDIF
+    
+    //  If any of the four cop cars is on player screen
+    IF ( r_h_2_player_in_benson = 2 )
+       
+       IF ( ( ( ( IS_ITEM_ONSCREEN(r_h_2_cop_car_1) ) OR ( IS_ITEM_ONSCREEN(r_h_2_cop_car_2) ) ) OR ( IS_ITEM_ONSCREEN(r_h_2_cop_car_3) ) ) OR ( IS_ITEM_ONSCREEN(r_h_2_cop_car_4) ) )
+          DISPLAY_MESSAGE (2215)            //  GOING DOWN!
+          SET_AMBIENT_LEVEL (0.00, 100)     //  Lights out
+          SET r_h_2_while_loop_1 = 1        //  Get out of this WHILE_EXEC loop
+       ENDIF
+       
+    ENDIF
+    
+ 
+ ENDWHILE
+ 
+ DELAY_HERE (200)
+ 
+ MAKE_CHAR_DO_NOTHING (r_h_2_cop_driver_1)
+ MAKE_CHAR_DO_NOTHING (r_h_2_cop_driver_2)
+ MAKE_CHAR_DO_NOTHING (r_h_2_cop_driver_3)
+ MAKE_CHAR_DO_NOTHING (r_h_2_cop_driver_4)
+ 
+ EXEC
+     
+     //  This IF exists because in official version released by R* the command WARP_FROM_CAR_TO_POINT crashes the game if the player isn't in a car. It was fixed on unofficial versions
+     IF ( IS_CHARACTER_IN_CAR(p1, r_h_2_benson_car) )             
+        WARP_FROM_CAR_TO_POINT (p1, 35.00, 238.00, 2.00, 180)     //  Teleport player to prison
+        SET_CHAR_GRAPHIC_TYPE (p1, GANG_GRAPHIC, 22)              //  Change the player clothes, he is now wearing prisioner clothes
+        //SET_ALL_CONTROLS_STATUS (p1, ON)                        //  Give back the player controls
+     ENDIF
+
+ ENDEXEC
+ 
+ REMOVE_WEAPONS (p1)            //     :\
+ CLEAR_WANTED_LEVEL (p1)
+ 
+ //  Generators sounds
+ r_h_2_generator_1_sound = CREATE_SOUND (33.50, 227.50, 5.00) GENERATOR_RUMBLE PLAY_FOREVER END
+ r_h_2_generator_2_sound = CREATE_SOUND (39.50, 227.50, 5.00) GENERATOR_RUMBLE PLAY_FOREVER END
+ 
+ //  While the player warp to prison has not finished, do nothing
+ WHILE ( NOT ( IS_POINT_ONSCREEN(35.00, 238.00, 2.00) ) )
+    DO_NOWT
+ ENDWHILE
+ 
+ DISPLAY_MESSAGE (2232)                 //  PRISON
+ 
+ //  Delete cop drivers
+ DELETE_ITEM (r_h_2_cop_driver_1)
+ DELETE_ITEM (r_h_2_cop_driver_2)
+ DELETE_ITEM (r_h_2_cop_driver_3)
+ DELETE_ITEM (r_h_2_cop_driver_4)
+ 
+ //  Prison guards
+ r_h_2_prison_guard_1 = CREATE_CHAR (10.50, 227.50, 2.00) 0 180 CRIMINAL_TYPE1 END
+ r_h_2_prison_guard_2 = CREATE_CHAR (22.50, 226.50, 2.00) 0 180 CRIMINAL_TYPE1 END
+ r_h_2_prison_guard_3 = CREATE_CHAR (29.50, 227.50, 2.00) 0 180 CRIMINAL_TYPE1 END
+ r_h_2_prison_guard_4 = CREATE_CHAR (41.50, 237.50, 2.00) 0 180 CRIMINAL_TYPE1 END
+ r_h_2_prison_guard_5 = CREATE_CHAR (37.50, 241.50, 2.00) 0 180 CRIMINAL_TYPE1 END
+ r_h_2_prison_guard_6 = CREATE_CHAR (29.50, 242.50, 2.00) 0 180 CRIMINAL_TYPE1 END
+ r_h_2_prison_guard_7 = CREATE_CHAR (24.50, 244.50, 2.00) 0 180 CRIMINAL_TYPE1 END
+ r_h_2_prison_guard_8 = CREATE_CHAR (19.50, 244.50, 2.00) 0 180 CRIMINAL_TYPE1 END
+ 
+ SET_CHAR_GRAPHIC_TYPE (r_h_2_prison_guard_1, EMERG_GRAPHIC, 0)
+ SET_CHAR_GRAPHIC_TYPE (r_h_2_prison_guard_2, EMERG_GRAPHIC, 0)
+ SET_CHAR_GRAPHIC_TYPE (r_h_2_prison_guard_3, EMERG_GRAPHIC, 0)
+ SET_CHAR_GRAPHIC_TYPE (r_h_2_prison_guard_4, EMERG_GRAPHIC, 0)
+ SET_CHAR_GRAPHIC_TYPE (r_h_2_prison_guard_5, EMERG_GRAPHIC, 0)
+ SET_CHAR_GRAPHIC_TYPE (r_h_2_prison_guard_6, EMERG_GRAPHIC, 0)
+ SET_CHAR_GRAPHIC_TYPE (r_h_2_prison_guard_7, EMERG_GRAPHIC, 0)
+ SET_CHAR_GRAPHIC_TYPE (r_h_2_prison_guard_8, EMERG_GRAPHIC, 0)
+ 
+ SET_CHAR_OBJECTIVE (r_h_2_prison_guard_1, NO_OBJ)
+ SET_CHAR_OBJECTIVE (r_h_2_prison_guard_2, NO_OBJ)
+ SET_CHAR_OBJECTIVE (r_h_2_prison_guard_3, NO_OBJ)
+ SET_CHAR_OBJECTIVE (r_h_2_prison_guard_4, NO_OBJ)
+ SET_CHAR_OBJECTIVE (r_h_2_prison_guard_5, NO_OBJ)
+ SET_CHAR_OBJECTIVE (r_h_2_prison_guard_6, NO_OBJ)
+ SET_CHAR_OBJECTIVE (r_h_2_prison_guard_7, NO_OBJ)
+ SET_CHAR_OBJECTIVE (r_h_2_prison_guard_8, NO_OBJ)
+ 
+ SET_CHAR_THREAT_SEARCH (r_h_2_prison_guard_1, LINE_OF_SIGHT)
+ SET_CHAR_THREAT_SEARCH (r_h_2_prison_guard_2, LINE_OF_SIGHT)
+ SET_CHAR_THREAT_SEARCH (r_h_2_prison_guard_3, LINE_OF_SIGHT)
+ SET_CHAR_THREAT_SEARCH (r_h_2_prison_guard_4, LINE_OF_SIGHT)
+ SET_CHAR_THREAT_SEARCH (r_h_2_prison_guard_5, LINE_OF_SIGHT)
+ SET_CHAR_THREAT_SEARCH (r_h_2_prison_guard_6, LINE_OF_SIGHT)
+ SET_CHAR_THREAT_SEARCH (r_h_2_prison_guard_7, LINE_OF_SIGHT)
+ SET_CHAR_THREAT_SEARCH (r_h_2_prison_guard_8, LINE_OF_SIGHT)
+ 
+ SET_CHAR_THREAT_REACTION (r_h_2_prison_guard_1, REACT_AS_NORMAL)
+ SET_CHAR_THREAT_REACTION (r_h_2_prison_guard_2, REACT_AS_NORMAL)
+ SET_CHAR_THREAT_REACTION (r_h_2_prison_guard_3, REACT_AS_NORMAL)
+ SET_CHAR_THREAT_REACTION (r_h_2_prison_guard_4, REACT_AS_NORMAL)
+ SET_CHAR_THREAT_REACTION (r_h_2_prison_guard_5, REACT_AS_NORMAL)
+ SET_CHAR_THREAT_REACTION (r_h_2_prison_guard_6, REACT_AS_NORMAL)
+ SET_CHAR_THREAT_REACTION (r_h_2_prison_guard_7, REACT_AS_NORMAL)
+ SET_CHAR_THREAT_REACTION (r_h_2_prison_guard_8, REACT_AS_NORMAL)
+
+ GIVE_WEAPON (r_h_2_prison_guard_1, MACHINE_GUN)
+ GIVE_WEAPON (r_h_2_prison_guard_2, MACHINE_GUN)
+ GIVE_WEAPON (r_h_2_prison_guard_3, MACHINE_GUN)
+ GIVE_WEAPON (r_h_2_prison_guard_4, MACHINE_GUN)
+ GIVE_WEAPON (r_h_2_prison_guard_5, MACHINE_GUN)
+ GIVE_WEAPON (r_h_2_prison_guard_6, MACHINE_GUN)
+ GIVE_WEAPON (r_h_2_prison_guard_7, MACHINE_GUN)
+ GIVE_WEAPON (r_h_2_prison_guard_8, MACHINE_GUN)
+ 
+ //  Creating 'The Hump'
+ r_h_2_the_hump_char = CREATE_CHAR (8.50, 242.50, 2.00) 22 180 DUMMY END
+ SET_CHAR_OBJECTIVE (r_h_2_the_hump_char, NO_OBJ)
+ 
+ SET_AMBIENT_LEVEL (0.20, 100)            //  Give back the overall map light, but a little darker ( 0.20 vs 0.30 )
+ 
+ SET_ALL_CONTROLS_STATUS (p1, ON)         //  Give back the player controls
+ 
+ DISPLAY_BRIEF (2216)                     //  "Not bad, son, you made it inside. Now locate The Hump - he's got your instructions."
+ POINT_ARROW_AT (arrow1, r_h_2_the_hump_char)           //  Point at 'The Hump'
+ 
+ WHILE_EXEC ( r_h_2_while_loop_2 = 0 )
+    
+    //  If the player meet 'The Hump'
+    IF ( ( r_h_2_player_met_the_hump = 0 ) AND ( LOCATE_ANOTHER_CHARACTER_ON_FOOT(p1, r_h_2_the_hump_char, 1.00, 1.00) ) )
+       DISPLAY_BRIEF (2217)                 //  "You made it! Hot DAMN! Take this here Emergency Keycard and get a Uniform and a S-Uzi Machine Gun from the Guard Room."
+       SET r_h_2_player_met_the_hump = 1
+       POINT_ARROW_AT (arrow1, 22.50, 249.50, 2.00)       //  Point arrow at Guard Room
+    ENDIF
+    
+    //  If the player enter the Guard Room
+    IF ( ( r_h_2_player_met_the_hump = 1 ) AND ( LOCATE_CHARACTER_ON_FOOT(p1, 22.50, 249.50, 2.00, 0.50, 0.50) ) )
+       IF ( r_h_2_hunting_guards = 0 )
+          DISPLAY_BRIEF (2218)                              //  "The Prisoners will start riotin' when you start shootin'. When the riot starts you kill all the guards."
+          SET_CHAR_GRAPHIC_TYPE (p1, EMERG_GRAPHIC, 0)      //  Change player clothes, he is now wearing guard clothes
+          REMOVE_ARROW (arrow1)
+          GIVE_WEAPON (p1, MACHINE_GUN)
+          DELETE_ITEM (r_h_2_the_hump_char)
+          bonus7 = START_BONUS_CHECK (almagang, 65535, 8, 0, CHAR, NOT_EXCLUSIVE, BY_ANY_WEAPON, NONE, NO_OCCUPATION, 0)
+          SET r_h_2_guards_to_be_killed = 8
+          SET r_h_2_hunting_guards = 1
+          ADD_ONSCREEN_COUNTER (r_h_2_guards_onscreen_counter, r_h_2_guards_to_be_killed)
+       ENDIF
+    ENDIF
+    
+    IF ( ( r_h_2_prison_riot_started = 0 ) AND ( IS_CHAR_FIRING_ONSCREEN(p1) ) )
+    
+       MAKE_ALL_CHARS_MUGGERS (ON)                         //  RIOT!
+       DISPLAY_BRIEF (2219)                                //  "SHIT! We got a RIOT on our hands!"
+       
+       SET r_h_2_prison_riot_started = 1                                     //  Lock this IF
+       
+       //  Prison alarm sounds and lights
+       
+       r_h_2_prison_alarm_sound_7 = CREATE_SOUND (29.00, 241.00, 1.00) PRISON_RIOT PLAY_FOREVER END
+       r_h_2_prison_alarm_sound_8 = CREATE_SOUND (38.00, 232.00, 1.00) PRISON_RIOT PLAY_FOREVER END
+       r_h_2_prison_alarm_sound_9 = CREATE_SOUND (21.00, 226.00, 1.00) PRISON_RIOT PLAY_FOREVER END
+       r_h_2_prison_alarm_sound_10 = CREATE_SOUND (7.00, 235.00, 1.00) PRISON_RIOT PLAY_FOREVER END
+       r_h_2_prison_alarm_sound_11 = CREATE_SOUND (19.00, 238.00, 1.00) PRISON_RIOT PLAY_FOREVER END
+       r_h_2_prison_alarm_sound_12 = CREATE_SOUND (20.00, 250.00, 1.00) PRISON_RIOT PLAY_FOREVER END
+       
+       r_h_2_prison_alarm_light_1 = CREATE_LIGHT (29.00, 241.00, 1.00) 7.99 255 (255, 0, 0) 30 100 5
+       r_h_2_prison_alarm_light_2 = CREATE_LIGHT (38.00, 232.00, 1.00) 7.99 255 (255, 0, 0) 30 100 5
+       r_h_2_prison_alarm_light_3 = CREATE_LIGHT (21.00, 226.00, 1.00) 7.99 255 (255, 0, 0) 30 100 5
+       r_h_2_prison_alarm_light_4 = CREATE_LIGHT (7.00, 235.00, 1.00) 7.99 255 (255, 0, 0) 30 100 5
+       r_h_2_prison_alarm_light_5 = CREATE_LIGHT (19.00, 238.00, 1.00) 7.99 255 (255, 0, 0) 30 100 5
+       r_h_2_prison_alarm_light_6 = CREATE_LIGHT (20.00, 250.00, 1.00) 7.99 255 (255, 0, 0) 30 100 5
+       
+       r_h_2_prison_alarm_sound_1 = CREATE_SOUND (29.00, 241.00, 1.00) PRISON_ALARM PLAY_FOREVER END
+       r_h_2_prison_alarm_sound_2 = CREATE_SOUND (38.00, 232.00, 1.00) PRISON_ALARM PLAY_FOREVER END
+       r_h_2_prison_alarm_sound_3 = CREATE_SOUND (21.00, 226.00, 1.00) PRISON_ALARM PLAY_FOREVER END
+       r_h_2_prison_alarm_sound_4 = CREATE_SOUND (7.00, 235.00, 1.00) PRISON_ALARM PLAY_FOREVER END
+       r_h_2_prison_alarm_sound_5 = CREATE_SOUND (19.00, 238.00, 1.00) PRISON_ALARM PLAY_FOREVER END
+       r_h_2_prison_alarm_sound_6 = CREATE_SOUND (20.00, 250.00, 1.00) PRISON_ALARM PLAY_FOREVER END
+
+       SET r_h_2_sound_lights_created = 1                //  sounds and lights were created
+       
+    ENDIF
+    
+    //  If the bonus has started, store the number of guards killed
+    IF ( r_h_2_hunting_guards = 1 )
+       STORE_BONUS_COUNT (bonus7, r_h_2_guards_killed)
+    ENDIF
+    
+    //  If the bonus has started, calculate the number of guards to be killed
+    IF ( r_h_2_hunting_guards = 1 )
+       SET r_h_2_guards_to_be_killed = (r_h_2_guards_kill_goal - r_h_2_guards_killed)
+    ENDIF
+    
+    //  If the player killed all prison guards
+    IF ( r_h_2_hunting_guards = 1 )
+       IF ( HAS_BONUS_PASSED(bonus7) )
+          DISPLAY_BRIEF_NOW (2220)              //  "Super shootin', Rooster. You need to use the Emergency Keycard on the locking mechanisms to blow open the prison gates."
+          POINT_ARROW_AT (arrow1, r_h_2_powergen_1_obj)       //  Point arrow at generator 1
+          POINT_ARROW_AT (arrow3, r_h_2_powergen_2_obj)       //  Point arrow at generator 2
+          CLEAR_ONSCREEN_COUNTER (r_h_2_guards_onscreen_counter)
+          SET r_h_2_all_guards_killed = 1
+          SET r_h_2_hunting_guards = 2
+       ENDIF
+    ENDIF
+    
+    //  If the player reaches the generator 1
+    IF ( ( r_h_2_gen_1_bomb_planted = 0 ) AND ( LOCATE_CHARACTER_ANY_MEANS(p1, 33.50, 227.50, 5.00, 1.50, 1.50) ) )
+       IF ( r_h_2_all_guards_killed = 1 )
+          DISPLAY_TIMER (timer1, 10)                //  10 seconds to explode
+          REMOVE_ARROW (arrow1)
+          SET r_h_2_generator_1_countdown = 250     //  10 seconds is 300 game cycles, but for some reason the original author coded 250 cycles (8.3 s). I will leave as it is.
+          SET r_h_2_countdown_gen_1_started = 1
+          SET r_h_2_gen_1_bomb_planted = 1
+       ENDIF
+    ENDIF
+    
+    //  Countdown generator 1
+    IF ( r_h_2_countdown_gen_1_started = 1 )
+       --r_h_2_generator_1_countdown
+    ENDIF
+    
+    //  If the countdown reaches zero
+    IF ( ( r_h_2_countdown_gen_1_started = 1 ) AND ( r_h_2_generator_1_countdown = 0 ) )
+       EXPLODE (r_h_2_powergen_1_obj)              //  BOOM
+       ++r_h_2_generators_destroyed                //  Count +1 generator destroyed
+       DELETE_ITEM (r_h_2_generator_1_sound)       //  Delete generator rumble sound
+    ENDIF
+    
+    
+    //  If the player reaches the generator 2
+    IF ( ( r_h_2_gen_2_bomb_planted = 0 ) AND ( LOCATE_CHARACTER_ANY_MEANS(p1, 39.50, 227.50, 5.00, 1.50, 1.50) ) )
+       IF ( r_h_2_all_guards_killed = 1 )
+          DISPLAY_TIMER (timer1, 10)                //  10 seconds to explode
+          REMOVE_ARROW (arrow3)
+          SET r_h_2_generator_2_countdown = 250     //  again, 250 cycles
+          SET r_h_2_countdown_gen_2_started = 1
+          SET r_h_2_gen_2_bomb_planted = 1
+       ENDIF
+    ENDIF
+    
+    //  Countdown generator 2
+    IF ( r_h_2_countdown_gen_2_started = 1 )
+       --r_h_2_generator_2_countdown
+    ENDIF
+    
+    //  If the countdown reaches zero
+    IF ( ( r_h_2_countdown_gen_2_started = 1 ) AND ( r_h_2_generator_2_countdown = 0 ) )
+       EXPLODE (r_h_2_powergen_2_obj)              //  BOOM
+       ++r_h_2_generators_destroyed                //  Count +1 generator destroyed
+       DELETE_ITEM (r_h_2_generator_2_sound)       //  Delete generator rumble sound
+    ENDIF
+    
+    //  If all generators have been destroyed
+    IF ( r_h_2_generators_destroyed = 2 )
+       OPEN_DOOR (door5)                     //  Open prison doors
+       OPEN_DOOR (door6)                     //  Open prison doors
+       CHANGE_CAR_LOCK (r_h_2_special_agent_car_1, UNLOCKED)   //  Unlock special agent cars
+       CHANGE_CAR_LOCK (r_h_2_special_agent_car_2, UNLOCKED)   //  Unlock special agent cars
+       CHANGE_CAR_LOCK (r_h_2_special_agent_car_3, UNLOCKED)   //  Unlock special agent cars
+       DISPLAY_BRIEF (2224)                  //  "Hey, Rooster, the gates are open! Hot DAMN - the bridge is still up! You are gonna have to use a vehicle to cross that there gap."
+       SET r_h_2_prison_gates_open = 1
+       SET r_h_2_generators_destroyed = 3
+    ENDIF
+    
+    //  If the player escapes the prison        (note that it doenst check if the player has killed all the guards nor destroyed the generators)
+    IF ( ( NOT ( IS_CHAR_IN_GANGZONE(p1, almagang) ) ) AND ( r_h_2_player_escaped_prison = 0 ) )
+       SET_AMBIENT_LEVEL (0.30, 0)                   //  Give back the original overall map light
+       DISPLAY_BRIEF (2225)                          //  "The Cops are lookin' for you, Rooster. Get over to Disgracelands and change clothes."
+       SET r_h_2_player_escaped_prison = 1
+       ALTER_WANTED_LEVEL (p1, 3)                    //  POLICE!
+       POINT_ARROW_AT (arrow1, 39.50, 79.50, 2.00)   //  Point at the Disgracelands
+       MAKE_ALL_CHARS_MUGGERS (OFF)                  //  There is not riot outside the prison
+    ENDIF
+    
+    //  If the player reaches at the building in Disgracelands        (note that it doenst check if the player has killed all the guards nor destroyed the generators)
+    IF ( LOCATE_CHARACTER_ANY_MEANS(p1, 39.50, 79.50, 2.00, 1.00, 1.00) )
+    
+       CLEAR_ALL_BRIEFS ()
+       ADD_SCORE (p1, 70000)
+       
+       SET_CHAR_GRAPHIC_TYPE (p1, GANG_GRAPHIC, 25)
+       DISPLAY_BRIEF (2228)                                 //  "Yee-ha! Them butt-slappin', shit-suckin' Guards are face down for the last time. [...] Here - you take this $70,000."
+       
+       SET savecount64 = 1
+       
+       DISPLAY_MESSAGE (2999)                               //  Mission Complete!
+       CLEAR_WANTED_LEVEL (p1)
+       ADD_MULTIPLIER (p1, 1)
+       CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (redngang, p1, 1)    //  RESPECT +
+       
+       SET_PHONE_DEAD (obj10)                         //  Kill Redneck Hard Phone
+       DISABLE_THREAD_TRIGGER (trigger15)             //  Disable its trigger too
+       
+       RETURN
+       
+    ENDIF
+ 
+ ENDWHILE
+ 
+RETURN
+
+
+
+
+clean_up_redn_hard_phone_m2:
+
+	SET_CHAR_GRAPHIC_TYPE (p1, GANG_GRAPHIC, 25)           //  Claude get back his default clothes
+ 
+	SET savecount81 = 0
+	SET savecount83 = 0
+ 
+	REMOVE_ARROW (arrow1)
+	REMOVE_ARROW (arrow3)
+ 
+	CLEAR_ONSCREEN_COUNTER (r_h_2_guards_onscreen_counter)
+ 
+	SET_ALL_CONTROLS_STATUS (p1, ON)
+ 
+	SET_AMBIENT_LEVEL (0.30, 0)
+ 
+ IF ( savecount64 = 1 )
+	   ++savecount87
+	   ++savecount91
+    
+    IF ( r_h_2_sound_lights_created = 1 )
+	      DELETE_ITEM (r_h_2_prison_alarm_sound_1)
+	      DELETE_ITEM (r_h_2_prison_alarm_sound_2)
+	      DELETE_ITEM (r_h_2_prison_alarm_sound_3)
+	      DELETE_ITEM (r_h_2_prison_alarm_sound_4)
+	      DELETE_ITEM (r_h_2_prison_alarm_sound_5)
+	      DELETE_ITEM (r_h_2_prison_alarm_sound_6)
+	      DELETE_ITEM (r_h_2_prison_alarm_sound_7)
+	      DELETE_ITEM (r_h_2_prison_alarm_sound_8)
+	      DELETE_ITEM (r_h_2_prison_alarm_sound_9)
+	      DELETE_ITEM (r_h_2_prison_alarm_sound_10)
+	      DELETE_ITEM (r_h_2_prison_alarm_sound_11)
+	      DELETE_ITEM (r_h_2_prison_alarm_sound_12)
+	      DELETE_ITEM (r_h_2_prison_alarm_light_1)
+	      DELETE_ITEM (r_h_2_prison_alarm_light_2)
+	      DELETE_ITEM (r_h_2_prison_alarm_light_3)
+	      DELETE_ITEM (r_h_2_prison_alarm_light_4)
+	      DELETE_ITEM (r_h_2_prison_alarm_light_5)
+	      DELETE_ITEM (r_h_2_prison_alarm_light_6)
+	   ENDIF
+    
+ ENDIF
+ 
+ 
+ 
+ IF ( CHECK_DEATHARREST_EXECUTED() )
+	   ++savecount90
+	   ++savecount92
+	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (redngang, p1, -1)
+	   CLEAR_WANTED_LEVEL (p1)
+	   MAKE_ALL_CHARS_MUGGERS (OFF)
+    
+    IF ( r_h_2_sound_lights_created = 1 )
+	      DELETE_ITEM (r_h_2_prison_alarm_sound_1)
+	      DELETE_ITEM (r_h_2_prison_alarm_sound_2)
+	      DELETE_ITEM (r_h_2_prison_alarm_sound_3)
+	      DELETE_ITEM (r_h_2_prison_alarm_sound_4)
+	      DELETE_ITEM (r_h_2_prison_alarm_sound_5)
+	      DELETE_ITEM (r_h_2_prison_alarm_sound_6)
+	      DELETE_ITEM (r_h_2_prison_alarm_sound_7)
+	      DELETE_ITEM (r_h_2_prison_alarm_sound_8)
+	      DELETE_ITEM (r_h_2_prison_alarm_sound_9)
+	      DELETE_ITEM (r_h_2_prison_alarm_sound_10)
+	      DELETE_ITEM (r_h_2_prison_alarm_sound_11)
+	      DELETE_ITEM (r_h_2_prison_alarm_sound_12)
+	      DELETE_ITEM (r_h_2_prison_alarm_light_1)
+	      DELETE_ITEM (r_h_2_prison_alarm_light_2)
+	      DELETE_ITEM (r_h_2_prison_alarm_light_3)
+	      DELETE_ITEM (r_h_2_prison_alarm_light_4)
+	      DELETE_ITEM (r_h_2_prison_alarm_light_5)
+	      DELETE_ITEM (r_h_2_prison_alarm_light_6)
+    ENDIF
+	
+ ENDIF
+ 
+	MISSION_HAS_FINISHED ()
+ 
+RETURN
+
+MISSIONSTART
+GOSUB redn_hard_phone_m2:
+GOSUB clean_up_redn_hard_phone_m2:
+MISSIONEND

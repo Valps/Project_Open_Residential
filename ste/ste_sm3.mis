@@ -1,0 +1,380 @@
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Redneck Attack! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+// Decompiled from "ste_sm3.scr" Using Epic GTA2 Script Decompiler by T.M.
+
+//FORWARD scie_med_phone1_2_m3:
+//FORWARD clean_up_scie_med_phone1_2_m3:
+
+CHAR_DATA s_m_3_redn_group_1
+CHAR_DATA s_m_3_redn_group_2
+CHAR_DATA s_m_3_redn_group_3
+//CHAR_DATA chr10
+//CHAR_DATA chr11
+//CHAR_DATA chr12
+//CHAR_DATA chr13
+//CHAR_DATA chr14
+//CHAR_DATA chr15
+
+CHAR_DATA s_m_3_srs_clone_group_1
+CHAR_DATA s_m_3_srs_clone_group_2
+CHAR_DATA s_m_3_srs_clone_group_3
+
+COUNTER s_m_3_while_loop = 0
+COUNTER s_m_3_generators_destroyed = 0
+COUNTER s_m_3_internal_counter = 0
+COUNTER s_m_3_group_1_alive = 0
+COUNTER s_m_3_group_2_alive = 0
+COUNTER s_m_3_group_3_alive = 0
+//COUNTER count8 = 0
+COUNTER s_m_3_timer = 0
+COUNTER s_m_3_east_generator_destroyed = 0
+COUNTER s_m_3_middle_generator_destroyed = 0
+COUNTER s_m_3_west_generator_destroyed = 0
+COUNTER s_m_3_redn_group_1_arrived = 0
+COUNTER s_m_3_redn_group_2_arrived = 0
+COUNTER s_m_3_redn_group_3_arrived = 0
+COUNTER s_m_3_countdown_started = 0
+
+OBJ_DATA s_m_3_east_generator
+OBJ_DATA s_m_3_middle_generator
+OBJ_DATA s_m_3_west_generator
+
+scie_med_phone1_2_m3:
+ 
+	SET savecount19 = 0
+ 
+	SET savecount81 = 1
+	SET savecount82 = 1
+ 
+	DISPLAY_MESSAGE (2461)              //  REDNECK ATTACK!
+	DISPLAY_BRIEF (2415)
+ 
+	s_m_3_east_generator = CREATE_OBJ (178.50, 248.50, 2.00) 0 POWERGEN END            //  First generator / East generator
+	s_m_3_middle_generator = CREATE_OBJ (173.50, 248.50, 2.00) 0 POWERGEN END          //  Second generator / Middle generator
+	s_m_3_west_generator = CREATE_OBJ (168.50, 248.50, 2.00) 0 POWERGEN END            //  Third generator / West generator
+ 
+ //  Creating SRS clones to protect the first generator
+	s_m_3_srs_clone_group_1 = CREATE_CHAR (177.40, 247.60, 2.00) 7 185 CRIMINAL END
+	SET_CHAR_THREAT_REACTION (s_m_3_srs_clone_group_1, REACT_AS_NORMAL)
+	GIVE_WEAPON (s_m_3_srs_clone_group_1, MACHINE_GUN)
+	ADD_CHAR_TO_GANG (s_m_3_srs_clone_group_1, sciegang)
+	SET_CHAR_OBJECTIVE (s_m_3_srs_clone_group_1, WAIT_ON_FOOT)
+	ADD_GROUP_TO_CHARACTER (s_m_3_srs_clone_group_1, 4)
+ 
+ //  Creating SRS clones to protect the second generator
+	s_m_3_srs_clone_group_2 = CREATE_CHAR (173.40, 247.60, 2.00) 7 180 CRIMINAL END
+	SET_CHAR_THREAT_REACTION (s_m_3_srs_clone_group_2, REACT_AS_NORMAL)
+	GIVE_WEAPON (s_m_3_srs_clone_group_2, MACHINE_GUN)
+	ADD_CHAR_TO_GANG (s_m_3_srs_clone_group_2, sciegang)
+	SET_CHAR_OBJECTIVE (s_m_3_srs_clone_group_2, WAIT_ON_FOOT)
+	ADD_GROUP_TO_CHARACTER (s_m_3_srs_clone_group_2, 4)
+ 
+ //  Creating SRS clones to protect the third generator
+	s_m_3_srs_clone_group_3 = CREATE_CHAR (169.40, 247.60, 2.00) 7 190 CRIMINAL END
+	SET_CHAR_THREAT_REACTION (s_m_3_srs_clone_group_3, REACT_AS_NORMAL)
+	GIVE_WEAPON (s_m_3_srs_clone_group_3, MACHINE_GUN)
+	ADD_CHAR_TO_GANG (s_m_3_srs_clone_group_3, sciegang)
+	SET_CHAR_OBJECTIVE (s_m_3_srs_clone_group_3, WAIT_ON_FOOT)
+	ADD_GROUP_TO_CHARACTER (s_m_3_srs_clone_group_3, 4)
+ 
+	POINT_ARROW_AT (arrow1, 173.50, 248.50, 2.00)    //  Point at the generators
+ 
+ //  While the player does not arrive at the generators
+ WHILE ( s_m_3_while_loop = 0 )
+    
+    //  If the player is seeing the middle generator
+    IF ( IS_ITEM_ACCURATELY_ONSCREEN(s_m_3_middle_generator) )
+       REMOVE_ARROW (arrow1)
+	      DISPLAY_BRIEF (2416)            //  "We need at least ONE Generator intact, THC-303, so defend them well [...] We should have auxiliary power on line in TWO minutes."
+	      SET s_m_3_while_loop = 1
+	      SET s_m_3_countdown_started = 1
+	      DISPLAY_TIMER (s_m_3_timer, 120)                //  120 seconds
+	      SET s_m_3_internal_counter = 3599               //  3600 = 120*30
+    ENDIF
+ 
+	ENDWHILE
+	
+	
+ //  While the countdown has not finished
+ WHILE_EXEC ( s_m_3_internal_counter > 0 )
+    
+    //  Countdown
+    IF ( s_m_3_countdown_started = 1 )
+       --s_m_3_internal_counter
+    ENDIF
+    
+    //  If the first generator has been destroyed
+    IF ( s_m_3_east_generator_destroyed = 0 )
+       IF ( CHECK_OBJ_MODEL(s_m_3_east_generator, POWERGEN_DEAD) )
+          DISPLAY_BRIEF (2417)                         //  "THC-303, we lost a Generator! Kill the Rednecks!"
+	         ++s_m_3_generators_destroyed
+	         SET s_m_3_east_generator_destroyed = 1
+       ENDIF
+    ENDIF
+    
+    //  If the second generator has been destroyed
+    IF ( s_m_3_middle_generator_destroyed = 0 )
+       IF ( CHECK_OBJ_MODEL(s_m_3_middle_generator, POWERGEN_DEAD) )
+          DISPLAY_BRIEF (2418)                         //  "A Generator is down, THC-303! Kill the Rednecks!"
+	         ++s_m_3_generators_destroyed
+	         SET s_m_3_middle_generator_destroyed = 1
+       ENDIF
+    ENDIF
+    
+    //  If the third generator has been destroyed
+    IF ( s_m_3_west_generator_destroyed = 0 )
+       IF ( CHECK_OBJ_MODEL(s_m_3_west_generator, POWERGEN_DEAD) )
+          DISPLAY_BRIEF (2419)                         //  "There goes a Generator, THC-303! Kill the Rednecks!"
+	         ++s_m_3_generators_destroyed
+	         SET s_m_3_west_generator_destroyed = 1
+       ENDIF
+    ENDIF
+    
+    //  If all generators have been destroyed
+    IF ( s_m_3_generators_destroyed = 3 )
+       CLEAR_ALL_BRIEFS ()
+	      DISPLAY_BRIEF (2420)         //  "Your poor performance has cost us dear, THC-303. That will be all for now. Dismissed!"
+	      SET savecount19 = 1
+	      DISPLAY_MESSAGE (2998)       //  Mission Failed!
+       RETURN
+    ENDIF
+    
+    //  If the first group is died or it does not exist, create them                           (east group)
+    IF ( s_m_3_group_1_alive = 0 )
+       s_m_3_redn_group_1 = CREATE_CHAR (177.50, 193.50, 2.00) 5 0 CRIMINAL END
+       SET_CHAR_THREAT_REACTION (s_m_3_redn_group_1, REACT_AS_NORMAL)
+       GIVE_WEAPON (s_m_3_redn_group_1, MACHINE_GUN)
+       ADD_CHAR_TO_GANG (s_m_3_redn_group_1, redngang)
+       ADD_GROUP_TO_CHARACTER (s_m_3_redn_group_1, 3)
+       SET_CHAR_OBJECTIVE (s_m_3_redn_group_1, GOTO_AREA_ON_FOOT, 178.50, 244.50, 2.00)
+       SET s_m_3_group_1_alive = 1
+    ENDIF
+    
+    //  If the second group is died or it does not exist, create them                           (middle group)
+    IF ( s_m_3_group_2_alive = 0 )
+       s_m_3_redn_group_2 = CREATE_CHAR (124.50, 193.50, 2.00) 5 0 CRIMINAL END
+       SET_CHAR_THREAT_REACTION (s_m_3_redn_group_2, REACT_AS_NORMAL)
+       GIVE_WEAPON (s_m_3_redn_group_2, MACHINE_GUN)
+       ADD_CHAR_TO_GANG (s_m_3_redn_group_2, redngang)
+       ADD_GROUP_TO_CHARACTER (s_m_3_redn_group_2, 3)
+       SET_CHAR_OBJECTIVE (s_m_3_redn_group_2, GOTO_AREA_ON_FOOT, 173.50, 244.50, 2.00)
+       SET s_m_3_group_2_alive = 1
+    ENDIF
+    
+    //  If the third group is died or it does not exist, create them                           (west group)
+    IF ( s_m_3_group_3_alive = 0 )
+       s_m_3_redn_group_3 = CREATE_CHAR (201.50, 171.50, 2.00) 5 0 CRIMINAL END
+       SET_CHAR_THREAT_REACTION (s_m_3_redn_group_3, REACT_AS_NORMAL)
+       GIVE_WEAPON (s_m_3_redn_group_3, MACHINE_GUN)
+       ADD_CHAR_TO_GANG (s_m_3_redn_group_3, redngang)
+       ADD_GROUP_TO_CHARACTER (s_m_3_redn_group_3, 3)
+       SET_CHAR_OBJECTIVE (s_m_3_redn_group_3, GOTO_AREA_ON_FOOT, 168.50, 244.50, 2.00)
+       SET s_m_3_group_3_alive = 1
+    ENDIF
+    
+    //  If the first group has reached the first generator, set them to destroy it
+    IF ( ( s_m_3_group_1_alive = 1 ) AND ( s_m_3_redn_group_1_arrived = 0 ) )
+       IF ( IS_CHAR_OBJECTIVE_PASSED(s_m_3_redn_group_1) )
+          GIVE_WEAPON (s_m_3_redn_group_1, ROCKET_LAUNCHER)
+          SET_CHAR_THREAT_REACTION (s_m_3_redn_group_1, NO_REACTION)
+          SET_CHAR_OBJECTIVE (s_m_3_redn_group_1, DESTROY_OBJECT, s_m_3_east_generator)
+          SET s_m_3_redn_group_1_arrived = 1
+       ENDIF
+    ENDIF
+    
+    //  If the second group has reached the second generator, set them to destroy it
+    IF ( ( s_m_3_group_2_alive = 1 ) AND ( s_m_3_redn_group_2_arrived = 0 ) )
+       IF ( IS_CHAR_OBJECTIVE_PASSED(s_m_3_redn_group_2) )
+          GIVE_WEAPON (s_m_3_redn_group_2, ROCKET_LAUNCHER)
+          SET_CHAR_THREAT_REACTION (s_m_3_redn_group_2, NO_REACTION)
+          SET_CHAR_OBJECTIVE (s_m_3_redn_group_2, DESTROY_OBJECT, s_m_3_middle_generator)
+          SET s_m_3_redn_group_2_arrived = 1
+       ENDIF
+    ENDIF
+    
+    //  If the third group has reached the third generator, set them to destroy it
+    IF ( ( s_m_3_group_3_alive = 1 ) AND ( s_m_3_redn_group_3_arrived = 0 ) )
+       IF ( IS_CHAR_OBJECTIVE_PASSED(s_m_3_redn_group_3) )
+          GIVE_WEAPON (s_m_3_redn_group_3, ROCKET_LAUNCHER)
+          SET_CHAR_THREAT_REACTION (s_m_3_redn_group_3, NO_REACTION)
+          SET_CHAR_OBJECTIVE (s_m_3_redn_group_3, DESTROY_OBJECT, s_m_3_west_generator)
+          SET s_m_3_redn_group_3_arrived = 1
+       ENDIF
+    ENDIF
+    
+    //  If the first group is alive, set an arrow at them, or else remove it
+    IF ( s_m_3_group_1_alive = 1 )
+       POINT_ARROW_AT (arrow1, s_m_3_redn_group_1)
+    ELSE
+       REMOVE_ARROW (arrow1)
+    ENDIF
+    
+    //  If the second group is alive, set an arrow at them, or else remove it
+    IF ( s_m_3_group_2_alive = 1 )
+       POINT_ARROW_AT (arrow3, s_m_3_redn_group_2)
+    ELSE
+       REMOVE_ARROW (arrow3)
+    ENDIF
+    
+    //  If the third group is alive, set an arrow at them, or else remove it
+    IF ( s_m_3_group_3_alive = 1 )
+       POINT_ARROW_AT (arrow4, s_m_3_redn_group_3)
+    ELSE
+       REMOVE_ARROW (arrow4)
+    ENDIF
+    
+    //  If the first redneck group has died, update flag to respawn them
+    IF ( s_m_3_group_1_alive = 1 )
+       IF ( HAS_CHARACTER_DIED(s_m_3_redn_group_1) )
+          SET s_m_3_group_1_alive = 0
+          SET s_m_3_redn_group_1_arrived = 0
+       ENDIF
+    ENDIF
+    
+    //  If the second redneck group has died, update flag to respawn them
+    IF ( s_m_3_group_2_alive = 1 )
+       IF ( HAS_CHARACTER_DIED(s_m_3_redn_group_2) )
+          SET s_m_3_group_2_alive = 0
+          SET s_m_3_redn_group_2_arrived = 0
+       ENDIF
+    ENDIF
+    
+    //  If the third redneck group has died, update flag to respawn them
+    IF ( s_m_3_group_3_alive = 1 )
+       IF ( HAS_CHARACTER_DIED(s_m_3_redn_group_3) )
+          SET s_m_3_group_3_alive = 0
+          SET s_m_3_redn_group_3_arrived = 0
+       ENDIF
+    ENDIF
+    
+    //  Handling the first redneck group objectives
+    IF ( s_m_3_redn_group_1_arrived = 1 )                                                       //  If the first redneck group has reached the first generator     (East generator)
+       IF ( ( s_m_3_group_1_alive = 1 ) AND ( IS_CHAR_OBJECTIVE_PASSED(s_m_3_redn_group_1) ) )  //  If they are alive and they have destroyed the first generator  (East generator)
+          IF ( s_m_3_middle_generator_destroyed = 0 )                                           //  If the second generator has not been destroyed yet             (Middle generator)
+             SET_CHAR_OBJECTIVE (s_m_3_redn_group_1, DESTROY_OBJECT, s_m_3_middle_generator)    //  Destroy the second generator                                   (Middle generator)
+          ELSE                                                                                  //  Or else, if the second generator has already been destroyed    (Middle generator)
+             IF ( s_m_3_west_generator_destroyed = 0 )                                          //  If the third generator has not been destroyed yet              (West generator)
+                SET_CHAR_OBJECTIVE (s_m_3_redn_group_1, DESTROY_OBJECT, s_m_3_west_generator)   //  Destroy the third generator                                    (West generator)
+             ENDIF
+          ENDIF
+       ENDIF
+    ENDIF
+    
+    //  Handling the second redneck group objectives
+    IF ( s_m_3_redn_group_2_arrived = 1 )                                                       //  If the second redneck group has reached the second generator   (Middle generator)
+       IF ( ( s_m_3_group_2_alive = 1 ) AND ( IS_CHAR_OBJECTIVE_PASSED(s_m_3_redn_group_2) ) )  //  If they are alive and they have destroyed the second generator (Middle generator)
+          IF ( s_m_3_east_generator_destroyed = 0 )                                             //  If the first generator has not been destroyed yet              (East generator)
+             SET_CHAR_OBJECTIVE (s_m_3_redn_group_2, DESTROY_OBJECT, s_m_3_east_generator)      //  Destroy the first generator                                    (East generator)
+          ELSE                                                                                  //  Or else, if the first generator has already been destroyed     (East generator)
+             IF ( s_m_3_west_generator_destroyed = 0 )                                          //  If the third generator has not been destroyed yet              (West generator)
+                SET_CHAR_OBJECTIVE (s_m_3_redn_group_2, DESTROY_OBJECT, s_m_3_west_generator)   //  Destroy the third generator                                    (West generator)
+             ENDIF
+          ENDIF
+       ENDIF
+    ENDIF
+    
+    //  Handling the third redneck group objectives
+    IF ( s_m_3_redn_group_3_arrived = 1 )                                                       //  If the third redneck group has reached the third generator     (West generator)
+       IF ( ( s_m_3_group_3_alive = 1 ) AND ( IS_CHAR_OBJECTIVE_PASSED(s_m_3_redn_group_3) ) )  //  If they are alive and they have destroyed the third generator  (West generator)
+          IF ( s_m_3_middle_generator_destroyed = 0 )                                           //  If the second generator has not been destroyed yet             (Middle generator)
+             SET_CHAR_OBJECTIVE (s_m_3_redn_group_3, DESTROY_OBJECT, s_m_3_middle_generator)    //  Destroy the second generator                                   (Middle generator)
+          ELSE                                                                                  //  Or else, if the second generator has already been destroyed    (Middle generator)
+             IF ( s_m_3_east_generator_destroyed = 0 )                                          //  If the first generator has not been destroyed yet              (East generator)
+                SET_CHAR_OBJECTIVE (s_m_3_redn_group_3, DESTROY_OBJECT, s_m_3_east_generator)   //  Destroy the first generator                                    (East generator)
+             ENDIF
+          ENDIF
+       ENDIF
+    ENDIF
+    
+ ENDWHILE
+ 
+	//  At least one generator has not been destroyed
+ 
+ //  If all generators survived
+ IF ( s_m_3_generators_destroyed = 0 )
+    CLEAR_ALL_BRIEFS ()
+    ADD_SCORE (p1, 50000)
+    DISPLAY_BRIEF (2421)       //  "Excellent, THC-303. We are still at full power. Here's $50,000."
+ ENDIF
+ 
+ //  If one generator has been destroyed
+ IF ( s_m_3_generators_destroyed = 1 )
+    CLEAR_ALL_BRIEFS ()
+    ADD_SCORE (p1, 30000)
+    DISPLAY_BRIEF (2422)       //  "You only lost one Generator, THC-303, so we have no need for auxiliary power. Here's $30,000."
+ ENDIF
+ 
+ //  If two of three generators have been destroyed
+ IF ( s_m_3_generators_destroyed = 2 )
+    CLEAR_ALL_BRIEFS ()
+    ADD_SCORE (p1, 10000)
+    DISPLAY_BRIEF (2423)       //  "Well, THC-303, at least we still have one operational Generator to take the strain. Here's $10,000."
+ ENDIF
+
+ SET savecount61 = 1
+ DISPLAY_MESSAGE (2999)        //  Mission Complete!
+ ADD_MULTIPLIER (p1, 1)
+ CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (sciegang, p1, 1)
+ CLEAR_WANTED_LEVEL (p1)
+ 
+ //  If the player has completed the Redneck Medium Mission 1, disable Redneck Medium Phone 1
+ IF ( savecount48 = 1 )
+    SET_PHONE_DEAD (obj3)
+    DISABLE_THREAD_TRIGGER (trigger3)
+ ENDIF
+ 
+ //  If the player has completed the Redneck Medium Mission 2, disable Redneck Medium Phone 2
+ IF ( savecount49 = 1 )
+    SET_PHONE_DEAD (obj4)
+    DISABLE_THREAD_TRIGGER (trigger4)
+ ENDIF
+
+RETURN
+
+
+
+clean_up_scie_med_phone1_2_m3:                          //  Clean up
+ 
+	CLEAR_TIMER (s_m_3_timer)
+ 
+	SET savecount81 = 0
+	SET savecount82 = 0
+ 
+	REMOVE_ARROW (arrow1)
+	REMOVE_ARROW (arrow3)
+	REMOVE_ARROW (arrow4)
+ 
+ IF ( s_m_3_group_1_alive = 1 )
+    DELETE_ITEM (s_m_3_redn_group_1)
+ ENDIF
+ 
+ IF ( s_m_3_group_2_alive = 1 )
+    DELETE_ITEM (s_m_3_redn_group_2)
+ ENDIF
+ 
+ IF ( s_m_3_group_3_alive = 1 )
+    DELETE_ITEM (s_m_3_redn_group_3)
+ ENDIF
+ 
+ IF ( savecount61 = 1 )
+	   ++savecount85
+	   ++savecount91
+	ENDIF
+ 
+ IF ( CHECK_DEATHARREST_EXECUTED() )
+	   ++savecount88
+	   ++savecount92
+	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (sciegang, p1, -1)
+	   CLEAR_WANTED_LEVEL (p1)
+	ENDIF
+ 
+	MISSION_HAS_FINISHED ()
+ 
+RETURN
+
+MISSIONSTART
+GOSUB scie_med_phone1_2_m3:
+GOSUB clean_up_scie_med_phone1_2_m3:
+MISSIONEND

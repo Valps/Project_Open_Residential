@@ -1,0 +1,206 @@
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Gang Car Bang! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+// Decompiled from "ste_rh1.scr" Using Epic GTA2 Script Decompiler by T.M.
+
+//FORWARD redn_hard_phone_m1:
+//FORWARD clean_up_redn_hard_phone_m1:
+
+CHAR_DATA r_h_1_redneck_group_leader
+
+COUNTER r_h_1_while_loop_1 = 0
+COUNTER r_h_1_hunting_meteors = 0
+COUNTER r_h_1_while_loop_2 = 0
+COUNTER r_h_1_hunting_ztypes = 0
+COUNTER r_h_1_has_bonus_started = 0
+
+ONSCREEN_COUNTER r_h_1_onscreen_meteors
+ONSCREEN_COUNTER r_h_1_onscreen_ztypes
+
+COUNTER r_h_1_meteors_remaining = 0
+COUNTER r_h_1_ztypes_remaining = 0
+COUNTER r_h_1_cars_to_destroy_goal = 5
+COUNTER r_h_1_meteors_destroyed = 0
+COUNTER r_h_1_ztypes_destroyed = 0
+
+redn_hard_phone_m1:
+
+	SET savecount13 = 0
+ 
+	DISPLAY_MESSAGE (2955)            //  GANG CAR BANG!
+ 
+	SET savecount81 = 1
+	SET savecount83 = 1
+ 
+	GIVE_WEAPON (p1, ROCKET_LAUNCHER, 10)
+ 
+	DISPLAY_BRIEF_NOW (2160)          //  "Rooster! Billy Bob here! [...] First to destroy five Meteors is The King!"
+ 
+	r_h_1_redneck_group_leader = CREATE_CHAR (11.50, 2.50, 2.00) 5 90 CRIMINAL END
+	ADD_CHAR_TO_GANG (r_h_1_redneck_group_leader, redngang)
+	ADD_GROUP_TO_CHARACTER (r_h_1_redneck_group_leader, 6)
+	GIVE_WEAPON (r_h_1_redneck_group_leader, MACHINE_GUN)
+	SET_CHAR_OBJECTIVE (r_h_1_redneck_group_leader, WAIT_ON_FOOT)
+	SET_CHAR_THREAT_REACTION (r_h_1_redneck_group_leader, NO_REACTION)
+	MAKE_NEW_LEADER_OF_GROUP (r_h_1_redneck_group_leader, p1)
+ 
+	POINT_ARROW_AT (arrow1, 227.50, 217.50, 2.00)
+ 
+ WHILE_EXEC ( r_h_1_while_loop_1 = 0 )
+ 
+    IF ( ( r_h_1_hunting_meteors = 0 ) AND ( IS_CHAR_IN_GANGZONE(p1, sciegang) ) )
+       DISPLAY_BRIEF_NOW (2161)                                               //  "Here we are, Rooster! Start bustin' up them Meteors!"
+	      bonus6 = START_BONUS_CHECK (sciegang, 65535, 5, 0, CAR, NOT_EXCLUSIVE, BY_ANY_WEAPON, NONE, STRATOSB)
+	      SET r_h_1_meteors_remaining = 5
+	      SET r_h_1_hunting_meteors = 1
+	      SET r_h_1_has_bonus_started = 1
+	      ADD_ONSCREEN_COUNTER (r_h_1_onscreen_meteors, r_h_1_meteors_remaining)
+	      REMOVE_ARROW (arrow1)
+    ENDIF
+    
+    IF ( ( r_h_1_hunting_meteors = 1 ) AND ( NOT ( IS_CHAR_IN_GANGZONE(p1, sciegang) ) ) )
+       DISPLAY_BRIEF_NOW (2162)                                               //  "Where you off to, son? Get back to SRS territory!"
+       SET r_h_1_hunting_meteors = 2
+	      POINT_ARROW_AT (arrow1, 227.50, 217.50, 2.00)
+    ENDIF
+    
+    IF ( ( r_h_1_hunting_meteors = 2 ) AND ( IS_CHAR_IN_GANGZONE(p1, sciegang) ) )
+       REMOVE_ARROW (arrow1)
+       SET r_h_1_hunting_meteors = 1
+    ENDIF
+    
+    IF ( r_h_1_has_bonus_started = 1 )
+       STORE_BONUS_COUNT (bonus6, r_h_1_meteors_destroyed)
+    ENDIF
+    
+    IF ( r_h_1_has_bonus_started = 1 )
+       SET r_h_1_meteors_remaining = (r_h_1_cars_to_destroy_goal - r_h_1_meteors_destroyed)
+    ENDIF
+    
+    IF ( r_h_1_hunting_meteors = 1 )
+       IF ( HAS_BONUS_PASSED(bonus6) )
+          DISPLAY_BRIEF_NOW (2163)                //  "You sure got a taste for it, Rooster! C'mon, let's do the Zaibatsu. Head over to The Village. Yee-ha!"
+	         CLEAR_ONSCREEN_COUNTER (r_h_1_onscreen_meteors)
+	         SET r_h_1_while_loop_1 = 1
+	         SET r_h_1_has_bonus_started = 0
+       ENDIF
+    ENDIF
+    
+    IF ( r_h_1_hunting_meteors = 1 )
+       IF ( HAS_BONUS_FAILED(bonus6) )
+          DISPLAY_BRIEF_NOW (2164)                //  "You play with fire, son, you gonna get burned!"
+	         CLEAR_ONSCREEN_COUNTER (r_h_1_onscreen_meteors)
+	         SET savecount13 = 1
+	         DISPLAY_MESSAGE (2998)                  //  Mission Failed!
+          RETURN
+       ENDIF
+    ENDIF
+ 
+ ENDWHILE
+
+	//  The player destroyed 5 SRS meterors
+ 
+ POINT_ARROW_AT (arrow1, 199.00, 25.50, 3.00)
+ 
+ WHILE_EXEC ( r_h_1_while_loop_2 = 0 )
+ 
+    IF ( ( r_h_1_hunting_ztypes = 0 ) AND ( IS_CHAR_IN_GANGZONE(p1, zaibgang) ) )
+       DISPLAY_BRIEF_NOW (2165)                                       //  "Look at them pretty Z-Types! First one to FIVE is The King."
+       bonus5 = START_BONUS_CHECK (zaibgang, 65535, 5, 0, CAR, NOT_EXCLUSIVE, BY_ANY_WEAPON, NONE, VTYPE)
+       SET r_h_1_ztypes_remaining = 5
+       SET r_h_1_has_bonus_started = 1
+       ADD_ONSCREEN_COUNTER (r_h_1_onscreen_ztypes, r_h_1_ztypes_remaining)
+       SET r_h_1_hunting_ztypes = 1
+       REMOVE_ARROW (arrow1)
+    ENDIF
+    
+    IF ( ( r_h_1_hunting_ztypes = 1 ) AND ( NOT ( IS_CHAR_IN_GANGZONE(p1, zaibgang) ) ) )
+       DISPLAY_BRIEF_NOW (2166)                                       //  "GodDAMN, Rooster! Get your ass back into The Village."
+       POINT_ARROW_AT (arrow1, 199.00, 25.50, 3.00)
+       SET r_h_1_hunting_ztypes = 2
+    ENDIF
+    
+    IF ( ( r_h_1_hunting_ztypes = 2 ) AND ( IS_CHAR_IN_GANGZONE(p1, zaibgang) ) )
+       REMOVE_ARROW (arrow1)
+       SET r_h_1_hunting_ztypes = 1
+    ENDIF
+    
+    IF ( r_h_1_has_bonus_started = 1 )
+       STORE_BONUS_COUNT (bonus5, r_h_1_ztypes_destroyed)
+    ENDIF
+    
+    IF ( r_h_1_has_bonus_started = 1 )
+       SET r_h_1_ztypes_remaining = (r_h_1_cars_to_destroy_goal - r_h_1_ztypes_destroyed)
+    ENDIF
+    
+    IF ( r_h_1_hunting_ztypes = 1 )
+       IF ( HAS_BONUS_PASSED(bonus5) )
+          CLEAR_ALL_BRIEFS ()
+          DISPLAY_BRIEF_NOW (2167)       //  "We sure are BUZZIN' from the fun, son! Here - here's a $70,000 bonus. C'mon, Rooster, it's King Karaoke at RV and YOU are up first!"
+          CLEAR_ONSCREEN_COUNTER (r_h_1_onscreen_ztypes)
+          SET r_h_1_while_loop_2 = 1
+       ENDIF
+    ENDIF
+    
+    IF ( r_h_1_hunting_ztypes = 1 )
+       IF ( HAS_BONUS_FAILED(bonus5) )
+          DISPLAY_BRIEF_NOW (2168)                    //  "What's up, boy? You got a target tattooed on that there yella belly?"
+          CLEAR_ONSCREEN_COUNTER (r_h_1_onscreen_ztypes)
+          SET savecount13 = 1
+          DISPLAY_MESSAGE (2998)                      //  Mission Failed!
+          RETURN
+       ENDIF
+    ENDIF
+ 
+ ENDWHILE
+ 
+ //  Mission Finished
+ 
+ ADD_SCORE (p1, 70000)
+ 
+ SET savecount55 = 1
+ 
+ DISPLAY_MESSAGE (2999)              //  Mission Complete!
+ CLEAR_WANTED_LEVEL (p1)
+ ADD_MULTIPLIER (p1, 1)
+ CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (redngang, p1, 1)    //  Respect +
+ 
+RETURN
+
+
+
+clean_up_redn_hard_phone_m1:                                  //  Clean up
+ 
+ IF ( NOT ( HAS_CHARACTER_DIED(r_h_1_redneck_group_leader) ) )
+	   DESTROY_GROUP (r_h_1_redneck_group_leader)
+	ENDIF
+ 
+	SET savecount81 = 0
+	SET savecount83 = 0
+ 
+	REMOVE_ARROW (arrow1)
+ 
+	CLEAR_ONSCREEN_COUNTER (r_h_1_onscreen_meteors)
+	CLEAR_ONSCREEN_COUNTER (r_h_1_onscreen_ztypes)
+ 
+ IF ( savecount55 = 1 )
+	   ++savecount87
+	   ++savecount91
+	ENDIF
+ 
+ IF ( CHECK_DEATHARREST_EXECUTED() )
+	   ++savecount90
+	   ++savecount92
+	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (redngang, p1, -1)
+	   CLEAR_WANTED_LEVEL (p1)
+	ENDIF
+ 
+	MISSION_HAS_FINISHED ()
+ 
+RETURN
+
+MISSIONSTART
+GOSUB redn_hard_phone_m1:
+GOSUB clean_up_redn_hard_phone_m1:
+MISSIONEND

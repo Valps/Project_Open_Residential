@@ -1,0 +1,314 @@
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Distraction Action! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+// Decompiled from "ste_zh2.scr" Using Epic GTA2 Script Decompiler by T.M.
+
+//FORWARD zaib_hard_phone_m2:
+//FORWARD clean_up_zaib_hard_phone_m2:
+
+CAR_DATA z_h_2_truck_trailer
+CAR_DATA z_h_2_special_agent_car
+
+CHAR_DATA z_h_2_cop_guard_1
+CHAR_DATA z_h_2_cop_guard_2
+CHAR_DATA z_h_2_cop_guard_3
+CHAR_DATA z_h_2_cop_guard_4
+CHAR_DATA z_h_2_cop_guard_5
+CHAR_DATA z_h_2_cop_guard_6
+CHAR_DATA z_h_2_cop_guard_7
+CHAR_DATA z_h_2_cop_guard_8
+CHAR_DATA z_h_2_cop_guard_9
+//CHAR_DATA chr16
+
+//CHAR_DATA chr17
+
+OBJ_DATA z_h_2_powergen
+OBJ_DATA z_h_2_health
+OBJ_DATA z_h_2_armour
+OBJ_DATA z_h_2_invulnerability
+OBJ_DATA z_h_2_molotov
+
+CAR_DATA z_h_2_parked_cop_car_1
+CAR_DATA z_h_2_parked_cop_car_2
+CAR_DATA z_h_2_parked_cop_car_3
+
+LIGHT z_h_2_alarm_light_1
+LIGHT z_h_2_alarm_light_2
+LIGHT z_h_2_alarm_light_3
+LIGHT z_h_2_alarm_light_4
+
+SOUND z_h_2_alarm_sound_1
+SOUND z_h_2_alarm_sound_2
+SOUND z_h_2_alarm_sound_3
+SOUND z_h_2_alarm_sound_4
+
+COUNTER z_h_2_generator_destroyed = 0
+//COUNTER count3 = 0
+//COUNTER count4 = 0
+COUNTER z_h_2_while_loop_2 = 0
+COUNTER z_h_2_internal_counter = 0
+COUNTER z_h_2_has_distraction_started = 0
+//COUNTER count8 = 0
+//COUNTER count9 = 0
+//COUNTER count10 = 0
+COUNTER z_h_2_while_loop_1 = 0
+COUNTER z_h_2_lights_sounds_created = 0
+
+zaib_hard_phone_m2:
+ 
+	SET savecount24 = 0
+ 
+	SET savecount81 = 1
+	SET savecount84 = 1
+ 
+	DISPLAY_MESSAGE (2470)          //  DISTRACTION ACTION!
+ 
+	DISABLE_CRANE (crane7)
+	DISABLE_CRANE (crane9)
+	DISABLE_CRANE (crane10)
+ 
+	z_h_2_powergen = CREATE_OBJ (82.50, 116.50, 6.00) 0 POWERGEN END
+	z_h_2_health = CREATE_OBJ (89.50, 115.50, 5.00) 0 COLLECT_30 END
+	z_h_2_armour = CREATE_OBJ (78.50, 116.50, 6.00) 0 COLLECT_31 END
+	z_h_2_invulnerability = CREATE_OBJ (103.50, 124.50, 5.00) 0 COLLECT_34 END
+	z_h_2_molotov = CREATE_OBJ (67.50, 117.50, 2.00) 0 COLLECT_04 END
+ 
+	FORCE_CLEANUP (z_h_2_health)
+	FORCE_CLEANUP (z_h_2_armour)
+	FORCE_CLEANUP (z_h_2_invulnerability)
+	FORCE_CLEANUP (z_h_2_molotov)
+ 
+	z_h_2_cop_guard_1 = CREATE_CHAR (81.50, 125.50, 6.00) 0 0 CRIMINAL END
+	z_h_2_cop_guard_2 = CREATE_CHAR (90.50, 125.50, 6.00) 0 0 CRIMINAL END
+	z_h_2_cop_guard_3 = CREATE_CHAR (99.50, 125.50, 6.00) 0 0 CRIMINAL END
+	z_h_2_cop_guard_4 = CREATE_CHAR (102.50, 125.50, 6.00) 0 0 CRIMINAL END
+	z_h_2_cop_guard_5 = CREATE_CHAR (100.50, 110.50, 6.00) 0 0 CRIMINAL END
+	z_h_2_cop_guard_6 = CREATE_CHAR (95.50, 110.50, 6.00) 0 0 CRIMINAL END
+	z_h_2_cop_guard_7 = CREATE_CHAR (90.50, 110.50, 6.00) 0 0 CRIMINAL END
+	z_h_2_cop_guard_8 = CREATE_CHAR (85.50, 110.50, 6.00) 0 0 CRIMINAL END
+	z_h_2_cop_guard_9 = CREATE_CHAR (76.50, 110.50, 6.00) 0 0 CRIMINAL END
+ 
+	SET_CHAR_GRAPHIC_TYPE (z_h_2_cop_guard_1, EMERG_GRAPHIC, 0)
+	SET_CHAR_GRAPHIC_TYPE (z_h_2_cop_guard_2, EMERG_GRAPHIC, 0)
+	SET_CHAR_GRAPHIC_TYPE (z_h_2_cop_guard_3, EMERG_GRAPHIC, 0)
+	SET_CHAR_GRAPHIC_TYPE (z_h_2_cop_guard_4, EMERG_GRAPHIC, 0)
+	SET_CHAR_GRAPHIC_TYPE (z_h_2_cop_guard_5, EMERG_GRAPHIC, 0)
+	SET_CHAR_GRAPHIC_TYPE (z_h_2_cop_guard_6, EMERG_GRAPHIC, 0)
+	SET_CHAR_GRAPHIC_TYPE (z_h_2_cop_guard_7, EMERG_GRAPHIC, 0)
+	SET_CHAR_GRAPHIC_TYPE (z_h_2_cop_guard_8, EMERG_GRAPHIC, 0)
+	SET_CHAR_GRAPHIC_TYPE (z_h_2_cop_guard_9, EMERG_GRAPHIC, 0)
+ 
+	SET_CHAR_THREAT_REACTION (z_h_2_cop_guard_1, REACT_AS_NORMAL)
+	SET_CHAR_THREAT_REACTION (z_h_2_cop_guard_2, REACT_AS_NORMAL)
+	SET_CHAR_THREAT_REACTION (z_h_2_cop_guard_3, REACT_AS_NORMAL)
+	SET_CHAR_THREAT_REACTION (z_h_2_cop_guard_4, REACT_AS_NORMAL)
+	SET_CHAR_THREAT_REACTION (z_h_2_cop_guard_5, REACT_AS_NORMAL)
+	SET_CHAR_THREAT_REACTION (z_h_2_cop_guard_6, REACT_AS_NORMAL)
+	SET_CHAR_THREAT_REACTION (z_h_2_cop_guard_7, REACT_AS_NORMAL)
+	SET_CHAR_THREAT_REACTION (z_h_2_cop_guard_8, REACT_AS_NORMAL)
+	SET_CHAR_THREAT_REACTION (z_h_2_cop_guard_9, REACT_AS_NORMAL)
+ 
+	SET_CHAR_THREAT_SEARCH (z_h_2_cop_guard_1, AREA_PLAYER_ONLY)
+	SET_CHAR_THREAT_SEARCH (z_h_2_cop_guard_2, AREA_PLAYER_ONLY)
+	SET_CHAR_THREAT_SEARCH (z_h_2_cop_guard_3, AREA_PLAYER_ONLY)
+	SET_CHAR_THREAT_SEARCH (z_h_2_cop_guard_4, AREA_PLAYER_ONLY)
+	SET_CHAR_THREAT_SEARCH (z_h_2_cop_guard_5, AREA_PLAYER_ONLY)
+	SET_CHAR_THREAT_SEARCH (z_h_2_cop_guard_6, AREA_PLAYER_ONLY)
+	SET_CHAR_THREAT_SEARCH (z_h_2_cop_guard_7, AREA_PLAYER_ONLY)
+	SET_CHAR_THREAT_SEARCH (z_h_2_cop_guard_8, AREA_PLAYER_ONLY)
+	SET_CHAR_THREAT_SEARCH (z_h_2_cop_guard_9, AREA_PLAYER_ONLY)
+ 
+	GIVE_WEAPON (z_h_2_cop_guard_1, MACHINE_GUN)
+	GIVE_WEAPON (z_h_2_cop_guard_2, MACHINE_GUN)
+	GIVE_WEAPON (z_h_2_cop_guard_3, MACHINE_GUN)
+	GIVE_WEAPON (z_h_2_cop_guard_4, MACHINE_GUN)
+	GIVE_WEAPON (z_h_2_cop_guard_5, MACHINE_GUN)
+	GIVE_WEAPON (z_h_2_cop_guard_6, MACHINE_GUN)
+	GIVE_WEAPON (z_h_2_cop_guard_7, MACHINE_GUN)
+	GIVE_WEAPON (z_h_2_cop_guard_8, MACHINE_GUN)
+	GIVE_WEAPON (z_h_2_cop_guard_9, MACHINE_GUN)
+ 
+	SET_CHAR_OBJECTIVE (z_h_2_cop_guard_1, GUARD_SPOT, 81.50, 125.50, 6.00)
+	SET_CHAR_OBJECTIVE (z_h_2_cop_guard_2, GUARD_SPOT, 90.50, 125.50, 6.00)
+	SET_CHAR_OBJECTIVE (z_h_2_cop_guard_3, GUARD_SPOT, 99.50, 125.50, 6.00)
+	SET_CHAR_OBJECTIVE (z_h_2_cop_guard_4, GUARD_SPOT, 102.50, 125.50, 6.00)
+	SET_CHAR_OBJECTIVE (z_h_2_cop_guard_5, GUARD_SPOT, 100.50, 110.50, 6.00)
+	SET_CHAR_OBJECTIVE (z_h_2_cop_guard_6, GUARD_SPOT, 95.50, 110.50, 6.00)
+	SET_CHAR_OBJECTIVE (z_h_2_cop_guard_7, GUARD_SPOT, 90.50, 110.50, 6.00)
+	SET_CHAR_OBJECTIVE (z_h_2_cop_guard_8, GUARD_SPOT, 85.50, 110.50, 6.00)
+	SET_CHAR_OBJECTIVE (z_h_2_cop_guard_9, GUARD_SPOT, 76.50, 110.50, 6.00)
+ 
+	z_h_2_parked_cop_car_1 = CREATE_CAR (93.00, 116.50, 2.00) 0 0 COPCAR END
+	z_h_2_parked_cop_car_2 = CREATE_CAR (95.00, 116.50, 2.00) 0 190 COPCAR END
+	z_h_2_parked_cop_car_3 = CREATE_CAR (98.00, 118.50, 2.00) 0 175 COPCAR END
+ 
+	DISPLAY_BRIEF (2960)           //  "Gecko - it's Red Valdez. I need you to create a diversion - something to distract the Cops. Go to the Video Store for further directions."
+	POINT_ARROW_AT (arrow1, 67.50, 117.50, 2.00)     //  Point at the Video Store
+ 
+	z_h_2_special_agent_car = CREATE_CAR (99.00, 117.50, 2.00) 0 180 EDSELFBI END
+	z_h_2_truck_trailer = CREATE_CAR (96.50, 117.50, 255.00) 0 0 TRUKCAB1 TRUKTRNS END
+ 
+	PUT_CAR_ON_TRAILER (z_h_2_special_agent_car, z_h_2_truck_trailer)
+ 
+ //  Wait the player to arrive at the Video Store
+ WHILE_EXEC ( NOT ( LOCATE_CHARACTER_ANY_MEANS(p1, 67.50, 117.50, 2.00, 4.00, 3.00) ) )
+    DO_NOWT
+ ENDWHILE
+	
+	POINT_ARROW_AT (arrow1, z_h_2_powergen)
+	DISPLAY_BRIEF (2962) 
+ //  "Head up the steps and across the pipes to get inside the Cop Station. Destroy the rooftop Generator to open the exit then
+ //  steal the Trailer with a Special Agent Car on it."
+ 
+ WHILE_EXEC ( z_h_2_generator_destroyed = 0 )
+ 
+    IF ( IS_CAR_WRECKED(z_h_2_truck_trailer) )
+       CLEAR_ALL_BRIEFS ()
+	      DISPLAY_BRIEF (2963)           //  "Idiot! The job is impossible with the Trailer destroyed!"
+	      SET savecount24 = 1
+	      DISPLAY_MESSAGE (2998)
+       RETURN
+    ENDIF
+    
+    IF ( ( CHECK_OBJ_MODEL(z_h_2_powergen, POWERGEN_DEAD) ) AND ( z_h_2_generator_destroyed = 0 ) )
+       SET z_h_2_generator_destroyed = 1
+       DISPLAY_BRIEF (2969)                     //  "SHIT! Destroying the Generator has set off an alarm! Get the Truck, Gecko - and get the hell out of there!"
+       z_h_2_alarm_sound_1 = CREATE_SOUND (98.00, 114.00, 2.00) PRISON_ALARM PLAY_FOREVER END
+       z_h_2_alarm_sound_2 = CREATE_SOUND (99.00, 122.00, 2.00) PRISON_ALARM PLAY_FOREVER END
+       z_h_2_alarm_sound_3 = CREATE_SOUND (84.00, 114.00, 3.00) PRISON_ALARM PLAY_FOREVER END
+       z_h_2_alarm_sound_4 = CREATE_SOUND (88.00, 121.00, 4.00) PRISON_ALARM PLAY_FOREVER END
+       z_h_2_alarm_light_1 = CREATE_LIGHT (98.00, 114.00, 2.00) 7.99 255 (0, 0, 255) 30 100 5
+       z_h_2_alarm_light_2 = CREATE_LIGHT (99.00, 122.00, 2.00) 7.99 255 (0, 0, 255) 30 100 5
+       z_h_2_alarm_light_3 = CREATE_LIGHT (84.00, 114.00, 3.00) 7.99 255 (0, 0, 255) 30 100 5
+       z_h_2_alarm_light_4 = CREATE_LIGHT (88.00, 121.00, 4.00) 7.99 255 (0, 0, 255) 30 100 5
+       SET z_h_2_lights_sounds_created = 1
+    ENDIF
+ 
+ ENDWHILE
+	
+	//  The generator has been destroyed
+
+ OPEN_DOOR (door4)
+ POINT_ARROW_AT (arrow1, z_h_2_truck_trailer)
+ 
+ WHILE_EXEC ( z_h_2_while_loop_1 = 0 )
+ 
+    IF ( IS_CHARACTER_IN_CAR(p1, z_h_2_truck_trailer) )
+       SET z_h_2_while_loop_1 = 1
+       DISPLAY_TIMER (timer1, 60)
+       SET z_h_2_internal_counter = 1800          //  1800 = ( 60 seconds )*( 30 cycles or frames per second )
+       DISPLAY_BRIEF (2970)       //  "Distract the Cops and avoid getting arrested for ONE minute. That should give me just enough time to pull off the little job I have planned."
+       SET z_h_2_has_distraction_started = 1
+       ALTER_WANTED_LEVEL (p1, 3)    //  POLICE!
+       REMOVE_ARROW (arrow1)
+    ENDIF
+    
+    IF ( IS_CAR_WRECKED(z_h_2_truck_trailer) )
+       CLEAR_ALL_BRIEFS ()
+       DISPLAY_BRIEF (2971)      //  "The destruction of the Truck means the operation is over, Gecko."
+       SET savecount24 = 1
+       DISPLAY_MESSAGE (2998)    //  Mission Failed!
+       RETURN
+    ENDIF
+ 
+ ENDWHILE
+ 
+ //  The player has entered the truck
+ 
+ WHILE_EXEC ( z_h_2_while_loop_2 = 0 )
+    
+    //  If the truck has been destroyed
+    IF ( IS_CAR_WRECKED(z_h_2_truck_trailer) )
+       CLEAR_ALL_BRIEFS ()
+       DISPLAY_BRIEF (2971)          //  "The destruction of the Truck means the operation is over, Gecko."
+       SET savecount24 = 1
+       DISPLAY_MESSAGE (2998)        //  Mission Failed!
+       RETURN
+    ENDIF
+    
+    //  If the trailer has been detached
+    IF ( NOT ( IS_TRAILER_ATTACHED(z_h_2_truck_trailer, z_h_2_truck_trailer) ) )
+       IF ( savecount24 = 0 )
+          CLEAR_ALL_BRIEFS ()
+          DISPLAY_BRIEF (2973)              //  "How dare you detach the Trailer! Forget it - the job's OFF!"
+          SET savecount24 = 1
+          DISPLAY_MESSAGE (2998)            //  Mission Failed!
+          RETURN
+       ENDIF
+    ENDIF
+    
+    //  Countdown
+    IF ( z_h_2_has_distraction_started = 1 )
+       --z_h_2_internal_counter
+    ENDIF
+    
+    //  If one minute has passed
+    IF ( z_h_2_internal_counter = 0 )
+       SET z_h_2_while_loop_2 = 1
+    ENDIF
+ 
+ ENDWHILE
+
+ //  The distraction has been successful
+ 
+ CLEAR_ALL_BRIEFS ()
+ DISPLAY_BRIEF (2975)                   //  "That was perfect, Gecko. Ha ha! One day perhaps I might share the reason for my mirth with you. For now, here's $70,000."
+ ADD_SCORE (p1, 70000)
+ SET savecount66 = 1
+ DISPLAY_MESSAGE (2999)                 //  Mission Complete!
+ CLEAR_WANTED_LEVEL (p1)
+ ADD_MULTIPLIER (p1, 1)
+ CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (zaibgang, p1, 1)
+ 
+ SET_PHONE_DEAD (obj15)                 //  Deactivate Zaibatsu Hard Phone
+ DISABLE_THREAD_TRIGGER (trigger10)
+ 
+RETURN
+
+
+
+clean_up_zaib_hard_phone_m2:             //  Clean up
+ 
+	SET savecount81 = 0
+	SET savecount84 = 0
+ 
+	REMOVE_ARROW (arrow1)
+ 
+	CLEAR_TIMER (timer1)
+ 
+	ENABLE_CRANE (crane7)
+	ENABLE_CRANE (crane9)
+	ENABLE_CRANE (crane10)
+ 
+ IF ( z_h_2_lights_sounds_created = 1 )
+	   DELETE_ITEM (z_h_2_alarm_sound_1)
+	   DELETE_ITEM (z_h_2_alarm_sound_2)
+	   DELETE_ITEM (z_h_2_alarm_sound_3)
+	   DELETE_ITEM (z_h_2_alarm_sound_4)
+	   DELETE_ITEM (z_h_2_alarm_light_1)
+	   DELETE_ITEM (z_h_2_alarm_light_2)
+	   DELETE_ITEM (z_h_2_alarm_light_3)
+	   DELETE_ITEM (z_h_2_alarm_light_4)
+	ENDIF
+ 
+ IF ( savecount66 = 1 )
+	   ++savecount86
+	   ++savecount91
+	ENDIF
+ 
+ IF ( CHECK_DEATHARREST_EXECUTED() )
+	   ++savecount89
+	   ++savecount92
+	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (zaibgang, p1, -1)
+	   CLEAR_WANTED_LEVEL (p1)
+	ENDIF
+ 
+	MISSION_HAS_FINISHED ()
+ 
+RETURN
+
+MISSIONSTART
+GOSUB zaib_hard_phone_m2:
+GOSUB clean_up_zaib_hard_phone_m2:
+MISSIONEND

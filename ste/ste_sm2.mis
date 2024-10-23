@@ -1,0 +1,530 @@
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Gran'Pa We Love You! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+// Decompiled from "ste_sm2.scr" Using Epic GTA2 Script Decompiler by T.M.
+
+//FORWARD scie_med_phone2_m1:
+//FORWARD clean_up_scie_med_phone2_m1:
+
+CHAR_DATA s_m_2_grandpa_char
+
+CHAR_DATA s_m_2_redneck_1_char
+CHAR_DATA s_m_2_redneck_2_char
+CHAR_DATA s_m_2_redneck_3_char
+CHAR_DATA s_m_2_redneck_4_char
+
+CAR_DATA s_m_2_grampa_pickup
+CAR_DATA s_m_2_hunting_car_1
+CAR_DATA s_m_2_hunting_car_2
+CAR_DATA s_m_2_hunting_car_3
+
+CHAR_DATA s_m_2_loony_1_char
+CHAR_DATA s_m_2_loony_2_char
+CHAR_DATA s_m_2_loony_3_char
+
+CHAR_DATA s_m_2_redn_assassin_1_char
+CHAR_DATA s_m_2_redn_assassin_2_char
+CHAR_DATA s_m_2_redn_assassin_3_char
+
+CAR_DATA s_m_2_redn_assassin_1_car
+CAR_DATA s_m_2_redn_assassin_2_car
+CAR_DATA s_m_2_redn_assassin_3_car
+
+TIMER_DATA s_m_2_timer
+
+COUNTER s_m_2_internal_counter = 7199
+COUNTER s_m_2_player_has_chosen_car = 0
+COUNTER s_m_2_while_loop_1 = 0
+COUNTER s_m_2_hunting_stage = 0
+COUNTER s_m_2_hunt_started = 0
+COUNTER s_m_2_player_out_pickup = 0
+COUNTER s_m_2_player_got_pickup = 0
+COUNTER s_m_2_grandpa_found = 0
+COUNTER s_m_2_player_pressed_horn = 0
+COUNTER s_m_2_while_loop_2 = 0
+COUNTER s_m_2_is_pickup_parking = 0
+COUNTER s_m_2_loony_1_created = 0
+COUNTER s_m_2_loony_2_created = 0
+COUNTER s_m_2_loony_3_created = 0
+COUNTER s_m_2_redn_assassins_created = 0
+COUNTER s_m_2_while_loop_3 = 0
+
+DECLARE_MISSION_FLAG (p1, savecount81)      //   ????
+
+scie_med_phone2_m1:
+ 
+	SET savecount7 = 0
+ 
+	SET savecount81 = 1
+	SET savecount82 = 1
+ 
+	DISPLAY_MESSAGE (2460)             //  GRAN'PA WE LOVE YOU!
+ 
+	MAKE_DOOR_AUTOMATIC (door3)
+ 
+	DISPLAY_BRIEF (2391)       //  "Hello [...] The Professor wants to experiment on a Redneck and has chosen the one they call Gran'pa. First you need to win their confidence..."
+	DISPLAY_BRIEF (2392)       //  "Head over to the Opry Car Park and meet with Gran'pa's grandson Dirk. You need his Pickup to kidnap Gran'pa."
+ 
+ //  Create the pickup
+	s_m_2_grampa_pickup = CREATE_GANG_CAR (66.50, 28.30, 2.00) 30 10 PICKUP END
+	CHANGE_CAR_LOCK (s_m_2_grampa_pickup, LOCKED)
+	UPDATE_DOOR_TARGET (door3, s_m_2_grampa_pickup)
+ 
+ //  Create three cars which the player can choose one to kill the targets
+	s_m_2_hunting_car_1 = CREATE_CAR (68.50, 28.50, 2.00) 3 90 FIAT END
+	s_m_2_hunting_car_2 = CREATE_CAR (68.50, 29.50, 2.00) 24 95 ZCX5 END
+	s_m_2_hunting_car_3 = CREATE_CAR (68.50, 30.50, 2.00) 31 85 STRIPETB END
+ 
+ //  Redneck char 1
+	s_m_2_redneck_1_char = CREATE_CHAR (66.90, 29.40, 2.00) 5 350 DUMMY END
+	SET_CHAR_THREAT_REACTION (s_m_2_redneck_1_char, REACT_AS_NORMAL)
+	GIVE_WEAPON (s_m_2_redneck_1_char, SHOTGUN)
+	ADD_CHAR_TO_GANG (s_m_2_redneck_1_char, redngang)
+	SET_CHAR_OBJECTIVE (s_m_2_redneck_1_char, WAIT_ON_FOOT)
+ 
+ //  Redneck char 2
+	s_m_2_redneck_2_char = CREATE_CHAR (66.40, 29.60, 2.00) 5 10 DUMMY END
+	SET_CHAR_THREAT_REACTION (s_m_2_redneck_2_char, REACT_AS_NORMAL)
+	GIVE_WEAPON (s_m_2_redneck_2_char, SHOTGUN)
+	ADD_CHAR_TO_GANG (s_m_2_redneck_2_char, redngang)
+	SET_CHAR_OBJECTIVE (s_m_2_redneck_2_char, WAIT_ON_FOOT)
+ 
+ //  Redneck char 3
+	s_m_2_redneck_3_char = CREATE_CHAR (66.70, 29.10, 2.00) 5 350 DUMMY END
+	SET_CHAR_THREAT_REACTION (s_m_2_redneck_3_char, REACT_AS_NORMAL)
+	GIVE_WEAPON (s_m_2_redneck_3_char, SHOTGUN)
+	ADD_CHAR_TO_GANG (s_m_2_redneck_3_char, redngang)
+	SET_CHAR_OBJECTIVE (s_m_2_redneck_3_char, WAIT_ON_FOOT)
+ 
+ //  Redneck char 4
+	s_m_2_redneck_4_char = CREATE_CHAR (66.10, 29.20, 2.00) 5 10 DUMMY END
+	SET_CHAR_THREAT_REACTION (s_m_2_redneck_4_char, REACT_AS_NORMAL)
+	GIVE_WEAPON (s_m_2_redneck_4_char, SHOTGUN)
+	ADD_CHAR_TO_GANG (s_m_2_redneck_4_char, redngang)
+	SET_CHAR_OBJECTIVE (s_m_2_redneck_4_char, WAIT_ON_FOOT)
+ 
+	POINT_ARROW_AT (arrow1, s_m_2_grampa_pickup)
+ 
+ //  While the player does not arrive at Opry Car Park
+ WHILE_EXEC ( NOT ( IS_ITEM_ONSCREEN(s_m_2_grampa_pickup) ) )
+    
+    //  If the pickup has been destroyed
+	   IF ( IS_CAR_WRECKED(s_m_2_grampa_pickup) )
+       IF ( savecount7 = 0 )
+          CLEAR_ALL_BRIEFS ()
+	         DISPLAY_BRIEF (2393)          //  "The job is over for you, THC-303. Without the Pickup you won't ever get Gran'pa."
+	         SET savecount7 = 1
+	         DISPLAY_MESSAGE (2998)        //  Mission Failed!
+          RETURN
+       ENDIF
+    ENDIF
+	
+ ENDWHILE
+ 
+	
+ DISPLAY_BRIEF (2394)        //  "Hey there, City Boy! You here to race? Anyone who beats mah record fer huntin' down and killin' THREE escaped Loonies wins mah Pickup"
+ DISPLAY_BRIEF (2395)        //  "Take your pick from these fine automobiles and the clock will start to tick!"
+ DISPLAY_BRIEF (2396)        //  "Drive fast, City Boy, and you might just get mah Pickup. Don't bother tryin' to get out of that car - the doors are locked shut! Hoo-hah!"
+ 
+ POINT_ARROW_AT (arrow1, s_m_2_hunting_car_1)
+ POINT_ARROW_AT (arrow3, s_m_2_hunting_car_2)
+ POINT_ARROW_AT (arrow4, s_m_2_hunting_car_3)
+ 
+ WHILE_EXEC ( s_m_2_while_loop_1 = 0 )
+    
+    //  If the player has killed one of the rednecks chars
+    IF ( ( ( ( HAS_CHARACTER_DIED(s_m_2_redneck_1_char) ) OR ( HAS_CHARACTER_DIED(s_m_2_redneck_2_char) ) ) OR ( HAS_CHARACTER_DIED(s_m_2_redneck_3_char) ) ) OR ( HAS_CHARACTER_DIED(s_m_2_redneck_4_char) ) )
+       CLEAR_ALL_BRIEFS ()
+       DISPLAY_BRIEF (2397)             //  "Killing Rednecks at this stage of the job wasn't clever, THC-303. Now it's pointless carrying on."
+       SET savecount7 = 1
+       DISPLAY_MESSAGE (2998)           //  Mission Failed!
+       RETURN
+    ENDIF
+    
+    //  If the Gram'pa pickup has been destroyed
+    IF ( IS_CAR_WRECKED(s_m_2_grampa_pickup) )
+       IF ( savecount7 = 0 )
+          CLEAR_ALL_BRIEFS ()
+          DISPLAY_BRIEF (2398)          //  "Destroying the Redneck vehicles makes no friends, THC-303."
+          SET savecount7 = 1
+          DISPLAY_MESSAGE (2998)        //  Mission Failed!
+          RETURN
+       ENDIF
+    ENDIF
+    
+    //  If the first car has been destroyed
+    IF ( IS_CAR_WRECKED(s_m_2_hunting_car_1) )
+       IF ( savecount7 = 0 )
+          CLEAR_ALL_BRIEFS ()
+          DISPLAY_BRIEF (2398)          //  "Destroying the Redneck vehicles makes no friends, THC-303."
+          SET savecount7 = 1
+          DISPLAY_MESSAGE (2998)        //  Mission Failed!
+          RETURN
+       ENDIF
+    ENDIF
+    
+    //  If the second car has been destroyed
+    IF ( IS_CAR_WRECKED(s_m_2_hunting_car_2) )
+       IF ( savecount7 = 0 )
+          CLEAR_ALL_BRIEFS ()
+          DISPLAY_BRIEF (2398)          //  "Destroying the Redneck vehicles makes no friends, THC-303."
+          SET savecount7 = 1
+          DISPLAY_MESSAGE (2998)        //  Mission Failed!
+          RETURN
+       ENDIF
+    ENDIF
+    
+    //  If the third car has been destroyed
+    IF ( IS_CAR_WRECKED(s_m_2_hunting_car_3) )
+       IF ( savecount7 = 0 )
+          CLEAR_ALL_BRIEFS ()
+          DISPLAY_BRIEF (2398)          //  "Destroying the Redneck vehicles makes no friends, THC-303."
+          SET savecount7 = 1
+          DISPLAY_MESSAGE (2998)        //  Mission Failed!
+          RETURN
+       ENDIF
+    ENDIF
+    
+    //  If the player has entered in one of the three cars
+    IF ( s_m_2_player_has_chosen_car = 0 )
+       IF ( ( ( IS_CHARACTER_IN_CAR(p1, s_m_2_hunting_car_1) ) OR ( IS_CHARACTER_IN_CAR(p1, s_m_2_hunting_car_2) ) ) OR ( IS_CHARACTER_IN_CAR(p1, s_m_2_hunting_car_3) ) )
+          DISPLAY_BRIEF (2399)
+          SET s_m_2_player_has_chosen_car = 1
+          SET s_m_2_hunt_started = 1
+          DISPLAY_TIMER (s_m_2_timer, 240)
+          SET s_m_2_internal_counter = 7199              //  7200 = ( 240 seconds ) * ( 30 cycles per second )
+          REMOVE_ARROW (arrow1)
+          REMOVE_ARROW (arrow3)
+          REMOVE_ARROW (arrow4)
+       ENDIF
+    ENDIF
+    
+    //  Prevents the player from getting out of his car
+    IF ( s_m_2_player_has_chosen_car = 1 )
+       SET_ENTER_CONTROL_STATUS (p1, OFF)
+    ENDIF
+    
+    //  Internal countdown
+    IF ( s_m_2_hunt_started = 1 )
+       --s_m_2_internal_counter
+    ENDIF
+    
+    //  Time Out!
+    IF ( s_m_2_internal_counter = 0 )
+       IF ( savecount7 = 0 )
+          CLEAR_ALL_BRIEFS ()
+          SET savecount7 = 1
+          DISPLAY_MESSAGE (2998)         //  Mission Failed!
+          DISPLAY_BRIEF (2411)           //  "Sheesh, City Boy, you got lead in your ass? Get outta here!"
+          RETURN
+       ENDIF
+    ENDIF
+    
+    //  If the player has chosen his car, create the first loony
+    IF ( ( s_m_2_player_has_chosen_car = 1 ) AND ( s_m_2_hunting_stage = 0 ) )
+       SET s_m_2_hunting_stage = 1
+       s_m_2_loony_1_char = CREATE_CHAR (132.50, 45.50, 3.00) 11 180 DUMMY END
+       SET s_m_2_loony_1_created = 1
+       SET_CHAR_OBJECTIVE (s_m_2_loony_1_char, NO_OBJ)
+       POINT_ARROW_AT (arrow1, s_m_2_loony_1_char)
+    ENDIF
+    
+    //  If the player has killed the first loony, create the second loony
+    IF ( s_m_2_loony_1_created = 1 )
+       IF ( ( s_m_2_hunting_stage = 1 ) AND ( IS_ITEM_ONSCREEN(s_m_2_loony_1_char) ) )
+          IF ( HAS_CHARACTER_DIED(s_m_2_loony_1_char) )
+             s_m_2_loony_2_char = CREATE_CHAR (149.50, 211.50, 2.00) 11 180 DUMMY END
+             SET s_m_2_loony_2_created = 1
+             SET_CHAR_OBJECTIVE (s_m_2_loony_2_char, NO_OBJ)
+             POINT_ARROW_AT (arrow1, s_m_2_loony_2_char)
+             SET s_m_2_hunting_stage = 2
+          ENDIF
+       ENDIF
+    ENDIF
+    
+    //  If the player has killed the second loony, create the third loony
+    IF ( s_m_2_loony_2_created = 1 )
+       IF ( ( s_m_2_hunting_stage = 2 ) AND ( IS_ITEM_ONSCREEN(s_m_2_loony_2_char) ) )
+          IF ( HAS_CHARACTER_DIED(s_m_2_loony_2_char) )
+             s_m_2_loony_3_char = CREATE_CHAR (24.50, 121.50, 2.00) 11 180 DUMMY END
+             SET s_m_2_loony_3_created = 1
+             SET_CHAR_OBJECTIVE (s_m_2_loony_3_char, NO_OBJ)
+             POINT_ARROW_AT (arrow1, s_m_2_loony_3_char)
+             SET s_m_2_hunting_stage = 3
+          ENDIF
+       ENDIF
+    ENDIF
+    
+    //  If the player has killed the third loony, point arrow at Opry Car Park
+    IF ( s_m_2_loony_3_created = 1 )
+       IF ( ( s_m_2_hunting_stage = 3 ) AND ( IS_ITEM_ONSCREEN(s_m_2_loony_3_char) ) )
+          IF ( HAS_CHARACTER_DIED(s_m_2_loony_3_char) )
+             POINT_ARROW_AT (arrow1, 67.50, 30.50, 2.00)    //  Point at Opry Car Park
+             SET s_m_2_hunting_stage = 4                                 //  Lock this IF
+          ENDIF
+       ENDIF
+    ENDIF
+    
+    //  If the player has returned to Opry Car Park after killing all loonies
+    IF ( ( s_m_2_hunting_stage = 4 ) AND ( LOCATE_CHARACTER_BY_CAR(p1, 67.50, 30.50, 2.00, 6.50, 6.50) ) )
+       REMOVE_ARROW (arrow1)
+       DISPLAY_BRIEF (2400)                               //  "GodDAMN you are one superfast son-of-a-bitch! I hate to say this but... mah Pickup's all yours, City Boy!"
+       SET s_m_2_hunting_stage = 5
+       SET s_m_2_timer = 0
+       CLEAR_TIMER (s_m_2_timer)
+       CHANGE_CAR_LOCK (s_m_2_grampa_pickup, UNLOCKED)                //  Unlocking the pickup
+       CHANGE_CAR_LOCK (s_m_2_hunting_car_1, UNLOCKED)                //  Unlocking the first car
+       CHANGE_CAR_LOCK (s_m_2_hunting_car_2, UNLOCKED)                //  Unlocking the second car
+       CHANGE_CAR_LOCK (s_m_2_hunting_car_3, UNLOCKED)                //  Unlocking the third car
+       SET s_m_2_while_loop_1 = 1
+       SET_ENTER_CONTROL_STATUS (p1, ON)                  //  Now the player is able to get out of his car
+    ENDIF
+    
+ 
+ ENDWHILE
+ 
+ //  The player has successfully completed the redneck challenge
+ 
+ POINT_ARROW_AT (arrow1, s_m_2_grampa_pickup)
+ 
+ //  Creating Grand'pa
+ s_m_2_grandpa_char = CREATE_CHAR (12.50, 42.50, 2.00) 5 0 DUMMY END
+ SET_CHAR_OBJECTIVE (s_m_2_grandpa_char, WAIT_ON_FOOT)
+ SET_CHAR_THREAT_REACTION (s_m_2_grandpa_char, NO_REACTION)
+ 
+ WHILE_EXEC ( s_m_2_while_loop_2 = 0 )
+    
+    //  If the player has entered the pickup
+    IF ( ( IS_CHARACTER_IN_CAR(p1, s_m_2_grampa_pickup) ) AND ( s_m_2_player_got_pickup = 0 ) )
+       DISPLAY_BRIEF (2401)                   //  "Well done, THC-303. Now go to the Ol' Banjo and collect Gran'pa."
+       POINT_ARROW_AT (arrow1, s_m_2_grandpa_char)
+       SET s_m_2_player_got_pickup = 1                        //  Lock this IF
+    ENDIF
+    
+    //  If the pickup has been destroyed
+    IF ( ( IS_CAR_WRECKED(s_m_2_grampa_pickup) ) AND ( savecount7 = 0 ) )
+       CLEAR_ALL_BRIEFS ()
+       DISPLAY_BRIEF (2410)                   //  "Now that was silly, THC-303. Now there's no way to complete this job!"
+       SET savecount7 = 1
+       DISPLAY_MESSAGE (2998)                 //  Mission Failed!
+       RETURN
+    ENDIF
+    
+    //  If Grand'pa has died
+    IF ( HAS_CHARACTER_DIED(s_m_2_grandpa_char) )
+       IF ( savecount7 = 0 )
+          CLEAR_ALL_BRIEFS ()
+          DISPLAY_BRIEF (2403)                //  "A dead old man is no use for what The Professor has in mind, THC-303. You are off the job."
+          SET savecount7 = 1
+          DISPLAY_MESSAGE (2998)              //  Mission Failed!
+          RETURN
+       ENDIF
+    ENDIF
+    
+    //  If the player has left the pickup              (I changed this and the next IF to fix a brief issue)
+    IF ( NOT ( IS_CHARACTER_IN_CAR(p1, s_m_2_grampa_pickup) ) )
+       IF ( ( s_m_2_player_out_pickup = 0 ) AND ( s_m_2_player_got_pickup = 1 ) )         //  The player has entered the pickup before and now he is out of it
+          POINT_ARROW_AT (arrow1, s_m_2_grampa_pickup)
+          DISPLAY_BRIEF (2404)                       //  "Don't keep me waiting, THC-303. Get back in the Pickup and bring Gran'pa to the Research Center!"
+          SET s_m_2_player_out_pickup = 1
+       ENDIF
+    ENDIF
+    
+    //  If the player has returned to the pickup
+    IF ( ( IS_CHARACTER_IN_CAR(p1, s_m_2_grampa_pickup) ) AND ( s_m_2_player_out_pickup = 1 ) )
+       POINT_ARROW_AT (arrow1, s_m_2_grandpa_char)
+       SET s_m_2_player_out_pickup = 0
+    ENDIF
+    
+    //  If the player is seeing Grand'pa from his pickup
+    IF ( ( IS_CHARACTER_IN_CAR(p1, s_m_2_grampa_pickup) ) AND ( IS_ITEM_ONSCREEN(s_m_2_grandpa_char) ) )
+       IF ( s_m_2_grandpa_found = 0 )
+          DISPLAY_BRIEF (2406)       //  "There's Gran'pa. He's old and blind but he should recognize the sound of Dirk's Pickup... Sound the horn to get his attention."
+          SET s_m_2_grandpa_found = 1
+       ENDIF
+    ENDIF
+    
+    //  If the player is pressing the horn near the Grand'pa
+    IF ( ( IS_ITEM_ONSCREEN(s_m_2_grandpa_char) ) AND ( s_m_2_grandpa_found = 1 ) )
+       IF ( IS_CHARACTER_IN_CAR(p1, s_m_2_grampa_pickup) )
+          IF ( ( IS_CHAR_PRESSING_HORN(p1) ) AND ( s_m_2_player_pressed_horn = 0 ) )
+             DISPLAY_BRIEF (2407)                                                //  "Hey there, young fella! Go easy on that horn! I'm comin'."
+             SET_CHAR_OBJECTIVE (s_m_2_grandpa_char, ENTER_CAR_AS_PASSENGER, s_m_2_grampa_pickup)
+             SET s_m_2_player_pressed_horn = 1                                                     //  Lock this IF
+          ENDIF
+       ENDIF
+    ENDIF
+    
+    //  If Grand'pa has entered the pickup
+    IF ( ( s_m_2_player_pressed_horn = 1 ) AND ( IS_CHAR_OBJECTIVE_PASSED(s_m_2_grandpa_char) ) )
+       SET s_m_2_while_loop_2 = 1
+    ENDIF
+ 
+ ENDWHILE
+ 
+ //  Grand'pa has entered the pickup
+ 
+ DISPLAY_BRIEF (2409)                                         //  "Fantastic, THC-303. Bring Gran'pa to the Research Center - in one piece. Do not let the Rednecks catch you."
+ POINT_ARROW_AT (arrow1, 236.00, 192.00, 2.00)                //  Point at SRS garage
+ UPDATE_DOOR_TARGET (door3, s_m_2_grampa_pickup)
+ 
+ WHILE_EXEC ( s_m_2_while_loop_3 = 0 )
+    
+    //  If the redneck assassins does not exists, create them
+    IF ( ( s_m_2_grandpa_found = 1 ) AND ( s_m_2_redn_assassins_created = 0 ) )
+       
+       //EXEC
+           s_m_2_redn_assassin_1_car = CREATE_GANG_CAR (19.50, 91.50, 2.00) 3 0 PICKUP END
+           s_m_2_redn_assassin_1_char = CREATE_CHAR_INSIDE_CAR (s_m_2_redn_assassin_1_car) 6 CRIMINAL END
+           SET_CHAR_OBJECTIVE (s_m_2_redn_assassin_1_char, KILL_CHAR_ANY_MEANS, p1)
+           SET_FAVOURITE_MODEL (s_m_2_redn_assassin_1_char, PICKUP)
+           SET_CHAR_THREAT_REACTION (s_m_2_redn_assassin_1_char, NO_REACTION)
+           SET_CHAR_THREAT_SEARCH (s_m_2_redn_assassin_1_char, LINE_OF_SIGHT)
+           GIVE_WEAPON (s_m_2_redn_assassin_1_char, SHOTGUN)
+           
+           s_m_2_redn_assassin_2_car = CREATE_GANG_CAR (77.50, 34.50, 2.00) 3 0 PICKUP END
+           s_m_2_redn_assassin_2_char = CREATE_CHAR_INSIDE_CAR (s_m_2_redn_assassin_2_car) 6 CRIMINAL END
+           SET_CHAR_OBJECTIVE (s_m_2_redn_assassin_2_char, KILL_CHAR_ANY_MEANS, p1)
+           SET_FAVOURITE_MODEL (s_m_2_redn_assassin_2_char, PICKUP)
+           SET_CHAR_THREAT_REACTION (s_m_2_redn_assassin_2_char, NO_REACTION)
+           SET_CHAR_THREAT_SEARCH (s_m_2_redn_assassin_2_char, LINE_OF_SIGHT)
+           GIVE_WEAPON (s_m_2_redn_assassin_2_char, SHOTGUN)
+           
+           s_m_2_redn_assassin_3_car = CREATE_GANG_CAR (72.50, 91.50, 2.00) 3 0 PICKUP END
+           s_m_2_redn_assassin_3_char = CREATE_CHAR_INSIDE_CAR (s_m_2_redn_assassin_3_car) 6 CRIMINAL END
+           SET_CHAR_OBJECTIVE (s_m_2_redn_assassin_3_char, KILL_CHAR_ANY_MEANS, p1)
+           SET_FAVOURITE_MODEL (s_m_2_redn_assassin_3_char, PICKUP)
+           SET_CHAR_THREAT_REACTION (s_m_2_redn_assassin_3_char, NO_REACTION)
+           SET_CHAR_THREAT_SEARCH (s_m_2_redn_assassin_3_char, LINE_OF_SIGHT)
+           GIVE_WEAPON (s_m_2_redn_assassin_3_char, SHOTGUN)
+           
+           ADD_CHAR_TO_GANG (s_m_2_redn_assassin_1_char, redngang)
+           ADD_CHAR_TO_GANG (s_m_2_redn_assassin_2_char, redngang)
+           ADD_CHAR_TO_GANG (s_m_2_redn_assassin_3_char, redngang)
+           
+           SET s_m_2_redn_assassins_created = 1
+           SET s_m_2_player_out_pickup = 0
+       //ENDEXEC
+       
+    ENDIF
+    
+    //  If the player has left the pickup
+    IF ( ( NOT ( IS_CHARACTER_IN_CAR(p1, s_m_2_grampa_pickup) ) ) AND ( s_m_2_player_out_pickup = 0 ) )
+       POINT_ARROW_AT (arrow1, s_m_2_grampa_pickup)
+       DISPLAY_BRIEF (2404)                           //  "Don't keep me waiting, THC-303. Get back in the Pickup and bring Gran'pa to the Research Center!"
+       SET s_m_2_player_out_pickup = 1
+    ENDIF
+    
+    //  If the player has returned to the pickup
+    IF ( ( IS_CHARACTER_IN_CAR(p1, s_m_2_grampa_pickup) ) AND ( s_m_2_player_out_pickup = 1 ) )
+       POINT_ARROW_AT (arrow1, 236.00, 192.00, 2.00)                     //  Point at SRS garage again
+       SET s_m_2_player_out_pickup = 0
+    ENDIF
+    
+    //  If the pickup is in front of SRS garage
+    IF ( ( IS_CAR_IN_BLOCK(s_m_2_grampa_pickup, 236.00, 193.00, 2.00, 2.00, 2.00) ) AND ( s_m_2_is_pickup_parking = 0 ) )
+       PARK (s_m_2_grampa_pickup, door3)
+       SET s_m_2_is_pickup_parking = 1
+       REMOVE_ARROW (arrow1)
+    ENDIF
+    
+    //  If the pickup's parking has finished
+    IF ( ( s_m_2_is_pickup_parking = 1 ) AND ( HAS_PARK_FINISHED() ) )
+       SET s_m_2_is_pickup_parking = 2
+       SET s_m_2_while_loop_3 = 1
+    ENDIF
+    
+    //  If the pickup has been destroyed
+    IF ( IS_CAR_WRECKED(s_m_2_grampa_pickup) )
+       IF ( savecount7 = 0 )
+          CLEAR_ALL_BRIEFS ()
+          DISPLAY_BRIEF (2402)               //  "IMBECILE, you couldn't even keep the Pickup in once piece, THC-303! This job is OVER."
+          SET savecount7 = 1
+          DISPLAY_MESSAGE (2998)             //  Mission Failed!
+          RETURN
+       ENDIF
+    ENDIF
+ 
+ ENDWHILE
+
+ //  The pickup has been parked
+
+ CLEAR_ALL_BRIEFS ()
+ DISPLAY_BRIEF (2408)                        //  "Smooth, THC-303. You are a cool operator. Please accept #$50,000# with our thanks for all your hard work."
+ ADD_SCORE (p1, 50000)
+ SET savecount49 = 1
+ DISPLAY_MESSAGE (2999)                      //  Mission Complete!
+ CLEAR_WANTED_LEVEL (p1)
+ ADD_MULTIPLIER (p1, 1)
+ CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (sciegang, p1, 1)
+ 
+ //  If the player has already completed the Scientist Medium Mission 3, disable Scientist Medium phone 2
+ IF ( savecount61 = 1 )
+    SET_PHONE_DEAD (obj4)
+    DISABLE_THREAD_TRIGGER (trigger4)
+ ENDIF
+
+RETURN
+
+
+
+clean_up_scie_med_phone2_m1:                          //  Clean up
+ 
+	SET savecount81 = 0
+	SET savecount82 = 0
+ 
+	REMOVE_ARROW (arrow1)
+	REMOVE_ARROW (arrow3)
+	REMOVE_ARROW (arrow4)
+ 
+	MAKE_DOOR_MANUAL (door3)
+ 
+	CHANGE_CAR_LOCK (s_m_2_grampa_pickup, UNLOCKED)
+	CHANGE_CAR_LOCK (s_m_2_hunting_car_1, UNLOCKED)
+	CHANGE_CAR_LOCK (s_m_2_hunting_car_2, UNLOCKED)
+	CHANGE_CAR_LOCK (s_m_2_hunting_car_3, UNLOCKED)
+ 
+	SET_ENTER_CONTROL_STATUS (p1, ON)
+ 
+	CLEAR_TIMER (s_m_2_timer)
+ 
+ //  Checking if any of the redneck assassins is alive
+ IF ( s_m_2_redn_assassins_created = 1 )
+ 
+    IF ( NOT ( HAS_CHARACTER_DIED(s_m_2_redn_assassin_1_char) ) )
+       MAKE_CHAR_DO_NOTHING (s_m_2_redn_assassin_1_char)
+    ENDIF
+    
+    IF ( NOT ( HAS_CHARACTER_DIED(s_m_2_redn_assassin_2_char) ) )
+       MAKE_CHAR_DO_NOTHING (s_m_2_redn_assassin_2_char)
+    ENDIF
+    
+    IF ( NOT ( HAS_CHARACTER_DIED(s_m_2_redn_assassin_3_char) ) )
+       MAKE_CHAR_DO_NOTHING (s_m_2_redn_assassin_3_char)
+    ENDIF
+ 
+ ENDIF
+ 
+ 
+ IF ( savecount49 = 1 )
+	   ++savecount85
+	   ++savecount91
+	ENDIF
+ 
+ IF ( CHECK_DEATHARREST_EXECUTED() )
+    ++savecount88
+	   ++savecount92
+	   CLEAR_TIMER (s_m_2_timer)
+	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (sciegang, p1, -1)
+	   CLEAR_WANTED_LEVEL (p1)
+ ENDIF
+	
+	MISSION_HAS_FINISHED ()
+ 
+RETURN
+
+MISSIONSTART
+GOSUB scie_med_phone2_m1:
+GOSUB clean_up_scie_med_phone2_m1:
+MISSIONEND

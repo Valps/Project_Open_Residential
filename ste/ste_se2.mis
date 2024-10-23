@@ -1,0 +1,346 @@
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Fake Truce! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+// Decompiled from "ste_se2.scr" Using Epic GTA2 Script Decompiler by T.M.
+
+//FORWARD scie_easy_phone2_m1:
+//FORWARD clean_up_scie_easy_phone2_m1:
+
+COUNTER s_e_2_player_pressed_horn = 0
+COUNTER s_e_2_player_arrived_redn_1 = 0
+COUNTER s_e_2_player_arrived_redn_2 = 0
+COUNTER s_e_2_player_arrived_zaib_1 = 0
+COUNTER s_e_2_player_arrived_zaib_2 = 0
+COUNTER s_e_2_all_groups_picked = 0
+COUNTER s_e_2_group_created = 0
+COUNTER s_e_2_player_got_bus = 0
+COUNTER s_e_2_player_out_bus = 0
+COUNTER s_e_2_redn_group_1_picked = 0
+COUNTER s_e_2_redn_group_2_picked = 0
+COUNTER s_e_2_zaib_group_1_picked = 0
+COUNTER s_e_2_bus_ready_destroy = 0
+
+COUNTER s_e_2_while_loop = 0
+
+SOUND s_e_2_screams_sound
+
+CAR_DATA s_e_2_bus
+
+CHAR_DATA s_e_2_group_char
+CHAR_DATA s_e_2_srs_clones_group_char
+
+scie_easy_phone2_m1:
+ 
+	SET savecount5 = 0
+ 
+	DISPLAY_MESSAGE (2958)          //  FAKE TRUCE!
+ 
+	SET savecount81 = 1
+	SET savecount82 = 1
+ 
+	s_e_2_group_char = CREATE_CHAR (16.50, 71.50, 2.00) 5 180 CRIMINAL END
+	GIVE_WEAPON (s_e_2_group_char, MACHINE_GUN)
+	SET_CHAR_THREAT_REACTION (s_e_2_group_char, NO_REACTION)
+	SET_CHAR_OBJECTIVE (s_e_2_group_char, WAIT_ON_FOOT)
+	ADD_CHAR_TO_GANG (s_e_2_group_char, redngang)
+	ADD_GROUP_TO_CHARACTER (s_e_2_group_char, 5)
+ 
+	DISPLAY_BRIEF (2300)
+ //  "Ah, THC-303. Dr LaBrat here. The Zaibatsu and Rednecks want a peace meeting so I'm taking the opportunity to perform an experiment.
+ //  Collect the old Factory Bus and I will unravel my plan."
+ 
+	SET s_e_2_player_pressed_horn = 0
+	SET s_e_2_player_arrived_redn_1 = 0
+	SET s_e_2_player_arrived_redn_2 = 0
+	SET s_e_2_player_arrived_zaib_1 = 0
+	SET s_e_2_player_arrived_zaib_2 = 0
+	SET s_e_2_all_groups_picked = 0
+	SET s_e_2_group_created = 1
+ 
+	s_e_2_bus = CREATE_CAR (227.50, 214.50, 2.00) 6 180 BUS END
+	POINT_ARROW_AT (arrow1, s_e_2_bus)
+ 
+ WHILE_EXEC ( s_e_2_while_loop = 0 )
+    
+    //  If the player has killed a lot of zaibatsu/redneck group members
+    IF ( ( s_e_2_bus_ready_destroy = 0 ) AND ( s_e_2_group_created = 1 ) )
+       IF ( NOT ( CHECK_NUMBER_ALIVE_IN_GROUP(s_e_2_group_char, 2) ) )
+          CLEAR_ALL_BRIEFS ()
+          DISPLAY_BRIEF (2314)                      //  "THC-303 you imbecile. Now we are on the verge of a gang war."
+          SET savecount5 = 1
+          DISPLAY_MESSAGE (2998)                    //  Mission Failed!
+          RETURN
+       ENDIF
+    ENDIF
+    
+    //  If the player has entered the bus for the first time
+    IF ( ( IS_CHARACTER_IN_CAR(p1, s_e_2_bus) ) AND ( s_e_2_all_groups_picked = 0 ) )
+       POINT_ARROW_AT (arrow1, s_e_2_group_char)
+       SET s_e_2_player_out_bus = 0
+       
+       IF ( s_e_2_player_got_bus = 0 )
+          DISPLAY_BRIEF (2301)                //  "First, collect the Redneck delegation from Cobbs Store in Mobile RV."
+          SET s_e_2_player_got_bus = 1
+       ENDIF
+       
+    ENDIF
+    
+    //  If the bus has been destroyed
+    IF ( ( s_e_2_bus_ready_destroy = 0 ) AND ( IS_CAR_WRECKED(s_e_2_bus) ) )
+       IF ( savecount5 = 0 )
+          CLEAR_ALL_BRIEFS ()
+          DISPLAY_BRIEF (2302)                //  "Unfortunately, THC-303, the Bus was critical to the success of my plan. Consider yourself fired."
+          SET savecount5 = 1
+          DISPLAY_MESSAGE (2998)
+          RETURN
+       ENDIF
+    ENDIF
+    
+    //  If the player got all zaib/redneck groups, point arrow at SRS center
+    IF ( ( IS_CHARACTER_IN_CAR(p1, s_e_2_bus) ) AND ( s_e_2_all_groups_picked = 1 ) )
+       IF ( s_e_2_bus_ready_destroy = 0 )
+          POINT_ARROW_AT (arrow1, 215.50, 226.50, 2.00)
+          SET s_e_2_player_out_bus = 0
+       ENDIF
+    ENDIF
+    
+    //  If the player has left the bus
+    IF ( ( s_e_2_player_got_bus = 1 ) AND ( NOT ( IS_CHARACTER_IN_CAR(p1, s_e_2_bus) ) ) )
+       IF ( s_e_2_player_out_bus = 0 )
+          IF ( s_e_2_bus_ready_destroy = 0 )
+             POINT_ARROW_AT (arrow1, s_e_2_bus)
+             DISPLAY_BRIEF_NOW (2303)                       //  "Please get back on the Bus, THC-303. I have a plan - remember?"
+             SET s_e_2_player_out_bus = 1
+          ENDIF
+       ENDIF
+    ENDIF
+    
+    //  If the player has arrived at the first redneck group
+    IF ( ( LOCATE_CHARACTER_BY_CAR(p1, 16.50, 71.50, 2.00, 8.00, 4.00) ) AND ( IS_CHARACTER_IN_CAR(p1, s_e_2_bus) ) )
+       IF ( s_e_2_player_arrived_redn_1 = 0 )
+          DISPLAY_BRIEF (2278)                //  "Sound the horn, THC-303."
+          SET s_e_2_player_arrived_redn_1 = 1
+       ENDIF
+    ENDIF
+    
+    //  If the player has pressed the horn
+    IF ( ( IS_CHARACTER_IN_CAR(p1, s_e_2_bus) ) AND ( IS_CHAR_PRESSING_HORN(p1) ) )
+       IF ( ( s_e_2_player_pressed_horn = 0 ) AND ( s_e_2_player_arrived_redn_1 = 1 ) )
+          DISPLAY_BRIEF_NOW (2304)                                           //  "Okay, boys, get on the Bus - and no spittin'!"
+          SET_CHAR_OBJECTIVE (s_e_2_group_char, ENTER_CAR_AS_PASSENGER, s_e_2_bus)
+          SET s_e_2_player_pressed_horn = 1
+          SET s_e_2_player_arrived_redn_1 = 2
+       ENDIF
+    ENDIF
+    
+    //  If the first redneck group has entered the bus
+    IF ( ( s_e_2_redn_group_1_picked = 0 ) AND ( IS_GROUP_IN_CAR(s_e_2_group_char) ) )
+       SET s_e_2_group_created = 0
+       KILL_ALL_PASSENGERS (s_e_2_bus)                                   //  Recycling characters and preventing the bus of being full                 (R.I.P.)
+       s_e_2_group_char = CREATE_CHAR (9.50, 43.50, 2.00) 5 180 CRIMINAL END
+       GIVE_WEAPON (s_e_2_group_char, MACHINE_GUN)
+       SET_CHAR_THREAT_REACTION (s_e_2_group_char, NO_REACTION)
+       SET_CHAR_OBJECTIVE (s_e_2_group_char, WAIT_ON_FOOT)
+       ADD_CHAR_TO_GANG (s_e_2_group_char, redngang)
+       ADD_GROUP_TO_CHARACTER (s_e_2_group_char, 5)
+       SET s_e_2_group_created = 1
+       POINT_ARROW_AT (arrow1, s_e_2_group_char)
+       DISPLAY_BRIEF (2305)                                  //  "Now drive to The Ol' Banjo and pick up some more White Trash."
+       SET s_e_2_redn_group_1_picked = 1
+    ENDIF
+    
+    //  If the player has arrived at the second redneck group
+    IF ( ( s_e_2_redn_group_1_picked = 1 ) AND ( LOCATE_CHARACTER_BY_CAR(p1, 9.50, 43.50, 2.00, 8.00, 4.00) ) )
+       IF ( ( IS_CHARACTER_IN_CAR(p1, s_e_2_bus) ) AND ( s_e_2_player_arrived_redn_2 = 0 ) )
+          SET s_e_2_player_pressed_horn = 0
+          DISPLAY_BRIEF (2278)                          //  "Sound the horn, THC-303."
+          SET s_e_2_player_arrived_redn_2 = 1
+       ENDIF
+    ENDIF
+    
+    //  If the player has pressed the horn
+    IF ( ( IS_CHARACTER_IN_CAR(p1, s_e_2_bus) ) AND ( s_e_2_redn_group_1_picked = 1 ) )
+       IF ( ( IS_CHAR_PRESSING_HORN(p1) ) AND ( s_e_2_player_pressed_horn = 0 ) )
+          DISPLAY_BRIEF_NOW (2306)                                           //  "C'mon, climb aboard!"
+          SET_CHAR_OBJECTIVE (s_e_2_group_char, ENTER_CAR_AS_PASSENGER, s_e_2_bus)
+          SET s_e_2_player_pressed_horn = 1
+          SET s_e_2_player_arrived_redn_2 = 2
+       ENDIF
+    ENDIF
+    
+    //  If the second redneck group has entered the bus
+    IF ( ( s_e_2_redn_group_1_picked = 1 ) AND ( s_e_2_redn_group_2_picked = 0 ) )
+       IF ( IS_GROUP_IN_CAR(s_e_2_group_char) )
+          KILL_ALL_PASSENGERS (s_e_2_bus)
+          SET s_e_2_redn_group_1_picked = 2
+          SET s_e_2_group_created = 0
+          s_e_2_group_char = CREATE_CHAR (197.50, 25.50, 3.00) 8 180 CRIMINAL END
+          GIVE_WEAPON (s_e_2_group_char, MACHINE_GUN)
+          SET_CHAR_THREAT_REACTION (s_e_2_group_char, NO_REACTION)
+          SET_CHAR_OBJECTIVE (s_e_2_group_char, WAIT_ON_FOOT)
+          ADD_CHAR_TO_GANG (s_e_2_group_char, zaibgang)
+          ADD_GROUP_TO_CHARACTER (s_e_2_group_char, 5)
+          SET s_e_2_group_created = 1
+          POINT_ARROW_AT (arrow1, s_e_2_group_char)
+          DISPLAY_BRIEF (2307)                                       //  "Drive with haste to the Zaibatsu Village, THC-303, and collect the Zaibatsu delegates."
+          SET s_e_2_redn_group_2_picked = 1
+       ENDIF
+    ENDIF
+    
+    //  If the player has arrived at the first Zaibatsu group
+    IF ( ( s_e_2_redn_group_2_picked = 1 ) AND ( LOCATE_CHARACTER_BY_CAR(p1, 197.50, 25.50, 3.00, 8.00, 4.00) ) )
+       IF ( ( IS_CHARACTER_IN_CAR(p1, s_e_2_bus) ) AND ( s_e_2_player_arrived_zaib_1 = 0 ) )
+          SET s_e_2_player_pressed_horn = 0
+          DISPLAY_BRIEF (2278)                          //  "Sound the horn, THC-303."
+          SET s_e_2_player_arrived_zaib_1 = 1
+       ENDIF
+    ENDIF
+    
+    //  If the player has pressed the horn
+    IF ( ( IS_CHAR_PRESSING_HORN(p1) ) AND ( s_e_2_player_pressed_horn = 0 ) )
+       IF ( s_e_2_redn_group_2_picked = 1 )
+          DISPLAY_BRIEF_NOW (2308)                                        //  "Climb aboard, Z-Operatives. But do not communicate with the Rednecks."
+          SET_CHAR_OBJECTIVE (s_e_2_group_char, ENTER_CAR_AS_PASSENGER, s_e_2_bus)
+          SET s_e_2_player_pressed_horn = 1
+          SET s_e_2_player_arrived_zaib_1 = 2
+       ENDIF
+    ENDIF
+    
+    //  If the first Zaibatsu group has entered the bus
+    IF ( ( s_e_2_zaib_group_1_picked = 0 ) AND ( s_e_2_redn_group_2_picked = 1 ) )
+       IF ( IS_GROUP_IN_CAR(s_e_2_group_char) )
+          SET s_e_2_redn_group_2_picked = 2
+          KILL_ALL_PASSENGERS (s_e_2_bus)
+          s_e_2_group_char = CREATE_CHAR (228.50, 34.50, 3.00) 8 180 CRIMINAL END
+          GIVE_WEAPON (s_e_2_group_char, MACHINE_GUN)
+          SET_CHAR_THREAT_REACTION (s_e_2_group_char, NO_REACTION)
+          SET_CHAR_OBJECTIVE (s_e_2_group_char, WAIT_ON_FOOT)
+          ADD_CHAR_TO_GANG (s_e_2_group_char, zaibgang)
+          ADD_GROUP_TO_CHARACTER (s_e_2_group_char, 5)
+          POINT_ARROW_AT (arrow1, s_e_2_group_char)
+          DISPLAY_BRIEF (2309)                                       //  "Okay, THC-303, only one more Zaibatsu group to collect."
+          SET s_e_2_zaib_group_1_picked = 1
+          SET s_e_2_player_pressed_horn = 0
+       ENDIF
+    ENDIF
+    
+    //  If the player has arrived at the second Zaibatsu group
+    IF ( ( s_e_2_zaib_group_1_picked = 1 ) AND ( LOCATE_CHARACTER_BY_CAR(p1, 228.50, 34.50, 3.00, 8.00, 4.00) ) )
+       IF ( IS_CHARACTER_IN_CAR(p1, s_e_2_bus) )
+          IF ( s_e_2_player_arrived_zaib_2 = 0 )
+             SET s_e_2_player_pressed_horn = 0
+             DISPLAY_BRIEF (2278)                   //  "Sound the horn, THC-303."
+             SET s_e_2_player_arrived_zaib_2 = 1
+          ENDIF
+       ENDIF
+    ENDIF
+    
+    //  If the player has pressed the horn
+    IF ( ( IS_CHARACTER_IN_CAR(p1, s_e_2_bus) ) AND ( IS_CHAR_PRESSING_HORN(p1) ) )
+       IF ( ( s_e_2_player_pressed_horn = 0 ) AND ( s_e_2_player_arrived_zaib_2 = 1 ) )
+          DISPLAY_BRIEF_NOW (2310)                                              //  "All aboard, Z-Men."
+          SET_CHAR_OBJECTIVE (s_e_2_group_char, ENTER_CAR_AS_PASSENGER, s_e_2_bus)
+          SET s_e_2_player_pressed_horn = 1
+          SET s_e_2_player_arrived_zaib_2 = 2
+       ENDIF
+    ENDIF
+    
+    //  If the second Zaibatsu group has entered the bus
+    IF ( ( ( s_e_2_all_groups_picked = 0 ) AND ( s_e_2_zaib_group_1_picked = 1 ) ) AND ( IS_GROUP_IN_CAR(s_e_2_group_char) ) )
+       SET s_e_2_all_groups_picked = 1
+       SET s_e_2_zaib_group_1_picked = 2
+       SET s_e_2_group_created = 0
+       KILL_ALL_PASSENGERS (s_e_2_bus)
+       DISPLAY_BRIEF (2311)                 //  "Now be careful, THC-303. Bring them all back to the Scientist Research Center - and fast."
+    ENDIF
+    
+    //  If the player has arrived at Scientist Research Center
+    IF ( ( LOCATE_CHARACTER_BY_CAR(p1, 215.50, 226.50, 2.00, 8.00, 3.00) ) AND ( s_e_2_bus_ready_destroy = 0 ) )
+       IF ( s_e_2_all_groups_picked = 1 )
+          DISPLAY_BRIEF (2312)              //  "You did well, THC-303. Now get off the Bus and let my SRS Clones take it from here."
+          REMOVE_ARROW (arrow1)
+          SET s_e_2_bus_ready_destroy = 1                   //  Lock this IF
+       ENDIF
+    ENDIF
+    
+    //  If the player isn't in the Scientist Research Center after getting all redneck and zaibatsu groups
+    IF ( ( s_e_2_bus_ready_destroy = 1 ) AND ( IS_CHARACTER_IN_CAR(p1, s_e_2_bus) ) )
+       IF ( NOT ( LOCATE_CHARACTER_BY_CAR(p1, 215.50, 226.50, 2.00, 8.00, 3.00) ) )
+          IF ( s_e_2_all_groups_picked = 1 )
+             SET s_e_2_bus_ready_destroy = 0
+             POINT_ARROW_AT (arrow1, 215.50, 226.50, 2.00)
+          ENDIF
+       ENDIF
+    ENDIF
+    
+    //  If the player leaves the bus after delivering the bus at Scientist Research Center
+    IF ( ( s_e_2_bus_ready_destroy = 1 ) AND ( NOT ( IS_CHARACTER_IN_CAR(p1, s_e_2_bus) ) ) )
+       CHANGE_CAR_LOCK (s_e_2_bus, LOCKED)
+       s_e_2_screams_sound = CREATE_SOUND (215.50, 226.50, 2.00) GANG_LOCKED_IN_BUS PLAY_FOREVER END
+       //  Creating the SRS clones
+       s_e_2_srs_clones_group_char = CREATE_CHAR (220.50, 230.50, 2.00) 7 180 CRIMINAL END
+       GIVE_WEAPON (s_e_2_srs_clones_group_char, PISTOL)
+       SET_CHAR_THREAT_REACTION (s_e_2_srs_clones_group_char, NO_REACTION)
+       SET_CHAR_OBJECTIVE (s_e_2_srs_clones_group_char, DESTROY_CAR, s_e_2_bus)
+       ADD_CHAR_TO_GANG (s_e_2_srs_clones_group_char, sciegang)
+       ADD_GROUP_TO_CHARACTER (s_e_2_srs_clones_group_char, 3)
+       SET s_e_2_all_groups_picked = 2
+       SET s_e_2_bus_ready_destroy = 2
+    ENDIF
+    
+    //  If the bus has been destroyed after locking all zaib/redneck groups in it
+    IF ( ( s_e_2_bus_ready_destroy = 2 ) AND ( IS_CAR_WRECKED(s_e_2_bus) ) )
+       CLEAR_ALL_BRIEFS ()
+       SET_CHAR_OBJECTIVE (s_e_2_srs_clones_group_char, NO_OBJ)
+       ADD_SCORE (p1, 30000)
+       SET savecount47 = 1
+       SET s_e_2_while_loop = 1
+       DELETE_ITEM (s_e_2_screams_sound)
+       DISPLAY_BRIEF (2315)            //  "Congratulations, THC-303. I can see your talents developing under my auspices. Here is $30,000 for your hard work."
+       DISPLAY_MESSAGE (2999)          //  Mission Complete!
+       CLEAR_WANTED_LEVEL (p1)
+       ADD_MULTIPLIER (p1, 1)
+       CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (sciegang, p1, 1)
+       SET_PHONE_DEAD (obj2)
+       DISABLE_THREAD_TRIGGER (trigger2)
+    ENDIF
+ 
+ ENDWHILE
+
+
+RETURN
+
+
+
+clean_up_scie_easy_phone2_m1:                   //  Clean up
+ 
+ IF ( s_e_2_bus_ready_destroy = 2 )
+	   DELETE_ITEM (s_e_2_screams_sound)
+	ENDIF
+ 
+	SET savecount81 = 0
+	SET savecount82 = 0
+ 
+	REMOVE_ARROW (arrow1)
+ 
+ IF ( savecount47 = 1 )
+	   ++savecount85
+	   ++savecount91
+	ENDIF
+ 
+ IF ( CHECK_DEATHARREST_EXECUTED() )
+	   ++savecount88
+	   ++savecount92
+	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (sciegang, p1, -1)
+	   CLEAR_WANTED_LEVEL (p1)
+	ENDIF
+ 
+	MISSION_HAS_FINISHED ()
+ 
+RETURN
+
+MISSIONSTART
+GOSUB scie_easy_phone2_m1:
+GOSUB clean_up_scie_easy_phone2_m1:
+MISSIONEND

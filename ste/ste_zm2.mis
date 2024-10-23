@@ -1,0 +1,328 @@
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Valdez Alert! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+// Decompiled from "ste_zm2.scr" Using Epic GTA2 Script Decompiler by T.M.
+
+//FORWARD zaib_med_phone2_m1:
+//FORWARD clean_up_zaib_med_phone2_m1:
+
+CHAR_DATA z_m_2_zmen_group
+
+//CAR_DATA auto120
+
+OBJ_DATA z_m_2_generator_1_obj
+OBJ_DATA z_m_2_generator_2_obj
+//OBJ_DATA obj171
+//OBJ_DATA obj172
+
+CHAR_DATA z_m_2_scie_guard_1
+CHAR_DATA z_m_2_scie_guard_2
+CHAR_DATA z_m_2_scie_guard_3
+CHAR_DATA z_m_2_scie_guard_4
+CHAR_DATA z_m_2_scie_guard_5
+CHAR_DATA z_m_2_scie_guard_6
+CHAR_DATA z_m_2_scie_guard_7
+
+//COUNTER count2 = 0
+//COUNTER count3 = 0
+//COUNTER count4 = 0
+//COUNTER count5 = 0
+//COUNTER count6 = 0
+COUNTER z_m_2_generators_destroyed = 0
+COUNTER z_m_2_generator_1_destroyed = 0
+COUNTER z_m_2_generator_2_destroyed = 0
+COUNTER z_m_2_anti_blast_suit_flag = 0
+COUNTER z_m_2_has_player_arrived_srs = 0
+COUNTER z_m_2_while_loop = 0
+
+SOUND z_m_2_generator_1_sound
+SOUND z_m_2_generator_2_sound
+
+zaib_med_phone2_m1:
+ 
+	SET savecount17 = 0
+ 
+	DISPLAY_MESSAGE (2467)                //  VALDEZ ALERT!
+ 
+	GIVE_WEAPON (p1, MOLOTOV, 10)
+ 
+	EXEC
+     
+	    SET savecount81 = 1
+	    SET savecount84 = 1
+     
+	    z_m_2_generator_1_obj = CREATE_OBJ (248.50, 249.50, 6.00) 0 POWERGEN END
+	    z_m_2_generator_2_obj = CREATE_OBJ (235.50, 213.50, 6.00) 0 POWERGEN END
+     
+	    z_m_2_generator_1_sound = CREATE_SOUND (248.50, 249.50, 6.00) GENERATOR_RUMBLE PLAY_FOREVER END
+	    z_m_2_generator_1_sound = CREATE_SOUND (235.50, 213.50, 6.00) GENERATOR_RUMBLE PLAY_FOREVER END
+     
+     //  Create the Z-Men group
+	    z_m_2_zmen_group = CREATE_CHAR (217.50, 33.50, 3.00) 8 180 DUMMY END
+	    GIVE_WEAPON (z_m_2_zmen_group, MACHINE_GUN)
+	    SET_CHAR_THREAT_REACTION (z_m_2_zmen_group, REACT_AS_NORMAL)
+	    SET_CHAR_OBJECTIVE (z_m_2_zmen_group, WAIT_ON_FOOT)
+	    ADD_CHAR_TO_GANG (z_m_2_zmen_group, zaibgang)
+	    ADD_GROUP_TO_CHARACTER (z_m_2_zmen_group, 6)
+     
+     //  Create the SRS Research Center guards
+	    z_m_2_scie_guard_1 = CREATE_CHAR (245.50, 215.50, 255.00) 7 180 DUMMY END
+	    ADD_PATROL_POINT (z_m_2_scie_guard_1, 248.50, 215.50, 4.00)
+	    ADD_PATROL_POINT (z_m_2_scie_guard_1, 245.50, 215.50, 4.00)
+	    SET_CHAR_THREAT_REACTION (z_m_2_scie_guard_1, REACT_AS_NORMAL)
+	    SET_CHAR_THREAT_SEARCH (z_m_2_scie_guard_1, AREA_PLAYER_ONLY)
+	    GIVE_WEAPON (z_m_2_scie_guard_1, MACHINE_GUN)
+	    ADD_CHAR_TO_GANG (z_m_2_scie_guard_1, sciegang)
+     
+	    z_m_2_scie_guard_2 = CREATE_CHAR (240.50, 229.50, 255.00) 7 180 DUMMY END
+	    ADD_PATROL_POINT (z_m_2_scie_guard_2, 245.50, 229.50, 4.00)
+	    ADD_PATROL_POINT (z_m_2_scie_guard_2, 240.50, 229.50, 4.00)
+	    SET_CHAR_THREAT_REACTION (z_m_2_scie_guard_2, REACT_AS_NORMAL)
+	    SET_CHAR_THREAT_SEARCH (z_m_2_scie_guard_2, AREA_PLAYER_ONLY)
+	    GIVE_WEAPON (z_m_2_scie_guard_2, MACHINE_GUN)
+	    ADD_CHAR_TO_GANG (z_m_2_scie_guard_2, sciegang)
+     
+	    z_m_2_scie_guard_3 = CREATE_CHAR (246.50, 233.50, 255.00) 7 180 DUMMY END
+	    ADD_PATROL_POINT (z_m_2_scie_guard_3, 251.50, 233.50, 3.00)
+	    ADD_PATROL_POINT (z_m_2_scie_guard_3, 246.50, 233.50, 3.00)
+	    SET_CHAR_THREAT_REACTION (z_m_2_scie_guard_3, REACT_AS_NORMAL)
+	    SET_CHAR_THREAT_SEARCH (z_m_2_scie_guard_3, AREA_PLAYER_ONLY)
+	    GIVE_WEAPON (z_m_2_scie_guard_3, MACHINE_GUN)
+	    ADD_CHAR_TO_GANG (z_m_2_scie_guard_3, sciegang)
+     
+	    z_m_2_scie_guard_4 = CREATE_CHAR (245.50, 246.50, 255.00) 7 180 DUMMY END
+	    ADD_PATROL_POINT (z_m_2_scie_guard_4, 252.50, 246.50, 2.00)
+	    ADD_PATROL_POINT (z_m_2_scie_guard_4, 245.50, 246.50, 2.00)
+	    SET_CHAR_THREAT_REACTION (z_m_2_scie_guard_4, REACT_AS_NORMAL)
+	    SET_CHAR_THREAT_SEARCH (z_m_2_scie_guard_4, AREA_PLAYER_ONLY)
+	    GIVE_WEAPON (z_m_2_scie_guard_4, MACHINE_GUN)
+	    ADD_CHAR_TO_GANG (z_m_2_scie_guard_4, sciegang)
+     
+	    z_m_2_scie_guard_5 = CREATE_CHAR (238.50, 221.50, 255.00) 7 180 DUMMY END
+	    ADD_PATROL_POINT (z_m_2_scie_guard_5, 241.50, 221.50, 3.00)
+	    ADD_PATROL_POINT (z_m_2_scie_guard_5, 238.50, 221.50, 3.00)
+	    SET_CHAR_THREAT_REACTION (z_m_2_scie_guard_5, REACT_AS_NORMAL)
+	    SET_CHAR_THREAT_SEARCH (z_m_2_scie_guard_5, AREA_PLAYER_ONLY)
+	    GIVE_WEAPON (z_m_2_scie_guard_5, MACHINE_GUN)
+	    ADD_CHAR_TO_GANG (z_m_2_scie_guard_5, sciegang)
+     
+	    z_m_2_scie_guard_6 = CREATE_CHAR (233.50, 215.50, 255.00) 7 180 DUMMY END
+	    ADD_PATROL_POINT (z_m_2_scie_guard_6, 239.50, 216.50, 2.00)
+	    ADD_PATROL_POINT (z_m_2_scie_guard_6, 233.50, 215.50, 2.00)
+	    SET_CHAR_THREAT_REACTION (z_m_2_scie_guard_6, REACT_AS_NORMAL)
+	    SET_CHAR_THREAT_SEARCH (z_m_2_scie_guard_6, AREA_PLAYER_ONLY)
+	    GIVE_WEAPON (z_m_2_scie_guard_6, MACHINE_GUN)
+	    ADD_CHAR_TO_GANG (z_m_2_scie_guard_6, sciegang)
+     
+	    z_m_2_scie_guard_7 = CREATE_CHAR (246.50, 228.50, 255.00) 7 180 DUMMY END
+	    ADD_PATROL_POINT (z_m_2_scie_guard_7, 252.50, 228.50, 2.00)
+	    ADD_PATROL_POINT (z_m_2_scie_guard_7, 246.50, 228.50, 2.00)
+	    SET_CHAR_THREAT_REACTION (z_m_2_scie_guard_7, REACT_AS_NORMAL)
+	    SET_CHAR_THREAT_SEARCH (z_m_2_scie_guard_7, AREA_PLAYER_ONLY)
+	    GIVE_WEAPON (z_m_2_scie_guard_7, MACHINE_GUN)
+	    ADD_CHAR_TO_GANG (z_m_2_scie_guard_7, sciegang)
+     
+	ENDEXEC
+ 
+	MAKE_NEW_LEADER_OF_GROUP (z_m_2_zmen_group, p1)
+ 
+	DISPLAY_BRIEF (2850)    //  "Gecko - Red Valdez here. I want you to infiltrate the SRS Research Center and destroy their Cold Fusion Generators. Some Z-Men will join you shortly."
+	DISPLAY_BRIEF (2856)    //  "Access to the Research Center appears impossible but we have found a way - over a line of rooftop ramps and then on to and along the old Railway Track."
+ 
+	GIVE_WEAPON (p1, ROCKET_LAUNCHER)
+	POINT_ARROW_AT (arrow1, 247.50, 209.50, 4.00)       //  Point at the backdoor of SRS Research Center
+ 
+ WHILE_EXEC ( z_m_2_has_player_arrived_srs = 0 )
+    
+    //  If the SRS backdoor has been exploded, waits the player to arrive in SRS
+    IF ( ( LOCATE_CHARACTER_BY_CAR(p1, 247.50, 209.50, 3.00, 2.00, 2.00) ) AND ( savecount97 = 1 ) )
+       REMOVE_ARROW (arrow1)
+	      DISPLAY_BRIEF (2870)            //  "Super driving, Gecko! Get out of the vehicle and use the Rocket Launcher to destroy the TWO Cold Fusion Generators."
+	      SET z_m_2_has_player_arrived_srs = 1
+    ENDIF
+    
+    //  If the SRS backdoor hasn't exploded yet, waits the player to get to it and explode it
+    IF ( savecount97 = 0 )
+       IF ( ( ( ( LOCATE_CHARACTER_ANY_MEANS(p1, 247.00, 206.00, 6.00, 4.00, 4.00) ) 
+       OR ( LOCATE_CHARACTER_ANY_MEANS(p1, 247.00, 206.00, 5.00, 4.00, 5.00) ) ) 
+       OR ( LOCATE_CHARACTER_ANY_MEANS(p1, 247.00, 206.00, 4.00, 4.00, 4.00) ) ) 
+       OR ( LOCATE_CHARACTER_ANY_MEANS(p1, 247.00, 206.00, 3.00, 4.00, 3.00) ) )
+          
+          EXPLODE (247.50, 207.50, 6.00)
+	         EXPLODE (246.50, 207.50, 6.00)
+	         EXPLODE (247.50, 207.50, 6.00)
+	         EXPLODE (246.50, 207.50, 6.00)
+	         EXPLODE (247.50, 206.50, 6.00)
+	         EXPLODE (246.50, 206.50, 6.00)
+          
+	         CHANGE_BLOCK TYPE (247, 207, 2) FIELD 0
+	         CHANGE_BLOCK TYPE (246, 207, 2) FIELD 0
+          
+          REMOVE_BLOCK (247, 207, 4, DO_DROP)
+	         REMOVE_BLOCK (246, 207, 4, DO_DROP)
+	         REMOVE_BLOCK (247, 207, 3, DO_DROP)
+	         REMOVE_BLOCK (246, 207, 3, DO_DROP)
+          
+	         CHANGE_BLOCK LID (247, 207, 2) NOT_FLAT NOT_FLIP 0 0 159
+	         CHANGE_BLOCK LID (246, 207, 2) NOT_FLAT NOT_FLIP 0 0 159
+          
+	         CHANGE_BLOCK SIDE (245, 207, 3) RIGHT WALL BULLET NOT_FLAT NOT_FLIP 0 985
+	         CHANGE_BLOCK SIDE (245, 207, 4) RIGHT WALL BULLET NOT_FLAT NOT_FLIP 0 985
+	         CHANGE_BLOCK SIDE (248, 207, 3) LEFT WALL BULLET NOT_FLAT NOT_FLIP 0 985
+	         CHANGE_BLOCK SIDE (248, 207, 4) LEFT WALL BULLET NOT_FLAT NOT_FLIP 0 985
+          
+	         SET savecount97 = 1
+          
+       ENDIF
+    ENDIF
+ 
+ ENDWHILE
+	
+	//  The player has entered the SRS Research Center
+	
+	DISPLAY_BRIEF (2871)
+ //  "There are Anti-Blast Suit Dispensers on the walkways leading to each Generator, Gecko. You can't miss them. But beware the SRS Guards - they won't be so forgiving."
+ 
+	POINT_ARROW_AT (arrow1, z_m_2_generator_1_obj)
+	POINT_ARROW_AT (arrow3, z_m_2_generator_2_obj)
+ 
+ WHILE_EXEC ( z_m_2_while_loop = 0 )
+    
+    //  If the first generator has been destroyed
+    IF ( ( CHECK_OBJ_MODEL(z_m_2_generator_1_obj, POWERGEN_DEAD) ) AND ( z_m_2_generator_1_destroyed = 0 ) )
+       DISPLAY_BRIEF (2872)                                                    //  "Generator One ELIMINATED!"
+	      REMOVE_ARROW (arrow1)
+	      EXPLODE (248.50, 249.50, 5.00)
+	      EXPLODE (247.50, 247.50, 5.00)
+	      EXPLODE (250.50, 248.50, 5.00)
+	      EXPLODE (250.50, 250.50, 5.00)
+	      EXPLODE (247.50, 250.50, 5.00)
+	      DELETE_ITEM (z_m_2_generator_1_sound)
+	      SET z_m_2_generator_1_destroyed = 1
+	      ++z_m_2_generators_destroyed
+    ENDIF
+    
+    //  If the second generator has been destroyed
+    IF ( ( CHECK_OBJ_MODEL(z_m_2_generator_2_obj, POWERGEN_DEAD) ) AND ( z_m_2_generator_2_destroyed = 0 ) )
+       DISPLAY_BRIEF (2873)                                                    //  "Generator Two ANNIHILATED!"
+	      REMOVE_ARROW (arrow3)
+	      EXPLODE (235.50, 213.50, 5.00)
+	      EXPLODE (237.50, 212.50, 5.00)
+	      EXPLODE (237.50, 214.50, 5.00)
+	      EXPLODE (234.50, 214.50, 4.00)
+	      EXPLODE (234.50, 211.50, 4.00)
+	      EXPLODE (234.50, 215.50, 5.00)
+	      DELETE_ITEM (z_m_2_generator_2_sound)
+	      SET z_m_2_generator_2_destroyed = 1
+	      ++z_m_2_generators_destroyed
+    ENDIF
+    
+    //  If the player has entered the walkway to the first generator, wear him with the Anti-Blast Suit
+    IF ( ( LOCATE_CHARACTER_ANY_MEANS(p1, 251.50, 247.50, 3.00, 1.00, 1.00) ) AND ( z_m_2_anti_blast_suit_flag = 0 ) )
+       SET_CHAR_GRAPHIC_TYPE (p1, GANG_GRAPHIC, 7)
+	      SET_CHAR_INVINCIBLE (p1, ON)                       //   Hmmmm...  Is this the source of the invulnerability exploit speedrunners use?
+	      SET z_m_2_anti_blast_suit_flag = 1
+    ENDIF
+    
+    //  If the player has left the walkway to the first generator, give back his clothes
+    IF ( ( LOCATE_CHARACTER_ANY_MEANS(p1, 252.50, 247.50, 3.00, 1.00, 1.00) ) AND ( z_m_2_anti_blast_suit_flag > 0 ) )
+       SET_CHAR_GRAPHIC_TYPE (p1, GANG_GRAPHIC, 25)
+	      SET_CHAR_INVINCIBLE (p1, OFF)
+	      SET z_m_2_anti_blast_suit_flag = 0
+    ENDIF
+    
+    //  ????
+    IF ( ( LOCATE_CHARACTER_ANY_MEANS(p1, 250.50, 247.50, 3.00, 1.00, 1.00) ) AND ( z_m_2_anti_blast_suit_flag < 2 ) )
+       SET z_m_2_anti_blast_suit_flag = 2
+    ENDIF
+    
+    //  If the player has entered the walkway to the second generator, wear him with the Anti-Blast Suit
+    IF ( ( LOCATE_CHARACTER_ANY_MEANS(p1, 237.50, 211.50, 3.00, 1.00, 1.00) ) AND ( z_m_2_anti_blast_suit_flag = 0 ) )
+       SET_CHAR_GRAPHIC_TYPE (p1, GANG_GRAPHIC, 7)
+	      SET_CHAR_INVINCIBLE (p1, ON)                       //  and this
+	      SET z_m_2_anti_blast_suit_flag = 1
+    ENDIF
+    
+    //  If the player has left the walkway to the second generator, give back his clothes
+    IF ( ( LOCATE_CHARACTER_ANY_MEANS(p1, 238.50, 211.50, 3.00, 1.00, 1.00) ) AND ( z_m_2_anti_blast_suit_flag > 0 ) )
+       SET_CHAR_GRAPHIC_TYPE (p1, GANG_GRAPHIC, 25)
+	      SET_CHAR_INVINCIBLE (p1, OFF)
+	      SET z_m_2_anti_blast_suit_flag = 0
+    ENDIF
+    
+    //  ????
+    IF ( LOCATE_CHARACTER_ANY_MEANS(p1, 239.50, 211.50, 3.00, 1.00, 1.00) )
+       SET z_m_2_anti_blast_suit_flag = 2
+    ENDIF
+    
+    //  If both generators have been destroyed
+    IF ( z_m_2_generators_destroyed = 2 )
+       
+       POINT_ARROW_AT (arrow1, 247.00, 206.00, 3.00)
+       
+       //  If the player get out of SRS Research Center
+       IF ( LOCATE_CHARACTER_ANY_MEANS(p1, 247.50, 206.50, 2.00, 2.00, 2.00) )
+	         SET z_m_2_while_loop = 1
+	      ENDIF
+       
+    ENDIF
+ 
+ ENDWHILE
+	
+ //  The player has escaped the SRS Research Center after destroyed both generators
+	
+	CLEAR_ALL_BRIEFS ()
+	REMOVE_ARROW (arrow1)
+	DISPLAY_BRIEF (2875)          //  "Well done, Gecko. Cold Fusion will remain a laboratory myth. Have $50,000. Stay in touch!"
+	ADD_SCORE (p1, 50000)
+	SET savecount59 = 1
+	DISPLAY_MESSAGE (2999)        //  Mission Complete!
+	CLEAR_WANTED_LEVEL (p1)
+	ADD_MULTIPLIER (p1, 1)
+	CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (zaibgang, p1, 1)
+ 
+ IF ( savecount65 = 1 )
+	   SET_PHONE_DEAD (obj14)
+	   DISABLE_THREAD_TRIGGER (trigger9)
+	ENDIF
+ 
+RETURN
+
+
+clean_up_zaib_med_phone2_m1:                                 //  Clean up
+ 
+ IF ( NOT ( HAS_CHARACTER_DIED(z_m_2_zmen_group) ) )
+	   DESTROY_GROUP (z_m_2_zmen_group)
+	ENDIF
+ 
+	SET_CHAR_GRAPHIC_TYPE (p1, GANG_GRAPHIC, 25)     //  Give the player his clothes back
+ 
+ //  There is no SET_CHAR_INVINCIBLE (p1, OFF) here...   hmmm...
+ 
+	REMOVE_ARROW (arrow1)
+	REMOVE_ARROW (arrow3)
+ 
+ IF ( savecount59 = 1 )
+	   ++savecount86
+	   ++savecount91
+	ENDIF
+ 
+ IF ( CHECK_DEATHARREST_EXECUTED() )
+	   ++savecount89
+	   ++savecount92
+	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (zaibgang, p1, -1)
+	   CLEAR_WANTED_LEVEL (p1)
+	ENDIF
+ 
+	MISSION_HAS_FINISHED ()
+ 
+	SET savecount81 = 0
+	SET savecount84 = 0
+ 
+RETURN
+
+MISSIONSTART
+GOSUB zaib_med_phone2_m1:
+GOSUB clean_up_zaib_med_phone2_m1:
+MISSIONEND

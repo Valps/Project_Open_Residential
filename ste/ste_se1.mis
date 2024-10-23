@@ -1,0 +1,326 @@
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Sink or Swim! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+// Decompiled from "ste_se1.scr" Using Epic GTA2 Script Decompiler by T.M.
+
+//FORWARD scie_easy_phone1_m1:
+//FORWARD clean_up_scie_easy_phone1_m1:
+
+COUNTER s_e_1_while_loop = 0
+COUNTER s_e_1_mission_stage = 0
+COUNTER s_e_1_player_out_taxi = 0
+COUNTER s_e_1_zman_1_picked = 0
+COUNTER s_e_1_zman_2_picked = 0
+COUNTER s_e_1_zman_3_picked = 0
+COUNTER s_e_1_taxi_at_car_crane = 0
+COUNTER s_e_1_player_pressed_horn = 0
+COUNTER s_e_1_player_arrived_zman_1 = 0
+COUNTER s_e_1_player_arrived_zman_2 = 0
+COUNTER s_e_1_player_arrived_zman_3 = 0
+COUNTER s_e_1_player_arrived_zman_4 = 0
+COUNTER s_e_1_all_zmen_picked = 0
+COUNTER s_e_1_taxi_locked = 0
+
+SOUND s_e_1_screams_sound
+
+CAR_DATA s_e_1_taxi_car
+
+CHAR_DATA s_e_1_zman_char
+
+scie_easy_phone1_m1:
+
+	SET savecount4 = 0
+ 
+	SET savecount81 = 1
+	SET savecount82 = 1
+ 
+	DISPLAY_MESSAGE (2957)                //  SINK OR SWIM!
+ 
+	ENABLE_CRANE (crane8)
+	SET_RECYCLE_MODEL_WANTED (STYPECAB)
+ 
+	s_e_1_zman_char = CREATE_CHAR (193.50, 110.50, 2.00) 8 180 DUMMY END
+ 
+	SET_CHAR_THREAT_REACTION (s_e_1_zman_char, NO_REACTION)
+	SET_CHAR_OBJECTIVE (s_e_1_zman_char, WAIT_ON_FOOT)
+ 
+	DISPLAY_BRIEF (2272)       //  "Hello, THC-303, it's Dr LaBrat. Zaibatsu Operatives have secret SRS data and I want it back. Steal a Taxi and keep it in one piece [...]."
+ 
+ WHILE_EXEC ( s_e_1_while_loop = 0 )
+    
+    //  If the player killed the Z-man
+    IF ( ( s_e_1_all_zmen_picked = 0 ) AND ( HAS_CHARACTER_DIED(s_e_1_zman_char) ) )
+	      IF ( savecount4 = 0 )
+	         DISPLAY_BRIEF (2274)        //  "Killing a Z-Operative places you under Zaibatsu surveillance, THC-303. Marked men are no use to me!"
+	         SET savecount4 = 1
+	         DISPLAY_MESSAGE (2998)      //  Mission Failed!
+          RETURN
+       ENDIF
+    ENDIF
+    
+    //  If the player has destroyed the taxi
+    IF ( ( s_e_1_mission_stage = 1 ) AND ( IS_CAR_WRECKED(s_e_1_taxi_car) ) )
+       IF ( savecount4 = 0 )
+	         DISPLAY_BRIEF (2275)        //  "I told you, THC-303 - keeping the Taxi in one piece was important. You are OFF the job."
+          SET savecount4 = 1
+          DISPLAY_MESSAGE (2998)      //  Mission Failed!
+          RETURN
+       ENDIF
+    ENDIF
+    
+    //  If the player entered a taxi for the first time
+    IF ( ( IS_CHARACTER_IN_MODEL(p1, STYPECAB) ) AND ( s_e_1_all_zmen_picked = 0 ) )
+       POINT_ARROW_AT (arrow1, s_e_1_zman_char)
+       SET s_e_1_player_out_taxi = 0
+          
+       IF ( s_e_1_mission_stage = 0 )
+          DISPLAY_BRIEF (2276)                        //  "The first Zaibatsu is waiting by the Clock Tower. He suspects nothing."
+          STORE_CAR_CHARACTER_IS_IN (p1, s_e_1_taxi_car)
+          SET s_e_1_mission_stage = 1                              //  Lock this IF
+       ENDIF
+       
+    ENDIF
+    
+    //  If the player got all Z-men, point arrow to scientist's crane
+    IF ( ( s_e_1_all_zmen_picked = 1 ) AND ( IS_CHARACTER_IN_CAR(p1, s_e_1_taxi_car) ) )
+       POINT_ARROW_AT (arrow1, 197.50, 245.50, 2.00)                  //  Scientist's crane coordinates
+       SET s_e_1_player_out_taxi = 0
+    ENDIF
+    
+    //  If the player has left the taxi
+    IF ( ( s_e_1_mission_stage = 1 ) AND ( NOT ( IS_CHARACTER_IN_CAR(p1, s_e_1_taxi_car) ) ) )
+       IF ( s_e_1_player_out_taxi = 0 )
+          IF ( s_e_1_taxi_at_car_crane = 0 )                            //  If the player isn't leaving the taxi to the crane after getting all Z-men
+             POINT_ARROW_AT (arrow1, s_e_1_taxi_car)          //  Point arrow to the taxi
+             DISPLAY_BRIEF_NOW (2277)                  //  "Do not leave the Taxi, THC-303!"
+             SET s_e_1_player_out_taxi = 1                            //  Lock this IF
+          ENDIF
+       ENDIF
+    ENDIF
+    
+    //  If the player has arrived at the first Z-man
+    IF ( ( ( s_e_1_mission_stage = 1 ) AND ( LOCATE_CHARACTER_BY_CAR(p1, 193.50, 110.50, 2.00, 8.00, 3.00) ) ) AND (IS_CHARACTER_IN_CAR(p1, s_e_1_taxi_car) ) )
+       IF ( s_e_1_player_arrived_zman_1 = 0 )
+          DISPLAY_BRIEF (2278)                         //  "Sound the horn, THC-303."
+          SET s_e_1_player_arrived_zman_1 = 1                              //  Lock this IF and unlock the next IF
+       ENDIF
+    ENDIF
+    
+    //  If the player has pressed the horn
+    IF ( ( IS_CHAR_PRESSING_HORN(p1) ) AND ( s_e_1_player_pressed_horn = 0 ) )
+       IF ( s_e_1_player_arrived_zman_1 = 1 )
+          DISPLAY_BRIEF_NOW (2279)                                          //  "Taxi! You are early. Where are the others?"
+          SET_CHAR_OBJECTIVE (s_e_1_zman_char, ENTER_CAR_AS_PASSENGER, s_e_1_taxi_car)
+          SET s_e_1_player_pressed_horn = 1
+          SET s_e_1_player_arrived_zman_1 = 2                                                   //  Lock this IF
+       ENDIF
+    ENDIF
+    
+    //  If the first Z-man entered the taxi
+    IF ( ( s_e_1_zman_1_picked = 0 ) AND ( IS_CHAR_OBJECTIVE_PASSED(s_e_1_zman_char) ) )
+       DELETE_ITEM (s_e_1_zman_char)                                                   //  Recycle character
+       SET_RECYCLE_MODEL_WANTED (NONE)
+       //SET count15 = 0
+       s_e_1_zman_char = CREATE_CHAR (43.50, 114.50, 3.00) 8 180 DUMMY END             //  Create the second Z-man
+       //SET count15 = 1
+       SET_CHAR_THREAT_REACTION (s_e_1_zman_char, NO_REACTION)
+       SET_CHAR_OBJECTIVE (s_e_1_zman_char, WAIT_ON_FOOT)
+       POINT_ARROW_AT (arrow1, s_e_1_zman_char)                                        //  Point arrow at the second Z-man
+       DISPLAY_BRIEF (2280)                                                 //  "Good, THC-303. Pick up the second Z-Operative."
+       SET s_e_1_zman_1_picked = 1                                                       //  Lock this IF
+    ENDIF
+    
+    //  If the player has arrived at the second Z-man
+    IF ( ( ( s_e_1_mission_stage = 1 ) AND ( s_e_1_zman_1_picked = 1 ) ) AND ( LOCATE_CHARACTER_BY_CAR(p1, 43.50, 114.50, 3.00, 8.00, 4.00) ) )
+       IF ( IS_CHARACTER_IN_CAR(p1, s_e_1_taxi_car) )
+          IF ( s_e_1_player_arrived_zman_2 = 0 )
+             SET s_e_1_player_pressed_horn = 0
+             DISPLAY_BRIEF (2278)              //  "Sound the horn, THC-303."
+             SET s_e_1_player_arrived_zman_2 = 1                   //  Lock this IF
+          ENDIF
+       ENDIF
+    ENDIF
+    
+    //  If the player has pressed the horn
+    IF ( ( s_e_1_zman_1_picked = 1 ) AND ( IS_CHAR_PRESSING_HORN(p1) ) )
+       IF ( s_e_1_player_pressed_horn = 0 )
+          DISPLAY_BRIEF_NOW (2281)                                          //  "At last! Taxi!"
+          SET_CHAR_OBJECTIVE (s_e_1_zman_char, ENTER_CAR_AS_PASSENGER, s_e_1_taxi_car)
+          SET s_e_1_player_pressed_horn = 1                                                    //  Lock this IF
+          //SET s_e_1_player_arrived_zman_2 = 2
+       ENDIF
+    ENDIF
+    
+    //  If the second Z-man entered the taxi
+    IF ( ( s_e_1_zman_2_picked = 0 ) AND ( IS_CHAR_OBJECTIVE_PASSED(s_e_1_zman_char) ) )
+       DELETE_ITEM (s_e_1_zman_char)
+       SET s_e_1_zman_1_picked = 2
+       //SET count15 = 0
+       s_e_1_zman_char = CREATE_CHAR (104.50, 140.50, 2.00) 8 180 DUMMY END
+       //SET count15 = 1
+       SET_CHAR_THREAT_REACTION (s_e_1_zman_char, NO_REACTION)
+       SET_CHAR_OBJECTIVE (s_e_1_zman_char, WAIT_ON_FOOT)
+       POINT_ARROW_AT (arrow1, s_e_1_zman_char)
+       DISPLAY_BRIEF (2282)                                                 //  "Well done, THC-303. Now find the third Z-Man."
+       SET s_e_1_zman_2_picked = 1
+    ENDIF
+    
+    //  If the player has arrived at the third Z-man
+    IF ( ( ( s_e_1_mission_stage = 1 ) AND ( s_e_1_zman_2_picked = 1 ) ) AND ( LOCATE_CHARACTER_BY_CAR(p1, 104.50, 140.50, 2.00, 8.00, 3.00) ) )
+       IF ( IS_CHARACTER_IN_CAR(p1, s_e_1_taxi_car) )
+          IF ( s_e_1_player_arrived_zman_3 = 0 )
+             SET s_e_1_player_pressed_horn = 0
+             DISPLAY_BRIEF (2278)                  //  "Sound the horn, THC-303."
+             SET s_e_1_player_arrived_zman_3 = 1
+          ENDIF
+       ENDIF
+    ENDIF
+    
+    //  If the player has pressed the horn
+    IF ( ( IS_CHAR_PRESSING_HORN(p1) ) AND ( s_e_1_player_pressed_horn = 0 ) )
+       IF ( s_e_1_zman_2_picked = 1 )
+          DISPLAY_BRIEF_NOW (2283)                                         //  "About time! Here is my Z-ID."
+          SET_CHAR_OBJECTIVE (s_e_1_zman_char, ENTER_CAR_AS_PASSENGER, s_e_1_taxi_car)
+          SET s_e_1_player_pressed_horn = 1                                                   //  Lock this IF
+          //SET s_e_1_player_arrived_zman_3 = 2
+       ENDIF
+    ENDIF
+    
+    //  If the third Z-man entered the taxi
+    IF ( ( s_e_1_zman_3_picked = 0 ) AND ( IS_CHAR_OBJECTIVE_PASSED(s_e_1_zman_char) ) )
+       DELETE_ITEM (s_e_1_zman_char)
+       SET s_e_1_zman_2_picked = 2
+       s_e_1_zman_char = CREATE_CHAR (34.50, 215.50, 2.00) 8 180 DUMMY END
+       SET_CHAR_THREAT_REACTION (s_e_1_zman_char, NO_REACTION)
+       SET_CHAR_OBJECTIVE (s_e_1_zman_char, WAIT_ON_FOOT)
+       POINT_ARROW_AT (arrow1, s_e_1_zman_char)
+       DISPLAY_BRIEF (2284)                                         //  "one Z-Operative to collect, THC-303."
+       SET s_e_1_zman_3_picked = 1
+       SET s_e_1_player_pressed_horn = 0
+    ENDIF
+    
+    //  If the player has arrived at the fourth Z-man
+    IF ( ( ( s_e_1_mission_stage = 1 ) AND ( s_e_1_zman_3_picked = 1 ) ) AND ( LOCATE_CHARACTER_BY_CAR(p1, 34.50, 215.50, 2.00, 8.00, 3.00) ) )
+       IF ( IS_CHARACTER_IN_CAR(p1, s_e_1_taxi_car) )
+          IF ( s_e_1_player_arrived_zman_4 = 0 )
+             SET s_e_1_player_pressed_horn = 0
+             DISPLAY_BRIEF (2278)                    //  "Sound the horn, THC-303."
+             SET s_e_1_player_arrived_zman_4 = 1
+          ENDIF
+       ENDIF
+    ENDIF
+    
+    //  If the player has pressed the horn
+    IF ( ( IS_CHAR_PRESSING_HORN(p1) ) AND ( s_e_1_player_pressed_horn = 0 ) )
+       IF ( s_e_1_player_arrived_zman_4 = 1 )
+          DISPLAY_BRIEF_NOW (2285)                                        //  "Ooh, is there a party going on in here?"
+          SET_CHAR_OBJECTIVE (s_e_1_zman_char, ENTER_CAR_AS_PASSENGER, s_e_1_taxi_car)
+          SET s_e_1_player_pressed_horn = 1
+          SET s_e_1_player_arrived_zman_4 = 2
+       ENDIF
+    ENDIF
+    
+    //  If the fourth Z-man entered the taxi
+    IF ( ( s_e_1_all_zmen_picked = 0 ) AND ( IS_CHAR_OBJECTIVE_PASSED(s_e_1_zman_char) ) )
+       IF ( s_e_1_player_arrived_zman_4 = 2 )
+          DELETE_ITEM (s_e_1_zman_char)
+          SET s_e_1_all_zmen_picked = 1
+          SET s_e_1_zman_3_picked = 2
+          POINT_ARROW_AT (arrow1, 197.50, 245.50, 2.00)
+          DISPLAY_BRIEF (2286)                                   //  "Drive our Zaibatsu friends to the South-East Dock Crane, THC-303."
+       ENDIF
+    ENDIF
+    
+    //  If the player is seeing the scientist's crane
+    IF ( ( IS_ITEM_ONSCREEN(crane8) ) AND ( s_e_1_taxi_at_car_crane = 0 ) )
+       IF ( s_e_1_all_zmen_picked = 1 )                                        //  If the player got all Z-men
+          DISPLAY_BRIEF (2287)                                   //  "Get out of the car, THC-303, and watch the Zaibatsu die!"
+          REMOVE_ARROW (arrow1)
+          s_e_1_screams_sound = CREATE_SOUND (197.50, 245.50, 2.00) GANG_DUMPED PLAY_FOREVER END              //  (muffled plea screams)
+          SET s_e_1_taxi_at_car_crane = 1                                         //  Lock this IF
+       ENDIF
+    ENDIF
+    
+    //  If the taxi is near the car crane
+    IF ( ( s_e_1_taxi_at_car_crane = 1 ) AND ( IS_CAR_IN_BLOCK(s_e_1_taxi_car, 197.50, 247.50, 2.00, 5.00, 5.00) ) )
+       IF ( NOT ( IS_CHARACTER_IN_CAR(p1, s_e_1_taxi_car) ) ) //  If the player has left the taxi
+          IF ( s_e_1_taxi_locked = 0 )
+             //s_e_1_screams_sound = CREATE_SOUND (197.50, 245.50, 2.00) GANG_DUMPED PLAY_FOREVER END         (removing duplicated sounds)
+             CHANGE_CAR_LOCK (s_e_1_taxi_car, LOCKED)         //  Lock the Taxi
+             REMOVE_ARROW (arrow1)
+             SET s_e_1_taxi_locked = 1                           //  Lock this IF
+          ENDIF
+       ENDIF
+    ENDIF
+    
+    //  ???
+    IF ( s_e_1_taxi_at_car_crane = 1 )
+       IF ( ( ( IS_CAR_IN_BLOCK(s_e_1_taxi_car, 197.50, 247.50, 3.00, 3.00, 4.00) ) OR ( IS_CAR_IN_BLOCK(s_e_1_taxi_car, 197.50, 247.50, 3.00, 3.00, 3.00) ) ) OR ( IS_CAR_IN_BLOCK(s_e_1_taxi_car, 197.50, 247.50, 3.00, 3.00, 2.00) ) )
+          SET s_e_1_mission_stage = 2
+       ENDIF
+    ENDIF
+    
+    //  If the taxi has sunk together with all Z-men
+    IF ( ( s_e_1_taxi_at_car_crane = 1 ) AND ( HAS_CAR_JUST_SUNK(s_e_1_taxi_car) ) )
+    
+       DELETE_ITEM (s_e_1_screams_sound)
+       CLEAR_ALL_BRIEFS ()
+       DISPLAY_BRIEF (2288)           //  "Efficient and effective work, THC-303. Here is $30,000. Spend it productively."
+       
+       SET s_e_1_taxi_at_car_crane = 2
+       SET s_e_1_while_loop = 1
+       
+       ADD_SCORE (p1, 30000)
+       
+       SET savecount46 = 1
+       
+       DISPLAY_MESSAGE (2999)         //  Mission Completed!
+       CLEAR_WANTED_LEVEL (p1)
+       ADD_MULTIPLIER (p1, 1)
+       CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (sciegang, p1, 1)
+       
+       SET_PHONE_DEAD (obj1)
+       DISABLE_THREAD_TRIGGER (trigger1)
+       RETURN
+       
+    ENDIF
+    
+ ENDWHILE
+       
+RETURN
+
+
+
+clean_up_scie_easy_phone1_m1:                         //  Clean Up
+ 
+ IF ( s_e_1_while_loop = 1 )
+	   DELETE_ITEM (s_e_1_screams_sound)
+	ENDIF
+ 
+	SET savecount81 = 0
+	SET savecount82 = 0
+ 
+	REMOVE_ARROW (arrow1)
+	DISABLE_CRANE (crane8)
+ 
+ IF ( savecount46 = 1 )
+	   ++savecount85
+	   ++savecount91
+ ENDIF
+ 
+ IF ( CHECK_DEATHARREST_EXECUTED() )
+	   ++savecount88
+	   ++savecount92
+	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (sciegang, p1, -1)
+	   CLEAR_WANTED_LEVEL (p1)
+	ENDIF
+ 
+	MISSION_HAS_FINISHED ()
+ 
+RETURN
+
+MISSIONSTART
+GOSUB scie_easy_phone1_m1:
+GOSUB clean_up_scie_easy_phone1_m1:
+MISSIONEND

@@ -1,0 +1,428 @@
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Fire Truck Fun! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+// Decompiled from "ste_ze2.scr" Using Epic GTA2 Script Decompiler by T.M.
+
+//FORWARD zaib_easy_phone2_m1:
+//FORWARD clean_up_zaib_easy_phone2_m1:
+
+COUNTER z_e_2_while_loop_1 = 0
+COUNTER z_e_2_is_player_in_cop_car = 0
+//COUNTER count4 = 0
+COUNTER z_e_2_is_player_in_van = 0
+COUNTER z_e_2_is_player_in_firetruck_3 = 0
+COUNTER z_e_2_cop_car_stored = 0
+COUNTER z_e_2_is_van_parking = 0
+COUNTER z_e_2_while_loop_2 = 0
+COUNTER z_e_2_is_player_in_firetruck = 0
+COUNTER z_e_2_player_arrived_at_zman = 0
+COUNTER z_e_2_while_loop_3 = 0
+COUNTER z_e_2_is_player_in_firetruck_2 = 0
+//COUNTER count15 = 0
+COUNTER z_e_2_has_van_approached = 0
+COUNTER z_e_2_is_van_driver_in_van = 0
+COUNTER z_e_2_van_driver_get_out = 0
+COUNTER z_e_2_has_bonus_started = 0
+COUNTER z_e_2_redn_remaining = 0
+COUNTER z_e_2_redn_kill_goal = 30
+COUNTER z_e_2_redn_members_killed = 0
+COUNTER z_e_2_onscreen_counter = 0
+//COUNTER count24 = 0
+COUNTER z_e_2_is_player_out_mobile_rv = 0
+COUNTER z_e_2_zman_created = 0
+COUNTER z_e_2_while_loop_4 = 0
+
+BONUS z_e_2_bonus
+
+CAR_DATA z_e_2_van
+CAR_DATA z_e_2_cop_car
+CAR_DATA z_e_2_firetruck
+//CAR_DATA auto123
+
+CHAR_DATA z_e_2_van_driver
+CHAR_DATA z_e_2_zman_char
+
+zaib_easy_phone2_m1:
+ 
+	MAKE_DOOR_AUTOMATIC (door1)
+ 
+	SET savecount15 = 0
+ 
+	SET savecount81 = 1
+	SET savecount84 = 1
+ 
+	DISPLAY_MESSAGE (2465)     //  FIRE TRUCK FUN!
+ 
+	DISPLAY_BRIEF (2591)       //  "Gecko! Red Valdez here. A new #SRS Flamethrower# is being transported across the city in an SRS Security Van - and I want it."
+	DISPLAY_BRIEF (2592)       //  "The Security Van has a new locking mechanism which can't be opened by conventional methods. The driver might be persuaded to get out by the Cops..."
+	DISPLAY_BRIEF (2593)       //  "OK, Gecko, here's the deal - steal a Cop Car."
+ 
+	z_e_2_van = CREATE_CAR (137.50, 197.50, 2.00) 10 90 VAN END
+	UPDATE_DOOR_TARGET (door1, z_e_2_van)
+ 
+	z_e_2_van_driver = CREATE_CHAR (137.50, 198.50, 2.00) 7 90 DUMMY END
+	GIVE_WEAPON (z_e_2_van_driver, MACHINE_GUN)
+	SET_CHAR_THREAT_REACTION (z_e_2_van_driver, NO_REACTION)
+	ADD_CHAR_TO_GANG (z_e_2_van_driver, sciegang)
+	SET_CHAR_OBJECTIVE (z_e_2_van_driver, ENTER_CAR_AS_DRIVER, z_e_2_van)
+ 
+ WHILE_EXEC ( z_e_2_while_loop_1 = 0 )
+    
+    //  If the driver has entered the van, lock it
+    IF ( ( IS_CHAR_OBJECTIVE_PASSED(z_e_2_van_driver) ) AND ( z_e_2_is_van_driver_in_van = 0 ) )
+       CHANGE_CAR_LOCK (z_e_2_van, LOCKED)
+	      SET_CHAR_DRIVE_AGGRESSION (z_e_2_van_driver, ON)
+	      SET z_e_2_is_van_driver_in_van = 1
+    ENDIF
+    
+    //  If the player has entered a cop car for the first time
+    IF ( ( IS_CHARACTER_IN_MODEL(p1, COPCAR) ) AND ( z_e_2_is_player_in_cop_car = 0 ) )
+       SET z_e_2_is_player_in_cop_car = 1
+	      STORE_CAR_CHARACTER_IS_IN (p1, z_e_2_cop_car)
+       SET z_e_2_cop_car_stored = 1
+	      DISPLAY_BRIEF (2594)                                 //  "That's useful - a spare Cop Uniform. Nice fit!"
+	      SET_CHAR_GRAPHIC_TYPE (p1, EMERG_GRAPHIC, 0)         //  Change player clothes, now he is wearing cop clothes
+	      POINT_ARROW_AT (arrow1, z_e_2_van)
+    ENDIF
+    
+    //  If the player get out of the cop car before stopping the van
+    IF ( ( z_e_2_is_player_in_cop_car = 1 ) AND ( z_e_2_van_driver_get_out = 0 ) )
+       IF ( NOT ( IS_CHARACTER_IN_CAR(p1, z_e_2_cop_car) ) )
+          SET z_e_2_is_player_in_cop_car = 0
+	         DISPLAY_BRIEF_NOW (2595)                          //  "When you steal the Cop Car, Gecko, stay in it!"
+	         //REMOVE_ARROW (arrow1)                           //  Original command
+          POINT_ARROW_AT (arrow1, z_e_2_cop_car)                  //  My alternative way
+       ENDIF
+    ENDIF
+    
+    //  If the player has approached the van using a cop car
+    IF ( ( IS_CHARACTER_IN_MODEL(p1, COPCAR) ) AND ( z_e_2_has_van_approached = 0 ) )
+       IF ( LOCATE_ANOTHER_CHARACTER_BY_CAR(p1, z_e_2_van_driver, 2.00, 1.00) )
+          STOP_CHAR_DRIVING (z_e_2_van_driver)                    //  Stop the van
+	         CHANGE_CAR_LOCK (z_e_2_van, UNLOCKED)         //  Unlock the van
+	         ORDER_DRIVER_OUT_CAR (z_e_2_van_driver)
+	         SET z_e_2_van_driver_get_out = 1
+	         DISPLAY_BRIEF (2596)                        //  "Can I help you, officer?"
+	         SET z_e_2_has_van_approached = 1
+       ENDIF
+    ENDIF
+    
+    //  If the van has been destroyed
+    IF ( IS_CAR_WRECKED(z_e_2_van) )
+       IF ( savecount15 = 0 )
+          CLEAR_ALL_BRIEFS ()
+	         DISPLAY_BRIEF (2597)                        //  "The Prototype Flamethrower was unique, Gecko, and foolishly you destroyed it. I suggest you take a break."
+	         SET savecount15 = 1
+	         DISPLAY_MESSAGE (2998)                      //  Mission Failed!
+          RETURN
+       ENDIF
+    ENDIF
+    
+    //  If the player has destroyed the cop car he was in (before approaching the van)
+    //IF ( ( IS_CHARACTER_IN_MODEL(p1, COPCAR) ) AND ( z_e_2_van_driver_get_out = 0 ) )                //  Original IF statement
+    IF ( ( z_e_2_cop_car_stored = 1 ) AND ( z_e_2_van_driver_get_out = 0 ) )                                         //  My correction
+       IF ( IS_CAR_WRECKED(z_e_2_cop_car) )
+          SET z_e_2_is_player_in_cop_car = 0
+          SET z_e_2_cop_car_stored = 0
+          DISPLAY_BRIEF_NOW (2598)               //  "Was that fun, Gecko? You better steal another Cop Car - NOW!"
+          REMOVE_ARROW (arrow1)
+       ENDIF
+    ENDIF
+    
+    //  If the player has entered the van
+    IF ( ( IS_CHARACTER_IN_CAR(p1, z_e_2_van) ) AND ( z_e_2_is_player_in_van = 0 ) )
+       
+       SET z_e_2_is_player_in_van = 1
+       DISPLAY_BRIEF_NOW (2599)                               //  "Excellent, Gecko. Bring the Security Van to The Village and park it in my Garage."
+       POINT_ARROW_AT (arrow1, 211.00, 31.00, 3.00)
+       
+       //  If the van driver is alive, set him to kill the player
+       IF ( NOT ( HAS_CHARACTER_DIED(z_e_2_van_driver) ) )
+          SET_CHAR_OBJECTIVE (z_e_2_van_driver, KILL_CHAR_ANY_MEANS, p1)
+       ENDIF
+       
+    ENDIF
+    
+    //  If the player has left the van
+    IF ( ( NOT ( IS_CHARACTER_IN_CAR(p1, z_e_2_van) ) ) AND ( z_e_2_is_player_in_van = 1 ) )
+       SET z_e_2_is_player_in_van = 0
+       DISPLAY_BRIEF_NOW (2600)                   //  "This is no time for fun, Gecko. Get back in the Security Van and get to The Village NOW!"
+       POINT_ARROW_AT (arrow1, z_e_2_van)
+    ENDIF
+    
+    //  If the van is in front of the zaibatsu garage
+    IF ( ( IS_CAR_IN_BLOCK(z_e_2_van, 211.00, 31.00, 3.00, 2.00, 2.00) ) AND ( z_e_2_is_van_parking = 0 ) )
+       PARK (z_e_2_van, door1)                                //  Park the van
+       SET z_e_2_is_van_parking = 1
+       REMOVE_ARROW (arrow1)
+       SET_CHAR_GRAPHIC_TYPE (p1, GANG_GRAPHIC, 25)         //  Give the player his clothes back
+    ENDIF
+    
+    //  If the van has been parked
+    IF ( ( z_e_2_is_van_parking = 1 ) AND ( HAS_PARK_FINISHED() ) )
+       SET z_e_2_is_player_in_van = 2
+       SET z_e_2_is_van_parking = 1
+       SET z_e_2_while_loop_1 = 1         //  Get out of this WHILE_EXEC
+    ENDIF
+ 
+ ENDWHILE
+ 
+ //  The van has been parked
+
+ DISPLAY_BRIEF (2601)        //  "Fantastic, Gecko. This particular Flamethrower will only operate in conjunction with a Fire Truck. So what are you waiting for? Go get a Fire Truck!"
+ SET_RECYCLE_MODEL_WANTED (FIRETRUK)
+ 
+ WHILE_EXEC ( z_e_2_while_loop_2 = 0 )
+ 
+    IF ( ( z_e_2_is_player_in_firetruck = 1 ) AND ( z_e_2_zman_created = 0 ) )
+       z_e_2_zman_char = CREATE_CHAR (212.50, 32.50, 3.00) 8 90 DUMMY END
+       SET_CHAR_THREAT_REACTION (z_e_2_zman_char, NO_REACTION)
+       ADD_CHAR_TO_GANG (z_e_2_zman_char, zaibgang)
+       DISPLAY_BRIEF (2602)                                          //  "Bring the Fire Truck to The Village!"
+       SET z_e_2_zman_created = 1
+       CLOSE_DOOR (door1)
+    ENDIF
+    
+    IF ( z_e_2_zman_created = 1 )
+       IF ( HAS_CHARACTER_DIED(z_e_2_zman_char) )
+          IF ( savecount15 = 0 )
+             CLEAR_ALL_BRIEFS ()
+             DISPLAY_BRIEF (2607)                 //  "He was the Chief Z-Technician, Gecko! Only an idiot would kill him."
+             DISPLAY_MESSAGE (2998)               //  Mission Failed!
+             SET savecount15 = 1
+             RETURN
+          ENDIF
+       ENDIF
+    ENDIF
+    
+    //  If the player has entered a firetruck
+    IF ( IS_CHARACTER_IN_MODEL(p1, FIRETRUK) )
+       IF ( z_e_2_is_player_in_firetruck = 0 )
+          SET z_e_2_is_player_in_firetruck = 1
+          STORE_CAR_CHARACTER_IS_IN (p1, z_e_2_firetruck)
+          POINT_ARROW_AT (arrow1, 212.50, 32.50, 3.00)
+       ENDIF
+    ENDIF
+    
+    //  If the player has left the firetruck
+    IF ( z_e_2_is_player_in_firetruck = 1 )
+       IF ( NOT ( IS_CHARACTER_IN_CAR(p1, z_e_2_firetruck) ) )
+          SET z_e_2_is_player_in_firetruck = 0
+          DISPLAY_BRIEF_NOW (2603)                        //  "We need the Fire Truck, Gecko - NOW!"
+          REMOVE_ARROW (arrow1)
+       ENDIF
+    ENDIF
+    
+    //  If the firetruck has been destroyed
+    IF ( z_e_2_is_player_in_firetruck = 1 )
+       IF ( IS_CAR_WRECKED(z_e_2_firetruck) )
+          SET z_e_2_is_player_in_firetruck = 0
+          DISPLAY_BRIEF_NOW (2604)                           //  "Stop wasting time, Gecko. Get me a Fire Truck!"
+          REMOVE_ARROW (arrow1)
+       ENDIF
+    ENDIF
+    
+    //  If the firetruck is near the Z-Technician, set him to enter it
+    IF ( z_e_2_zman_created = 1 )
+       IF ( ( ( z_e_2_is_player_in_firetruck = 1 ) AND ( IS_CAR_IN_BLOCK(z_e_2_firetruck, 211.00, 31.00, 3.00, 7.00, 7.00) ) ) AND ( z_e_2_player_arrived_at_zman = 0 ) )
+          SET_CHAR_OBJECTIVE (z_e_2_zman_char, ENTER_CAR_AS_PASSENGER, z_e_2_firetruck)
+          SET z_e_2_player_arrived_at_zman = 1
+          REMOVE_ARROW (arrow1)
+       ENDIF
+    ENDIF
+    
+    //  If the Z-Technician has entered the firetruck
+    IF ( z_e_2_zman_created = 1 )
+       IF ( ( z_e_2_player_arrived_at_zman = 1 ) AND ( IS_CHAR_OBJECTIVE_PASSED(z_e_2_zman_char) ) )
+          DISPLAY_BRIEF_NOW (2605)                     //  "Super, Gecko! My Z-Technicians will have the Flamethrower attached in seconds."
+          SET z_e_2_is_player_in_firetruck = 2
+          SET z_e_2_player_arrived_at_zman = 1
+          SET z_e_2_while_loop_2 = 1                               //  Get out of this WHILE_EXEC
+       ENDIF
+    ENDIF
+ 
+ ENDWHILE
+
+ //  The Z-Technician has entered the firetruck
+
+ SET_RECYCLE_MODEL_WANTED (NONE)
+ DELAY_HERE (100)                                      //  Wait 3.333 seconds
+ DISPLAY_BRIEF (2608)                                  //  "Now the new Fire Truck is ready let's put it to the test! Head for Mobile RV and barbecue at least 30 Rednecks!"
+ POINT_ARROW_AT (arrow1, 44.00, 46.00, 3.00)           //  Point at Mobile RV
+ 
+ IF ( NOT ( IS_CAR_WRECKED(z_e_2_firetruck) ) )                //  Checking that the firetruck isn't wrecked (maybe avoiding a possible crash)
+    GIVE_WEAPON (z_e_2_firetruck, CAR_FLAMETHROWER)            //  Give it a flamethrower
+ ENDIF
+
+ SET z_e_2_is_player_in_firetruck_2 = 1
+ 
+ WHILE_EXEC ( z_e_2_while_loop_3 = 0 )
+    
+    //  If the firetruck has been destroyed
+    IF ( IS_CAR_WRECKED(z_e_2_firetruck) )
+       IF ( savecount15 = 0 )
+          CLEAR_ALL_BRIEFS ()
+          DISPLAY_BRIEF (2606)                         //  "That Fire Truck was invaluable, Gecko. Your employment has been terminated!"
+          SET savecount15 = 1
+          DISPLAY_MESSAGE (2998)                       //  Mission Failed!
+          RETURN
+       ENDIF
+    ENDIF
+    
+    //  If the player has left the firetruck
+    IF ( ( NOT ( IS_CHARACTER_IN_CAR(p1, z_e_2_firetruck) ) ) AND ( z_e_2_is_player_in_firetruck_2 = 1 ) )
+       SET z_e_2_is_player_in_firetruck_2 = 0
+       DISPLAY_BRIEF_NOW (2609)                       //  "The Zaibatsu do not play games, Gecko! Get in the Fire Truck and drive to Mobile RV."
+       POINT_ARROW_AT (arrow1, z_e_2_firetruck)
+    ENDIF
+    
+    //  If the player has returned to the firetruck
+    IF ( ( IS_CHARACTER_IN_CAR(p1, z_e_2_firetruck) ) AND ( z_e_2_is_player_in_firetruck_2 = 0 ) )
+       SET z_e_2_is_player_in_firetruck_2 = 1
+       POINT_ARROW_AT (arrow1, 44.00, 46.00, 3.00)    //  Point at Mobile RV again
+    ENDIF
+    
+    //  If the player has entered Mobile RV
+    IF ( IS_CHAR_IN_ZONE(p1, m19) )
+       REMOVE_ARROW (arrow1)
+       DISPLAY_BRIEF (2610)                  //  "Great! Get cooking, Gecko!"
+       SET z_e_2_while_loop_3 = 1                       //  Get out of this WHILE_EXEC
+    ENDIF
+ 
+ ENDWHILE
+ 
+ //  The player has arrived at the Mobile RV (and probably driving the firetruck rigged with a flamethrower)
+ 
+ z_e_2_bonus = START_BONUS_CHECK (m19, 65535, 30, 0, CHAR, NOT_EXCLUSIVE, BY_FLAMETHROWER, FIRETRUK, redngang)
+ SET z_e_2_redn_remaining = 30
+ SET z_e_2_has_bonus_started = 1
+ ADD_ONSCREEN_COUNTER (z_e_2_onscreen_counter, z_e_2_redn_remaining)
+ REMOVE_ARROW (arrow1)
+ 
+ WHILE_EXEC ( z_e_2_while_loop_4 = 0 )
+ 
+    IF ( z_e_2_has_bonus_started = 1 )
+       STORE_BONUS_COUNT (z_e_2_bonus, z_e_2_redn_members_killed)
+    ENDIF
+    
+    IF ( z_e_2_has_bonus_started = 1 )
+       SET z_e_2_redn_remaining = (z_e_2_redn_kill_goal - z_e_2_redn_members_killed)
+    ENDIF
+    
+    IF ( HAS_BONUS_PASSED(z_e_2_bonus) )
+       SET z_e_2_while_loop_4 = 1
+    ENDIF
+    
+    //  If the player has left the firetruck while being in Mobile RV
+    IF ( ( NOT ( IS_CHARACTER_IN_CAR(p1, z_e_2_firetruck) ) ) AND ( z_e_2_is_player_in_firetruck_3 = 1 ) )
+       IF ( z_e_2_is_player_out_mobile_rv = 0 )
+          SET z_e_2_is_player_in_firetruck_3 = 0
+          DISPLAY_BRIEF_NOW (2611)                  //  "This job's hot, Gecko! Get back in the Fire Truck and cook the Rednecks."
+          POINT_ARROW_AT (arrow1, z_e_2_firetruck)
+       ENDIF
+    ENDIF
+    
+    //  If the player has returned to the firetruck (inside Mobile RV)
+    IF ( ( IS_CHARACTER_IN_CAR(p1, z_e_2_firetruck) ) AND ( z_e_2_is_player_in_firetruck_3 = 0 ) )
+       IF ( z_e_2_is_player_out_mobile_rv = 0 )
+          SET z_e_2_is_player_in_firetruck_3 = 1
+          REMOVE_ARROW (arrow1)
+       ENDIF
+    ENDIF
+    
+    //  If the player has left the Mobile RV
+    IF ( ( NOT ( IS_CHAR_IN_ZONE(p1, m19) ) ) AND ( z_e_2_is_player_out_mobile_rv = 0 ) )
+       POINT_ARROW_AT (arrow1, 44.00, 46.00, 3.00)
+       DISPLAY_BRIEF (2612)                                 //  "Get back to Mobile RV and cook those Rednecks!"
+       SET z_e_2_is_player_out_mobile_rv = 1
+    ENDIF
+    
+    //  If the player has returned to the Mobile RV
+    IF ( ( IS_CHAR_IN_ZONE(p1, m19) ) AND ( z_e_2_is_player_out_mobile_rv = 1 ) )
+       REMOVE_ARROW (arrow1)
+       DISPLAY_BRIEF (2613)                                 //  "Keep on burning the Rednecks until I tell you to stop!"
+       SET z_e_2_is_player_out_mobile_rv = 0
+    ENDIF
+    
+    //  If the player has left the firetruck while being outside Mobile RV
+    IF ( ( NOT ( IS_CHARACTER_IN_CAR(p1, z_e_2_firetruck) ) ) AND ( z_e_2_is_player_in_firetruck_3 = 1 ) )
+       IF ( z_e_2_is_player_out_mobile_rv = 1 )
+          SET z_e_2_is_player_in_firetruck_3 = 0
+          DISPLAY_BRIEF_NOW (2614)                    //  "This job's hot, Gecko! Get back in the Fire Truck and cook the Rednecks!"
+          POINT_ARROW_AT (arrow1, z_e_2_firetruck)
+       ENDIF
+    ENDIF
+    
+    //  If the player has returned to the firetruck (outside Mobile RV)
+    IF ( ( IS_CHARACTER_IN_CAR(p1, z_e_2_firetruck) ) AND ( z_e_2_is_player_in_firetruck_3 = 0 ) )
+       IF ( z_e_2_is_player_out_mobile_rv = 1 )
+          SET z_e_2_is_player_in_firetruck_3 = 1
+          POINT_ARROW_AT (arrow1, 44.00, 46.00, 3.00)
+       ENDIF
+    ENDIF
+    
+    //  If the firetruck has been destroyed
+    IF ( IS_CAR_WRECKED(z_e_2_firetruck) )
+       IF ( savecount15 = 0 )
+          CLEAR_ALL_BRIEFS ()
+          DISPLAY_BRIEF (2606)           //  "That Fire Truck was invaluable, Gecko. Your employment has been terminated!"
+          SET savecount15 = 1
+          DISPLAY_MESSAGE (2998)         //  Mission Failed!
+          RETURN
+       ENDIF
+    ENDIF
+ 
+ ENDWHILE
+ 
+ //  The player has killed 30 rednecks in Mobile RV using the flamethrower of the firetruck
+
+ CLEAR_ALL_BRIEFS ()
+ ADD_SCORE (p1, 30000)
+ SET savecount57 = 1
+ DISPLAY_MESSAGE (2999)  //  Mission Complete!
+ 
+ //  This brief is missing on the original ste_ze2.scr, however I found the final unused brief in e.gxt, so I will display it.
+ DISPLAY_BRIEF_NOW (2615)//  "Scorcher, Gecko! The Rednecks are roasting and the SRS are taking the blame! We have many jobs for the resourceful. In the meantime, please accept $30,000."
+ 
+ CLEAR_WANTED_LEVEL (p1)
+ ADD_MULTIPLIER (p1, 1)
+ CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (zaibgang, p1, 1)
+ SET_PHONE_DEAD (obj12)
+ DISABLE_THREAD_TRIGGER (trigger7)
+ 
+RETURN
+
+
+
+clean_up_zaib_easy_phone2_m1:                       //  Clean up
+ 
+	SET_CHAR_GRAPHIC_TYPE (p1, GANG_GRAPHIC, 25)         //  Give the player his clothes back if he is using the cop clothes
+ 
+	SET savecount81 = 0
+	SET savecount84 = 0
+ 
+	REMOVE_ARROW (arrow1)
+	MAKE_DOOR_MANUAL (door1)
+	CLEAR_ONSCREEN_COUNTER (z_e_2_onscreen_counter)
+ 
+ IF ( savecount57 = 1 )
+	   ++savecount86
+	   ++savecount91
+	ENDIF
+ 
+ IF ( CHECK_DEATHARREST_EXECUTED() )
+	   ++savecount89
+	   ++savecount92
+	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (zaibgang, p1, -1)
+	   CLEAR_WANTED_LEVEL (p1)
+	ENDIF
+ 
+	MISSION_HAS_FINISHED ()
+ 
+RETURN
+
+MISSIONSTART
+GOSUB zaib_easy_phone2_m1:
+GOSUB clean_up_zaib_easy_phone2_m1:
+MISSIONEND

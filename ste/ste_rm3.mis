@@ -1,0 +1,263 @@
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Tanks-Giving! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+// Decompiled from "ste_rm3.scr" Using Epic GTA2 Script Decompiler by T.M.
+
+//FORWARD redn_med_phone1_2_m3:
+//FORWARD clean_up_redn_med_phone1_2_m3:
+
+CAR_DATA r_m_3_tank_car
+
+CAR_DATA r_m_3_jeep_1_car
+CAR_DATA r_m_3_jeep_2_car
+CAR_DATA r_m_3_jeep_3_car
+CAR_DATA r_m_3_jeep_4_car
+
+CHAR_DATA r_m_3_army_guard_1
+CHAR_DATA r_m_3_army_guard_2
+CHAR_DATA r_m_3_army_guard_3
+CHAR_DATA r_m_3_army_guard_4
+CHAR_DATA r_m_3_army_guard_5
+CHAR_DATA r_m_3_army_guard_6
+/*
+CHAR_DATA chr13
+CHAR_DATA chr14
+CHAR_DATA chr15
+CHAR_DATA chr16
+CHAR_DATA chr17
+CHAR_DATA chr18
+CHAR_DATA chr19
+CHAR_DATA chr20
+*/
+
+OBJ_DATA r_m_3_grenade
+OBJ_DATA r_m_3_invulnerability
+OBJ_DATA r_m_3_jail_free_bonus
+
+COUNTER r_m_3_while_loop = 0
+COUNTER r_m_3_cop_level_6_changed = 0
+COUNTER r_m_3_player_in_tank = 0
+COUNTER r_m_3_is_tank_parking = 0
+//COUNTER count6 = 0               //  seems to be useless
+//COUNTER count7 = 0
+//COUNTER count8 = 0
+//COUNTER count9 = 0
+COUNTER r_m_3_is_powergen_destroyed = 0
+
+SOUND r_m_3_powergen_sound
+
+OBJ_DATA r_m_3_powergen_obj
+
+redn_med_phone1_2_m3:
+
+	SET savecount21 = 0
+ 
+	DISPLAY_MESSAGE (2954)             //  TANKS-GIVING!
+ 
+	MAKE_DOOR_AUTOMATIC (door2)
+ 
+	r_m_3_grenade = CREATE_OBJ (228.50, 114.50, 2.00) 0 COLLECT_05 END
+	r_m_3_invulnerability = CREATE_OBJ (238.50, 114.50, 2.00) 0 COLLECT_34 END
+	r_m_3_jail_free_bonus = CREATE_OBJ (227.50, 89.50, 2.00) 0 COLLECT_32 END
+ 
+ //  These objects will be automatically removed once the mission is finished / failed
+	FORCE_CLEANUP (r_m_3_grenade)
+	FORCE_CLEANUP (r_m_3_invulnerability)
+	FORCE_CLEANUP (r_m_3_jail_free_bonus)
+ 
+	SET savecount81 = 1
+	SET savecount83 = 1
+ 
+ //  Powergen locking the army base entrance
+	r_m_3_powergen_obj = CREATE_OBJ (234.50, 117.50, 2.00) 0 POWERGEN END
+ 
+ //  Army Base Entrance Door: Generator rumble sound
+	r_m_3_powergen_sound = CREATE_SOUND (234.50, 117.50, 2.00) GENERATOR_RUMBLE PLAY_FOREVER END
+ 
+ //  Creating the Tank
+	r_m_3_tank_car = CREATE_CAR (231.50, 90.50, 2.00) 0 90 TANK END
+ 
+ //  Creating the jeeps
+	r_m_3_jeep_1_car = CREATE_CAR (236.50, 95.50, 2.00) 0 90 JEEP END
+	r_m_3_jeep_2_car = CREATE_CAR (236.50, 97.50, 2.00) 0 90 JEEP END
+	r_m_3_jeep_3_car = CREATE_CAR (236.50, 98.50, 2.00) 0 90 JEEP END
+	r_m_3_jeep_4_car = CREATE_CAR (236.50, 100.50, 2.00) 0 90 JEEP END
+ 
+ //  Update the redneck's garage door to open when the tank is near
+	UPDATE_DOOR_TARGET (door2, r_m_3_tank_car)
+ 
+ //  Creating all army guards
+	r_m_3_army_guard_1 = CREATE_CHAR (234.50, 115.50, 255.00) 4 180 ARMY END                //   Original occupation:   DUMMY
+	ADD_PATROL_POINT (r_m_3_army_guard_1, 237.50, 115.50, 2.00)
+	ADD_PATROL_POINT (r_m_3_army_guard_1, 234.50, 115.50, 2.00)
+	SET_CHAR_THREAT_REACTION (r_m_3_army_guard_1, REACT_AS_NORMAL)
+	SET_CHAR_THREAT_SEARCH (r_m_3_army_guard_1, AREA_PLAYER_ONLY)
+	GIVE_WEAPON (r_m_3_army_guard_1, MACHINE_GUN)
+ 
+	r_m_3_army_guard_2 = CREATE_CHAR (234.50, 109.50, 255.00) 4 180 ARMY END                //   Original occupation:   DUMMY
+	ADD_PATROL_POINT (r_m_3_army_guard_2, 234.50, 106.50, 2.00)
+	ADD_PATROL_POINT (r_m_3_army_guard_2, 234.50, 109.50, 2.00)
+	SET_CHAR_THREAT_REACTION (r_m_3_army_guard_2, REACT_AS_NORMAL)
+	SET_CHAR_THREAT_SEARCH (r_m_3_army_guard_2, AREA_PLAYER_ONLY)
+	GIVE_WEAPON (r_m_3_army_guard_2, MACHINE_GUN)
+ 
+	r_m_3_army_guard_3 = CREATE_CHAR (228.50, 110.50, 255.00) 4 180 ARMY END                //   Original occupation:   DUMMY
+	ADD_PATROL_POINT (r_m_3_army_guard_3, 227.50, 114.50, 2.00)
+	ADD_PATROL_POINT (r_m_3_army_guard_3, 228.50, 110.50, 2.00)
+	SET_CHAR_THREAT_REACTION (r_m_3_army_guard_3, REACT_AS_NORMAL)
+	SET_CHAR_THREAT_SEARCH (r_m_3_army_guard_3, AREA_PLAYER_ONLY)
+	GIVE_WEAPON (r_m_3_army_guard_3, MACHINE_GUN)
+ 
+	r_m_3_army_guard_4 = CREATE_CHAR (228.50, 94.50, 255.00) 4 180 ARMY END                //   Original occupation:   DUMMY
+	ADD_PATROL_POINT (r_m_3_army_guard_4, 230.50, 99.50, 2.00)
+	ADD_PATROL_POINT (r_m_3_army_guard_4, 228.50, 94.50, 2.00)
+	SET_CHAR_THREAT_REACTION (r_m_3_army_guard_4, REACT_AS_NORMAL)
+	SET_CHAR_THREAT_SEARCH (r_m_3_army_guard_4, AREA_PLAYER_ONLY)
+	GIVE_WEAPON (r_m_3_army_guard_4, MACHINE_GUN)
+ 
+	r_m_3_army_guard_5 = CREATE_CHAR (232.50, 93.50, 255.00) 4 180 ARMY END                //   Original occupation:   DUMMY
+	ADD_PATROL_POINT (r_m_3_army_guard_5, 239.50, 93.50, 2.00)
+	ADD_PATROL_POINT (r_m_3_army_guard_5, 232.50, 93.50, 2.00)
+	SET_CHAR_THREAT_REACTION (r_m_3_army_guard_5, REACT_AS_NORMAL)
+	SET_CHAR_THREAT_SEARCH (r_m_3_army_guard_5, AREA_PLAYER_ONLY)
+	GIVE_WEAPON (r_m_3_army_guard_5, MACHINE_GUN)
+ 
+	r_m_3_army_guard_6 = CREATE_CHAR (233.50, 88.50, 255.00) 4 180 ARMY END                //   Original occupation:   DUMMY
+	ADD_PATROL_POINT (r_m_3_army_guard_6, 235.50, 91.50, 2.00)
+	ADD_PATROL_POINT (r_m_3_army_guard_6, 233.50, 88.50, 2.00)
+	SET_CHAR_THREAT_REACTION (r_m_3_army_guard_6, REACT_AS_NORMAL)
+	SET_CHAR_THREAT_SEARCH (r_m_3_army_guard_6, AREA_PLAYER_ONLY)
+	GIVE_WEAPON (r_m_3_army_guard_6, MACHINE_GUN)
+ 
+	DISPLAY_BRIEF (2151)    //  "Hey, Rooster [...] I want to surprise Jungle Montana with a Tank fer his birthday. How about you drivin' over to the Army Base and stealin' me one?"
+	DISPLAY_BRIEF (2152)    //  "They guard that Army Base real well, Rooster. You get what I mean!"
+ 
+	POINT_ARROW_AT (arrow1, r_m_3_tank_car)     //  Point arrow at the tank
+ 
+ WHILE_EXEC ( r_m_3_while_loop = 0 )
+    
+    //  Checking if the generator has been destroyed
+    IF ( ( CHECK_OBJ_MODEL(r_m_3_powergen_obj, POWERGEN_DEAD) ) AND ( r_m_3_is_powergen_destroyed = 0 ) )
+       OPEN_DOOR (door8)                   //  Open the Army Base door
+      	DELETE_ITEM (r_m_3_powergen_sound)               //  No sounds comes from the generator anymore
+      	SET r_m_3_is_powergen_destroyed = 1                     //  Lock this IF
+    ENDIF
+    
+    //  If the player entered the tank
+    IF ( ( IS_CHARACTER_IN_CAR(p1, r_m_3_tank_car) ) AND ( r_m_3_player_in_tank = 0 ) )
+       SET r_m_3_player_in_tank = 1
+      	DISPLAY_BRIEF_NOW (2153)                       //  "Get your butt out of there quick, boy, and head for the Mobile RV - pronto!"
+      	POINT_ARROW_AT (arrow1, 53.00, 66.00, 2.00)
+    ENDIF
+    
+    //  If the player left the tank
+    IF ( ( NOT ( IS_CHARACTER_IN_CAR(p1, r_m_3_tank_car) ) ) AND ( r_m_3_player_in_tank = 1 ) )
+       SET r_m_3_player_in_tank = 0
+      	DISPLAY_BRIEF_NOW (2154)                   //  "I want that Tank, Rooster, so get back in!"
+      	POINT_ARROW_AT (arrow1, r_m_3_tank_car)
+    ENDIF
+    
+    //  The tank has been destroyed
+    IF ( IS_CAR_WRECKED(r_m_3_tank_car) )
+       IF ( savecount21 = 0 )
+          CLEAR_ALL_BRIEFS ()
+         	DISPLAY_BRIEF (2155)      //  "I even bought the card, Rooster, and you go an' screw up the present. Now I'm pissed."
+          SET savecount21 = 1
+          DISPLAY_MESSAGE (2998)    //  Mission Failed!
+          RETURN
+       ENDIF
+    ENDIF
+    
+    //  The tank is in front of redneck's garage door
+    IF ( ( IS_CAR_IN_BLOCK(r_m_3_tank_car, 54.00, 66.00, 2.00, 2.00, 2.00) ) AND ( r_m_3_is_tank_parking = 0 ) )
+       PARK (r_m_3_tank_car, door2)        //  Park it
+       SET r_m_3_is_tank_parking = 1               //  Lock this IF
+       REMOVE_ARROW (arrow1)
+    ENDIF
+    
+    //  If the park has finished
+    IF ( r_m_3_is_tank_parking = 1 )
+       IF ( HAS_PARK_FINISHED() )
+          SET r_m_3_player_in_tank = 2
+          SET r_m_3_is_tank_parking = 1
+          //SET count6 = 1
+          SET r_m_3_while_loop = 1
+       ENDIF
+    ENDIF
+    
+    //  If the tank is at Army Base Entrance
+    IF ( ( IS_CAR_IN_BLOCK(r_m_3_tank_car, 235.50, 117.50, 2.00, 1.00, 1.00) ) OR ( IS_CAR_IN_BLOCK(r_m_3_tank_car, 236.50, 117.50, 2.00, 1.00, 1.00) ) )
+       IF ( r_m_3_cop_level_6_changed = 0 )
+          IF ( r_m_3_player_in_tank = 1)                 //  and if the player is driving the tank
+             SET r_m_3_cop_level_6_changed = 1                //  Lock this IF
+             CHANGE_POLICE_LEVEL (6)       //  ...
+             ALTER_WANTED_LEVEL (p1, 6)    //  Omg
+          ENDIF
+       ENDIF
+    ENDIF
+ 
+ ENDWHILE
+ 
+ //  The player parked the tank
+ 
+ CLEAR_ALL_BRIEFS ()
+ DISPLAY_BRIEF (2156)                //  "That's fine work, Rooster. You take this $50,000 and you give me a call real soon, y' hear? [...]"
+ ADD_SCORE (p1, 50000)
+ 
+ SET savecount63 = 1
+ 
+ DISPLAY_MESSAGE (2999)              //  Mission Complete!
+ CLEAR_WANTED_LEVEL (p1)
+ ADD_MULTIPLIER (p1, 1)
+ 
+ CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (redngang, p1, 1)    //  RESPECT +
+ 
+ //  If the player has completed the Redneck Medium Phone 1 Mission 1
+ IF ( savecount53 = 1 )
+    SET_PHONE_DEAD (obj8)
+    DISABLE_THREAD_TRIGGER (trigger13)
+ ENDIF
+ 
+ //  If the player has completed the Redneck Medium Phone 2 Mission 1
+ IF ( savecount54 = 1 )
+    SET_PHONE_DEAD (obj9)
+    DISABLE_THREAD_TRIGGER (trigger14)
+ ENDIF
+ 
+RETURN
+
+
+
+clean_up_redn_med_phone1_2_m3:                           //  Clean up
+
+	CLOSE_DOOR (door8)                   //  Close the Army Base entrance
+ MAKE_DOOR_MANUAL (door2)             //  Keep as it is
+ 
+	CHANGE_POLICE_LEVEL (5)              //  Changing back the maximum police level
+ 
+	SET savecount81 = 0
+	SET savecount83 = 0
+ 
+	REMOVE_ARROW (arrow1)
+ 
+ IF ( savecount63 = 1 )
+	   ++savecount87
+	   ++savecount91
+	ENDIF
+ 
+ IF ( CHECK_DEATHARREST_EXECUTED() )
+	   ++savecount90
+	   ++savecount92
+	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (redngang, p1, -1)
+	   CLEAR_WANTED_LEVEL (p1)
+	ENDIF
+ 
+	MISSION_HAS_FINISHED ()
+ 
+RETURN
+
+MISSIONSTART
+GOSUB redn_med_phone1_2_m3:
+GOSUB clean_up_redn_med_phone1_2_m3:
+MISSIONEND

@@ -1,0 +1,531 @@
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Benson Burner! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+// Decompiled from "ste_rm2.scr" Using Epic GTA2 Script Decompiler by T.M.
+
+//FORWARD redn_med_phone2_m1:
+//FORWARD clean_up_redn_med_phone2_m1:
+
+//  This mission was very tricky to decipher, since its code flux can be regressive
+
+CAR_DATA r_m_2_benson_car
+CAR_DATA r_m_2_trailer_car
+CAR_DATA r_m_2_truck_cab
+
+CHAR_DATA r_m_2_cop_char
+
+COUNTER r_m_2_cop_yeeha_flag = 0
+
+COUNTER r_m_2_benson_rigged = 0
+COUNTER r_m_2_benson_on_trailer = 0
+COUNTER r_m_2_benson_at_redn_crane = 0
+
+COUNTER r_m_2_is_cop_in_benson = 0
+
+COUNTER r_m_2_player_in_truck_cab_1 = 0          //  is player in truck cab?  (before attaching to the trailer)
+COUNTER r_m_2_player_in_truck_cab_2 = 0          //  is player in truck cab?  (after attaching to the trailer)
+
+COUNTER r_m_2_trailer_at_redn_crane = 0
+COUNTER r_m_2_trailer_at_cop_crane = 0
+
+COUNTER r_m_2_player_in_truck_cab_3 = 0          //  is player in truck cab?  (with the benson attached to the trailer)
+COUNTER r_m_2_has_benson_delivered = 0
+
+COUNTER r_m_2_player_in_benson_n_rigged = 0      //  benson not rigged
+COUNTER r_m_2_player_in_benson_rigged = 0        //  benson rigged
+
+COUNTER r_m_2_trailer_not_attached = 0
+COUNTER r_m_2_trailer_attached = 0
+
+SOUND r_m_2_wow_yeeha_sound
+
+redn_med_phone2_m1:
+
+	SET savecount12 = 0
+ 
+	DISPLAY_MESSAGE (2674)          //  BENSON BURNER!
+ 
+	SET savecount81 = 1
+	SET savecount83 = 1
+ 
+	DISPLAY_BRIEF (2101)            //  "Hey, Rooster! Billy Bob Bean here. [...] So steal me a Benson!"
+ 
+ //  Create the benson and the trailer
+	r_m_2_benson_car = CREATE_CAR (165.50, 95.50, 2.00) 9 270 MERC END
+	r_m_2_trailer_car = CREATE_CAR (11.50, 30.50, 2.00) 0 90 TRUKTRNS END
+ 
+	POINT_ARROW_AT (arrow1, r_m_2_benson_car)      //  Point arrow at the benson
+ 
+	MAKE_CAR_A_DUMMY (r_m_2_benson_car)            //  Make the benson drive around
+ 
+ WHILE_EXEC ( r_m_2_benson_on_trailer = 0 )
+ 
+    WHILE_EXEC ( r_m_2_benson_at_redn_crane = 0 )
+       
+       //  The benson has been destroyed
+       IF ( IS_CAR_WRECKED(r_m_2_benson_car) )
+          IF ( savecount12 = 0 )
+             CLEAR_ALL_BRIEFS ()
+            	DISPLAY_BRIEF_NOW (2103)    //  "He was waiting for a Benson, Rooster, not bakin' foil!"
+            	SET savecount12 = 1
+            	DISPLAY_MESSAGE (2998)      //  Mission Failed!
+             RETURN
+          ENDIF
+       ENDIF
+       
+       //  The trailer has been destroyed
+       IF ( IS_CAR_WRECKED(r_m_2_trailer_car) )
+          IF ( savecount12 = 0 )
+             CLEAR_ALL_BRIEFS ()
+             DISPLAY_BRIEF_NOW (2110)    //  "That was real stupid destroyin' the Trailer, Rooster. Now how are we gonna transport the Benson?"
+             SET savecount12 = 1
+             DISPLAY_MESSAGE (2998)      //  Mission Failed!
+             RETURN
+          ENDIF
+       ENDIF
+       
+       //  If the player entered the benson
+       IF ( ( IS_CHARACTER_IN_CAR(p1, r_m_2_benson_car) ) AND ( r_m_2_player_in_benson_rigged = 0 ) )
+          IF ( r_m_2_benson_rigged = 1 )           //  If the benson is rigged
+             
+             SET r_m_2_player_in_benson_rigged = 1                            //  Lock this entire IF
+             DISPLAY_BRIEF_NOW (2104)                   //  "Praise The Lord, Rooster! Take this here Benson to Buckwheat's Crane and await the SIGN!"
+             POINT_ARROW_AT (arrow1, 55.50, 48.50, 3.00)
+          
+          ELSE              //  if the benson isn't rigged yet
+             
+             IF ( ( IS_CHARACTER_IN_CAR(p1, r_m_2_benson_car) ) AND ( r_m_2_player_in_benson_n_rigged = 0 ) )
+                IF ( r_m_2_benson_rigged = 0 )
+                   SET r_m_2_player_in_benson_n_rigged = 1
+                   DISPLAY_BRIEF_NOW (2105)             //  "Montana's got the explosives ready at the Trailer Park but he needs $5,000. Now you kill for cash if you need to, Rooster!"
+                   POINT_ARROW_AT (arrow1, 94.50, 29.50, 2.00)
+                ENDIF
+             ENDIF
+             
+          ENDIF
+          
+       ENDIF
+       
+       //  The player get out of the rigged benson
+       IF ( ( NOT ( IS_CHARACTER_IN_CAR(p1, r_m_2_benson_car) ) ) AND ( r_m_2_player_in_benson_rigged = 1 ) )
+          IF ( r_m_2_benson_rigged = 1 )
+             SET r_m_2_player_in_benson_rigged = 0
+             DISPLAY_BRIEF_NOW (2106)                  //  "This ain't Buckwheat's Crane, Rooster! Get back in the Benson!"
+             POINT_ARROW_AT (arrow1, r_m_2_benson_car)
+          ENDIF
+       ENDIF
+       
+       //  The player get out of the benson (before it is rigged)
+       IF ( ( NOT ( IS_CHARACTER_IN_CAR(p1, r_m_2_benson_car) ) ) AND ( r_m_2_player_in_benson_n_rigged = 1 ) )
+          IF ( r_m_2_benson_rigged = 0 )
+             SET r_m_2_player_in_benson_n_rigged = 0
+             DISPLAY_BRIEF_NOW (2107)            //  "The clock's tickin', Rooster. Get the Benson to Montana's Bomb Shop!"
+             POINT_ARROW_AT (arrow1, r_m_2_benson_car)
+          ENDIF
+       ENDIF
+       
+       //  If the player rigged the benson a bomb, update flag
+       IF ( ( HAS_CAR_GOT_WEAPON(r_m_2_benson_car, CAR_BOMB) ) AND ( r_m_2_benson_rigged = 0 ) )
+          SET r_m_2_benson_rigged = 1
+       ENDIF
+       
+       //  If the player reached at the redneck crane
+       IF ( ( r_m_2_benson_rigged = 1 ) AND ( IS_CAR_IN_BLOCK(r_m_2_benson_car, 55.50, 48.50, 2.00, 7.00, 7.00) ) )
+          REMOVE_ARROW (arrow1)
+          DISPLAY_BRIEF (2114)                     //  "Dwight T has a trailer. Find a Truck Cab, Rooster, and we got ourselves transportation fer the Benson."
+          SET r_m_2_benson_at_redn_crane = 1                           //  Get out of this WHILE_EXEC loop
+       ENDIF
+       
+       ENDEXEC
+    
+    ENDWHILE
+    
+    //  The player reached at redneck crane driving the rigged benson
+    
+    SET_RECYCLE_MODEL_WANTED (TRUKCAB1)           //  PSX command
+    
+    
+    WHILE_EXEC ( r_m_2_benson_at_redn_crane = 1 )
+       
+       IF ( r_m_2_trailer_attached = 1 )
+          
+          //  If the benson isn't near to the redneck crane anymore
+          IF ( NOT ( IS_CAR_IN_BLOCK(r_m_2_benson_car, 55.50, 48.50, 2.00, 7.00, 7.00) ) )
+             DISPLAY_BRIEF_NOW (2108)                     //  "Can we PLEASE get the Benson to Buckwheat's Crane, Rooster?"
+             POINT_ARROW_AT (arrow1, 55.50, 48.50, 3.00)
+             SET r_m_2_benson_at_redn_crane = 0                               //  Get back to the previous WHILE_EXEC loop
+          ENDIF
+          
+          //  The benson has been destroyed
+          IF ( IS_CAR_WRECKED(r_m_2_benson_car) )
+             IF ( savecount12 = 0 )
+                CLEAR_ALL_BRIEFS ()
+                DISPLAY_BRIEF_NOW (2103)    //  "He was waiting for a Benson, Rooster, not bakin' foil!"
+                SET savecount12 = 1
+                DISPLAY_MESSAGE (2998)      //  Mission Failed!
+                RETURN
+             ENDIF
+          ENDIF
+          
+          //  The trailer has been destroyed
+          IF ( IS_CAR_WRECKED(r_m_2_trailer_car) )
+             IF ( savecount12 = 0 )
+                CLEAR_ALL_BRIEFS ()
+                DISPLAY_BRIEF_NOW (2110)    //  "That was real stupid destroyin' the Trailer, Rooster. Now how are we gonna transport the Benson?"
+                SET savecount12 = 1
+                DISPLAY_MESSAGE (2998)      //  Mission Failed!
+                RETURN
+             ENDIF
+          ENDIF
+          
+          //  If the trailer is not attached to the truck cab    (the player released the trailer)
+          IF ( NOT ( IS_TRAILER_ATTACHED(r_m_2_truck_cab, r_m_2_trailer_car) ) )
+             DISPLAY_BRIEF_NOW (2111)             //  "Easy, Rooster. You go back and get the Trailer now."
+             POINT_ARROW_AT (arrow1, r_m_2_trailer_car)
+             SET r_m_2_trailer_attached = 0
+          ENDIF
+          
+          //  If the player entered the truck cab (with the trailer attached to it)
+          IF ( ( IS_CHARACTER_IN_CAR(p1, r_m_2_truck_cab) ) AND ( r_m_2_player_in_truck_cab_2 = 0 ) )
+             SET r_m_2_player_in_truck_cab_2 = 1
+             DISPLAY_BRIEF_NOW (2112)             //  "Drive the Trailer over to Buckwheat's Crane, Rooster, and get that there Benson loaded!"
+             POINT_ARROW_AT (arrow1, 55.50, 48.50, 2.00)
+          ENDIF
+          
+          //  If the player leaves the truck cab (with the trailer attached to it)
+          IF ( ( NOT ( IS_CHARACTER_IN_CAR(p1, r_m_2_truck_cab) ) ) AND ( r_m_2_player_in_truck_cab_2 = 1 ) )
+             SET r_m_2_player_in_truck_cab_2 = 0
+             DISPLAY_BRIEF_NOW (2115)             //  "Get back in the Truck cab, Rooster!"
+             POINT_ARROW_AT (arrow1, r_m_2_truck_cab)
+          ENDIF
+          
+          //  If the truck cab with the trailer reached at the redneck crane
+          IF ( ( IS_CAR_IN_BLOCK(r_m_2_truck_cab, 55.50, 48.50, 2.00, 7.00, 7.00) ) AND ( r_m_2_trailer_at_redn_crane = 0 ) )
+             SET r_m_2_trailer_at_redn_crane = 1
+             REMOVE_ARROW (arrow1)
+             DISPLAY_BRIEF_NOW (2116)             //  "Park the Trailer and let Buckwheat dump his load."
+          ENDIF
+          
+          //  If the truck cab with the trailer leaves the redneck crane after reaching it
+          IF ( ( NOT ( IS_CAR_IN_BLOCK(r_m_2_truck_cab, 55.50, 48.50, 2.00, 7.00, 7.00) ) ) AND ( r_m_2_trailer_at_redn_crane = 1 ) )
+             SET r_m_2_trailer_at_redn_crane = 0
+             POINT_ARROW_AT (arrow1, 55.50, 48.50, 2.00)
+             DISPLAY_BRIEF_NOW (2117)             //  "GodDAMN son-of-a-bitch! Will you move your slack ass to Buckwheat's Crane!"
+          ENDIF
+          
+          //  If the benson is on the trailer
+          IF ( IS_CAR_ON_TRAILER(r_m_2_benson_car, r_m_2_trailer_car) )
+             SET r_m_2_benson_on_trailer = 1               //  Get out of the first WHILE (the big one)
+             SET r_m_2_benson_at_redn_crane = 2               //  Get out of this WHILE_EXEC
+             DISABLE_CRANE (crane9)
+          ENDIF
+          
+       
+       ENDIF
+       
+
+
+       
+       IF ( r_m_2_trailer_attached = 0 )
+          
+          //  If the benson isn't near to the redneck crane anymore
+          IF ( NOT ( IS_CAR_IN_BLOCK(r_m_2_benson_car, 55.50, 48.50, 2.00, 7.00, 7.00) ) )
+             DISPLAY_BRIEF_NOW (2121)                               //  "Hey! Unless I'm mistaken, Rooster, there's a Goddamn job to be done here."
+             POINT_ARROW_AT (arrow1, 55.50, 48.50, 3.00)
+             SET r_m_2_benson_at_redn_crane = 0
+          ENDIF
+          
+          //  The benson has been destroyed
+          IF ( IS_CAR_WRECKED(r_m_2_benson_car) )
+             IF ( savecount12 = 0 )
+                CLEAR_ALL_BRIEFS ()
+                DISPLAY_BRIEF_NOW (2122)    //  "He was waiting for a Benson, Rooster, not bakin' foil!"
+                SET savecount12 = 1
+                DISPLAY_MESSAGE (2998)      //  Mission Failed!
+                RETURN
+             ENDIF
+          ENDIF
+          
+          //  The trailer has been destroyed
+          IF ( IS_CAR_WRECKED(r_m_2_trailer_car) )
+             IF ( savecount12 = 0 )
+                CLEAR_ALL_BRIEFS ()
+                DISPLAY_BRIEF_NOW (2110)    //  "That was real stupid destroyin' the Trailer, Rooster. Now how are we gonna transport the Benson?"
+                SET savecount12 = 1
+                DISPLAY_MESSAGE (2998)      //  Mission Failed!
+                RETURN
+             ENDIF
+          ENDIF
+          
+          //  The player attached the trailer to the truck cab
+          IF ( ( r_m_2_player_in_truck_cab_1 = 1 ) AND ( IS_TRAILER_ATTACHED(r_m_2_truck_cab, r_m_2_trailer_car) ) )
+             DISPLAY_BRIEF_NOW (2118)                   //  "Deliver this Benson safe, Rooster, and I might just give you a shot at ma' Mary-Joe Bean."
+             SET r_m_2_trailer_attached = 1
+             POINT_ARROW_AT (arrow1, 55.50, 48.50, 2.00)
+          ENDIF
+          
+          
+          //  If the player entered a truck cab
+          IF ( ( IS_CHARACTER_IN_MODEL(p1, TRUKCAB1) ) OR ( IS_CHARACTER_IN_MODEL(p1, TRUKCAB2) ) )
+             IF ( r_m_2_player_in_truck_cab_1 = 0 )
+                SET r_m_2_player_in_truck_cab_1 = 1
+                STORE_CAR_CHARACTER_IS_IN (p1, r_m_2_truck_cab)
+                DISPLAY_BRIEF_NOW (2119)               //  "That's what I call a Truck Cab, Rooster. Now go get Dwight T's Trailer."
+                POINT_ARROW_AT (arrow1, r_m_2_trailer_car)
+             ENDIF
+          ENDIF
+       
+          //  If the player leaves the truck cab                                                                       (crash?)
+          IF ( ( r_m_2_player_in_truck_cab_1 = 1 ) AND ( NOT ( IS_CHARACTER_IN_CAR(p1, r_m_2_truck_cab) ) ) )
+             SET r_m_2_player_in_truck_cab_1 = 0
+             DISPLAY_BRIEF_NOW (2123)        //  "I'm gettin' tired of bein' messed around, boy. Get y'rself a Truck Cab!"
+             REMOVE_ARROW (arrow1)
+          ENDIF
+          
+
+       ENDIF
+       
+       
+       ENDEXEC
+    
+    ENDWHILE
+ 
+ ENDWHILE
+ 
+
+ //  The player get the benson attached to his trailer
+
+ DISPLAY_BRIEF_NOW (2118)                        //  "Deliver this Benson safe, Rooster, and I might just give you a shot at ma' Mary-Joe Bean."
+ POINT_ARROW_AT (arrow1, 234.50, 151.50, 3.00)
+ 
+ SET r_m_2_player_in_truck_cab_2 = 1
+ SET r_m_2_player_in_truck_cab_3 = 1
+ 
+ SET_RECYCLE_MODEL_WANTED (NONE)
+ 
+ WHILE_EXEC ( r_m_2_has_benson_delivered = 0 )
+ 
+    IF ( r_m_2_trailer_not_attached = 0 )
+       
+       //  The trailer has been destroyed
+       IF ( IS_CAR_WRECKED(r_m_2_trailer_car) )
+          IF ( savecount12 = 0 )
+             CLEAR_ALL_BRIEFS ()
+             DISPLAY_BRIEF_NOW (2120)
+             SET savecount12 = 1
+             DISPLAY_MESSAGE (2998)
+             RETURN
+          ENDIF
+       ENDIF
+       
+       //  The truck cab has been destroyed
+       IF ( IS_CAR_WRECKED(r_m_2_truck_cab) )
+          IF ( r_m_2_player_in_truck_cab_1 = 2 )
+             CLEAR_ALL_BRIEFS ()
+             DISPLAY_BRIEF_NOW (2120)    //  "You screwed up just about as much as is humanly possible, boy. We ain't needin' your sorta help no more. Scat!"
+             SET r_m_2_player_in_truck_cab_1 = 1
+          ENDIF
+       ENDIF
+       
+       //  If the player released the trailer from the truck cab
+       IF ( NOT ( IS_TRAILER_ATTACHED(r_m_2_truck_cab, r_m_2_trailer_car) ) )
+          DISPLAY_BRIEF_NOW (2111)             //  "Easy, Rooster. You go back and get the Trailer now."
+          POINT_ARROW_AT (arrow1, r_m_2_trailer_car)
+          SET r_m_2_trailer_not_attached = 1
+       ENDIF
+       
+       //  If the player enter the truck cab
+       IF ( ( IS_CHARACTER_IN_CAR(p1, r_m_2_truck_cab) ) AND ( r_m_2_player_in_truck_cab_3 = 0 ) )
+          IF ( r_m_2_trailer_at_cop_crane = 0 )                   //  and the truck isn't near the cop crane yet
+             SET r_m_2_player_in_truck_cab_3 = 1
+             DISPLAY_BRIEF_NOW (2118)          //  "Deliver this Benson safe, Rooster, and I might just give you a shot at ma' Mary-Joe Bean."
+             POINT_ARROW_AT (arrow1, 234.50, 151.50, 3.00)
+          ENDIF
+       ENDIF
+       
+       //  If the player leaves the truck cab
+       IF ( ( NOT ( IS_CHARACTER_IN_CAR(p1, r_m_2_truck_cab) ) ) AND ( r_m_2_player_in_truck_cab_3 = 1 ) )
+          IF ( r_m_2_trailer_at_cop_crane = 0 )                //  and the trailer isn't near the cop crane
+             SET r_m_2_player_in_truck_cab_3 = 0
+             DISPLAY_BRIEF_NOW (2124)             //  "The Trailer ain't gonna drive itself, Rooster. Get back in that Truck Cab!"
+             POINT_ARROW_AT (arrow1, r_m_2_truck_cab)
+          ENDIF
+       ENDIF
+       
+       //  If the player reached at the cop crane
+       IF ( ( IS_CAR_IN_BLOCK(r_m_2_truck_cab, 234.50, 151.50, 3.00, 7.00, 7.00) ) AND ( r_m_2_trailer_at_cop_crane = 0 ) )
+          SET r_m_2_trailer_at_cop_crane = 1
+          REMOVE_ARROW (arrow1)
+          DISPLAY_BRIEF_NOW (2125)             //  "Leave the Trailer near the Cop Crane!"
+       ENDIF
+       
+       //  If the player leaves the cop crane after reaching it
+       IF ( ( NOT ( IS_CAR_IN_BLOCK(r_m_2_truck_cab, 234.50, 151.50, 3.00, 7.00, 7.00) ) ) AND ( r_m_2_trailer_at_cop_crane = 1 ) )
+          SET r_m_2_trailer_at_cop_crane = 0
+          POINT_ARROW_AT (arrow1, 234.50, 151.50, 3.00)
+          DISPLAY_BRIEF_NOW (2126)             //  "You deaf, boy? I said leave the Trailer near the Cop Crane!"
+       ENDIF
+       
+       //  If the benson isn't on the trailer anymore (the cop crane jacked it up)
+       IF ( NOT ( IS_CAR_ON_TRAILER(r_m_2_benson_car, r_m_2_trailer_car) ) )
+          SET r_m_2_has_benson_delivered = 1                    //  Exit this WHILE_EXEC loop
+       ENDIF
+       
+    ENDIF
+    
+    
+    
+    IF ( r_m_2_trailer_not_attached = 1 )
+    
+       //  The trailer has been destroyed
+       IF ( IS_CAR_WRECKED(r_m_2_trailer_car) )
+          IF ( savecount12 = 0 )
+             CLEAR_ALL_BRIEFS ()
+             DISPLAY_BRIEF_NOW (2120)        //  "You screwed up just about as much as is humanly possible, boy. We ain't needin' your sorta help no more. Scat!"
+             SET savecount12 = 1
+             DISPLAY_MESSAGE (2998)          //  Mission Failed!
+             RETURN
+          ENDIF
+       ENDIF
+       
+       //  If the trailer has been attached again
+       IF ( IS_TRAILER_ATTACHED(r_m_2_truck_cab, r_m_2_trailer_car) )
+          DISPLAY_BRIEF_NOW (2118)           //  "Deliver this Benson safe, Rooster, and I might just give you a shot at ma' Mary-Joe Bean."
+          SET r_m_2_trailer_not_attached = 0
+          POINT_ARROW_AT (arrow1, 234.50, 151.50, 3.00)
+       ENDIF
+       
+       //  If the player got a truck cab
+       IF ( ( IS_CHARACTER_IN_MODEL(p1, TRUKCAB1) ) OR ( IS_CHARACTER_IN_MODEL(p1, TRUKCAB2) ) )
+          IF ( r_m_2_player_in_truck_cab_2 = 0 )
+             SET r_m_2_player_in_truck_cab_2 = 1
+             STORE_CAR_CHARACTER_IS_IN (p1, r_m_2_truck_cab)
+             DISPLAY_BRIEF_NOW (2127)                  //  "Pick up the Trailer, Rooster!"
+             POINT_ARROW_AT (arrow1, r_m_2_trailer_car)
+          ENDIF
+       ENDIF
+       
+       //  If the player leaves the truck cab
+       IF ( ( NOT ( IS_CHARACTER_IN_CAR(p1, r_m_2_truck_cab) ) ) AND ( r_m_2_player_in_truck_cab_2 = 1 ) )
+          SET r_m_2_player_in_truck_cab_2 = 0
+          DISPLAY_BRIEF_NOW (2128)                   //  "Get back in that Truck Cab, Rooster."
+          POINT_ARROW_AT (arrow1, r_m_2_trailer_car)
+       ENDIF
+    
+    ENDIF
+    
+ 
+ ENDWHILE
+ 
+ //  The benson has been jacked up by the cop crane
+ 
+ //  Create the cop
+ r_m_2_cop_char = CREATE_CHAR (229.50, 157.50, 3.00) 0 180 DUMMY END
+ DISPLAY_BRIEF_NOW (2129)
+ SET_CHAR_THREAT_REACTION (r_m_2_cop_char, NO_REACTION)
+ ORDER_CHAR_TO_DRIVE_CAR (r_m_2_cop_char, r_m_2_benson_car)
+ 
+ WHILE_EXEC ( r_m_2_is_cop_in_benson = 0 )
+    
+    //  If the cop died
+    IF ( HAS_CHARACTER_DIED(r_m_2_cop_char) )
+       IF ( savecount12 = 0 )
+          CLEAR_ALL_BRIEFS ()
+          DISPLAY_BRIEF_NOW (2130)      //  "Is that what I tol' you to do, Rooster?"
+          SET savecount12 = 1
+          DISPLAY_MESSAGE (2998)        //  Mission Failed!
+          RETURN
+       ENDIF
+    ENDIF
+    
+    //  If the benson has been destroyed
+    IF ( IS_CAR_WRECKED(r_m_2_benson_car) )
+       IF ( savecount12 = 0 )
+          CLEAR_ALL_BRIEFS ()
+          DISPLAY_BRIEF_NOW (2122)      //  "He was waiting for a Benson, Rooster, not bakin' foil!"
+          SET savecount12 = 1
+          DISPLAY_MESSAGE (2998)        //  Mission Failed!
+          RETURN
+       ENDIF
+    ENDIF
+    
+    //  If the cop is on player screen
+    IF ( ( r_m_2_cop_yeeha_flag = 0 ) AND ( IS_ITEM_ONSCREEN(r_m_2_cop_char) ) )
+       DISPLAY_BRIEF_NOW (2113)                            //  "Oh, baby! My new Benson! Rolling hills here we come! Here's $50,000."
+       r_m_2_wow_yeeha_sound = CREATE_SOUND (234.50, 151.50, 6.00) YEEHA_BOMB PLAY_INSTANT END      //  WOW!  YEEHA!
+       SET r_m_2_cop_yeeha_flag = 1
+    ENDIF
+    
+    //  If the cop has entered the rigged benson
+    IF ( IS_CHARACTER_IN_CAR(r_m_2_cop_char, r_m_2_benson_car) )
+       SET r_m_2_is_cop_in_benson = 1           //  Get out of this WHILE_EXEC loop
+    ENDIF
+ 
+ ENDWHILE
+ 
+ //  The cop entered the benson
+
+ DISABLE_CRANE (crane7)
+ DISABLE_CRANE (crane9)
+ DISABLE_CRANE (crane10)
+ 
+ EXPLODE (r_m_2_benson_car)             //  R.I.P.
+ 
+ ADD_SCORE (p1, 50000)
+ 
+ SET savecount54 = 1
+ 
+ DISPLAY_MESSAGE (2999)
+ CLEAR_WANTED_LEVEL (p1)
+ 
+ ADD_MULTIPLIER (p1, 1)
+ 
+ CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (redngang, p1, 1)          //  Respect +
+ 
+ //  If the player has passed the Redneck Medium Mission 3
+ IF ( savecount63 = 1 )
+    SET_PHONE_DEAD (obj9)                 //  Kill the Redneck Medium Phone 2
+    DISABLE_THREAD_TRIGGER (trigger14)    //  Disable its trigger too
+ ENDIF
+ 
+ //   Why?  Maybe to prevent the crane to attach the wrecked benson on the trailer again
+ WHILE ( IS_ITEM_ONSCREEN(r_m_2_benson_car) )
+    DO_NOWT
+ ENDWHILE
+
+
+RETURN
+
+
+clean_up_redn_med_phone2_m1:                        //  Clean up
+
+	SET savecount81 = 0
+	SET savecount83 = 0
+ 
+	REMOVE_ARROW (arrow1)
+ 
+	ENABLE_CRANE (crane7)
+	ENABLE_CRANE (crane9)
+	ENABLE_CRANE (crane10)
+ 
+ IF ( savecount54 = 1 )
+	   ++savecount87
+	   ++savecount91
+	ENDIF
+ 
+ IF ( CHECK_DEATHARREST_EXECUTED() )
+	   ++savecount90
+	   ++savecount92
+	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (redngang, p1, -1)
+	   CLEAR_WANTED_LEVEL (p1)
+	ENDIF
+ 
+	MISSION_HAS_FINISHED ()
+ 
+RETURN
+
+MISSIONSTART
+GOSUB redn_med_phone2_m1:
+GOSUB clean_up_redn_med_phone2_m1:
+MISSIONEND

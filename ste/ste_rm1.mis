@@ -1,0 +1,505 @@
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Greatest Hits! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+// Decompiled from "ste_rm1.scr" Using Epic GTA2 Script Decompiler by T.M.
+
+//FORWARD redn_med_phone1_m1:
+//FORWARD clean_up_redn_med_phone1_m1:
+
+CHAR_DATA r_m_1_assassin_1_char
+CHAR_DATA r_m_1_assassin_2_char
+
+CHAR_DATA r_m_1_zaib_guard_1
+CHAR_DATA r_m_1_zaib_guard_2
+CHAR_DATA r_m_1_zaib_guard_3
+CHAR_DATA r_m_1_zaib_guard_4
+
+CHAR_DATA r_m_1_flambo_cortez
+
+CHAR_DATA r_m_1_redneck_group_char
+
+CAR_DATA r_m_1_cortez_limo_car
+
+COUNTER r_m_1_assassins_killed = 0
+
+COUNTER r_m_1_assassin_1_alive = 0
+COUNTER r_m_1_assassin_2_alive = 0
+
+COUNTER r_m_1_has_assin_1_arrow = 0
+COUNTER r_m_1_has_assin_2_arrow = 0
+
+COUNTER r_m_1_flag_assin_number_2 = 0
+COUNTER r_m_1_flag_assin_number_3 = 0
+COUNTER r_m_1_flag_assin_number_4 = 0
+COUNTER r_m_1_flag_assin_number_5 = 0
+COUNTER r_m_1_flag_assin_number_6 = 0
+COUNTER r_m_1_flag_assin_number_7 = 0
+COUNTER r_m_1_flag_assin_number_8 = 0
+
+/*
+COUNTER count14 = 0
+COUNTER count15 = 0
+COUNTER count16 = 0
+COUNTER count17 = 0
+COUNTER count18 = 0
+COUNTER count19 = 0
+COUNTER count20 = 0
+COUNTER count21 = 0
+*/
+
+COUNTER r_m_1_sound_brief_flag = 0
+
+COUNTER r_m_1_respawn_count = 0
+
+COUNTER r_m_1_while_loop = 0
+
+SOUND r_m_1_laughs_sound
+
+redn_med_phone1_m1:
+
+	SET savecount11 = 0
+ 
+	DISPLAY_MESSAGE (2673)          //  GREATEST HITS!
+ 
+	SET savecount81 = 1
+	SET savecount83 = 1
+ 
+	DISPLAY_BRIEF (2051)            //  "Hey, Rooster, it's Billy Bob Bean. I fancy killin' myself some Zaibatsu Hitmen [...] Can you start assassinatin' 'em fer me?"
+ 
+ //  Creating the redneck group to help the player
+	r_m_1_redneck_group_char = CREATE_CHAR (70.50, 28.50, 2.00) 6 90 CRIMINAL END
+	GIVE_WEAPON (r_m_1_redneck_group_char, PISTOL)
+	ADD_CHAR_TO_GANG (r_m_1_redneck_group_char, redngang)
+	ADD_GROUP_TO_CHARACTER (r_m_1_redneck_group_char, 6)
+	SET_CHAR_OBJECTIVE (r_m_1_redneck_group_char, WAIT_ON_FOOT)
+	SET_CHAR_THREAT_REACTION (r_m_1_redneck_group_char, NO_REACTION)
+	MAKE_NEW_LEADER_OF_GROUP (r_m_1_redneck_group_char, p1)
+ 
+ //  Assassin 1
+	r_m_1_assassin_1_char = CREATE_CHAR (63.50, 193.50, 2.00) 8 90 CRIMINAL_TYPE1 END
+	SET_CHAR_OBJECTIVE (r_m_1_assassin_1_char, KILL_CHAR_ANY_MEANS, p1)
+	SET_CHAR_THREAT_REACTION (r_m_1_assassin_1_char, NO_REACTION)
+	SET_CHAR_THREAT_SEARCH (r_m_1_assassin_1_char, LINE_OF_SIGHT_PLAYER_ONLY)
+	GIVE_WEAPON (r_m_1_assassin_1_char, PISTOL)
+	ADD_CHAR_TO_GANG (r_m_1_assassin_1_char, zaibgang)
+	SET_FAVOURITE_MODEL (r_m_1_assassin_1_char, VTYPE)
+ 
+	SET r_m_1_assassin_1_alive = 1
+ 
+ //  Assassin 2
+	r_m_1_assassin_2_char = CREATE_CHAR (216.50, 164.50, 2.00) 8 90 CRIMINAL_TYPE1 END
+	SET_CHAR_OBJECTIVE (r_m_1_assassin_2_char, KILL_CHAR_ANY_MEANS, p1)
+	SET_CHAR_THREAT_REACTION (r_m_1_assassin_2_char, NO_REACTION)
+	SET_CHAR_THREAT_SEARCH (r_m_1_assassin_2_char, LINE_OF_SIGHT_PLAYER_ONLY)
+	GIVE_WEAPON (r_m_1_assassin_2_char, SHOTGUN)
+	ADD_CHAR_TO_GANG (r_m_1_assassin_2_char, zaibgang)
+	SET_FAVOURITE_MODEL (r_m_1_assassin_2_char, VTYPE)
+ 
+	SET r_m_1_assassin_2_alive = 1
+ 
+ //  While the player does not kill 8 assassins
+ WHILE_EXEC ( r_m_1_assassins_killed < 8 )
+    
+    //  If the assassin 1 died
+    IF ( ( r_m_1_assassin_1_alive = 1 ) AND ( HAS_CHARACTER_DIED(r_m_1_assassin_1_char) ) )
+       REMOVE_ARROW (arrow2)
+      	++r_m_1_assassins_killed                    //  Count +1
+      	SET r_m_1_assassin_1_alive = 0              //  Lock this IF
+    ENDIF
+    
+    //  If the assassin 1 died but the kills number does not add up to 8 yet
+    IF ( ( r_m_1_assassin_1_alive = 0 ) AND ( r_m_1_assassins_killed < 8 ) )
+       IF ( r_m_1_respawn_count < 6 )            //  If he respawned less than 6 times
+          
+          //  Respawning assassin 1
+          r_m_1_assassin_1_char = CREATE_CHAR (63.50, 193.50, 2.00) 8 90 CRIMINAL END
+         	SET_CHAR_OBJECTIVE (r_m_1_assassin_1_char, KILL_CHAR_ANY_MEANS, p1)
+         	SET_CHAR_THREAT_REACTION (r_m_1_assassin_1_char, NO_REACTION)
+         	SET_CHAR_THREAT_SEARCH (r_m_1_assassin_1_char, LINE_OF_SIGHT_PLAYER_ONLY)
+         	ADD_CHAR_TO_GANG (r_m_1_assassin_1_char, zaibgang)
+         	SET_FAVOURITE_MODEL (r_m_1_assassin_1_char, VTYPE)
+          
+         	++r_m_1_respawn_count                  //  Count +1 respawn
+          
+          //  If he is the 2° assassin: use Shotgun
+          IF ( ( r_m_1_assassins_killed = 1 ) AND ( r_m_1_flag_assin_number_2 = 0 ) )
+             GIVE_WEAPON (r_m_1_assassin_1_char, SHOTGUN)
+            	SET r_m_1_flag_assin_number_2 = 1                    //  Lock this IF
+            	SET r_m_1_assassin_1_alive = 1                    //  Update flag
+          ENDIF
+          
+          //  If he is the 3° assassin: use Shotgun
+          IF ( ( r_m_1_assassins_killed = 2 ) AND ( r_m_1_flag_assin_number_3 = 0 ) )
+             GIVE_WEAPON (r_m_1_assassin_1_char, SHOTGUN)
+            	SET r_m_1_flag_assin_number_3 = 1                    //  Lock this IF
+            	SET r_m_1_assassin_1_alive = 1                    //  Update flag
+          ENDIF
+          
+          //  If he is the 4° assassin: use Grenades
+          IF ( ( r_m_1_assassins_killed = 3 ) AND ( r_m_1_flag_assin_number_4 = 0 ) )
+             GIVE_WEAPON (r_m_1_assassin_1_char, GRENADE)
+            	SET r_m_1_flag_assin_number_4 = 1                    //  Lock this IF
+            	SET r_m_1_assassin_1_alive = 1                    //  Update flag
+          ENDIF
+          
+          //  If he is the 5° assassin: use Machine Gun
+          IF ( ( r_m_1_assassins_killed = 4 ) AND ( r_m_1_flag_assin_number_5 = 0 ) )
+             GIVE_WEAPON (r_m_1_assassin_1_char, MACHINE_GUN)
+	            SET r_m_1_flag_assin_number_5 = 1                    //  Lock this IF
+	            SET r_m_1_assassin_1_alive = 1                     //  Update flag
+          ENDIF
+          
+          //  If he is the 6° assassin: use Molotov
+          IF ( ( r_m_1_assassins_killed = 5 ) AND ( r_m_1_flag_assin_number_6 = 0 ) )
+             GIVE_WEAPON (r_m_1_assassin_1_char, MOLOTOV)
+            	SET r_m_1_flag_assin_number_6 = 1                    //  Lock this IF
+            	SET r_m_1_assassin_1_alive = 1                     //  Update flag
+          ENDIF
+          
+          //  If he is the 7° assassin: use Machine Gun
+          IF ( ( r_m_1_assassins_killed = 6 ) AND ( r_m_1_flag_assin_number_7 = 0 ) )
+             GIVE_WEAPON (r_m_1_assassin_1_char, MACHINE_GUN)
+	            SET r_m_1_flag_assin_number_7 = 1                    //  Lock this IF
+	            SET r_m_1_assassin_1_alive = 1                     //  Update flag
+          ENDIF
+          
+          //  If he is the 8° assassin: use Silenced Machine Gun
+          IF ( ( r_m_1_assassins_killed = 7 ) AND ( r_m_1_flag_assin_number_8 = 0 ) )
+             GIVE_WEAPON (r_m_1_assassin_1_char, SILENCED_MACHINE_GUN)
+            	SET r_m_1_flag_assin_number_8 = 1                    //  Lock this IF
+            	SET r_m_1_assassin_1_alive = 1                     //  Update flag
+          ENDIF
+          
+       ENDIF
+    ENDIF
+    
+    
+    
+    //  If the assassin 2 died
+    IF ( ( r_m_1_assassin_2_alive = 1 ) AND ( HAS_CHARACTER_DIED(r_m_1_assassin_2_char) ) )
+       REMOVE_ARROW (arrow3)
+      	++r_m_1_assassins_killed                    //  Count +1
+      	SET r_m_1_assassin_2_alive = 0              //  Lock this IF
+    ENDIF
+    
+    //  If the assassin 2 died but the kills number does not add up to 8 yet
+    IF ( ( r_m_1_assassin_2_alive = 0 ) AND ( r_m_1_assassins_killed < 8 ) )
+       IF ( r_m_1_respawn_count < 6 )            //  If he respawned less than 6 times
+          
+          //  Respawning assassin 2
+          r_m_1_assassin_2_char = CREATE_CHAR (216.50, 164.50, 2.00) 8 90 CRIMINAL END
+	         SET_CHAR_OBJECTIVE (r_m_1_assassin_2_char, KILL_CHAR_ANY_MEANS, p1)
+	         SET_CHAR_THREAT_REACTION (r_m_1_assassin_2_char, NO_REACTION)
+	         SET_CHAR_THREAT_SEARCH (r_m_1_assassin_2_char, LINE_OF_SIGHT_PLAYER_ONLY)
+	         ADD_CHAR_TO_GANG (r_m_1_assassin_2_char, zaibgang)
+	         SET_FAVOURITE_MODEL (r_m_1_assassin_2_char, VTYPE)
+          
+	         ++r_m_1_respawn_count                  //  Count +1 respawn
+          
+          //  If he is the 2° assassin: use Shotgun
+          IF ( ( r_m_1_assassins_killed = 1 ) AND ( r_m_1_flag_assin_number_2 = 0 ) )
+             GIVE_WEAPON (r_m_1_assassin_2_char, SHOTGUN)
+	            SET r_m_1_flag_assin_number_2 = 1                     //  Lock this IF
+	            SET r_m_1_assassin_2_alive = 1                     //  Update flag
+          ENDIF
+          
+          //  If he is the 3° assassin: use Pistol
+          IF ( ( r_m_1_assassins_killed = 2 ) AND ( r_m_1_flag_assin_number_3 = 0 ) )
+             GIVE_WEAPON (r_m_1_assassin_2_char, PISTOL)
+             SET r_m_1_flag_assin_number_3 = 1                     //  Lock this IF
+	            SET r_m_1_assassin_2_alive = 1                     //  Update flag
+          ENDIF
+          
+          //  If he is the 4° assassin: use Grenades
+          IF ( ( r_m_1_assassins_killed = 3 ) AND ( r_m_1_flag_assin_number_4 = 0 ) )
+             GIVE_WEAPON (r_m_1_assassin_2_char, GRENADE)
+             SET r_m_1_flag_assin_number_4 = 1                     //  Lock this IF
+	            SET r_m_1_assassin_2_alive = 1                     //  Update flag
+          ENDIF
+          
+          //  If he is the 5° assassin: use Pistol
+          IF ( ( r_m_1_assassins_killed = 4 ) AND ( r_m_1_flag_assin_number_5 = 0 ) )
+             GIVE_WEAPON (r_m_1_assassin_2_char, PISTOL)
+	            SET r_m_1_flag_assin_number_5 = 1                    //  Lock this IF
+	            SET r_m_1_assassin_2_alive = 1                     //  Update flag
+          ENDIF
+          
+          //  If he is the 6° assassin: use Molotov
+          IF ( ( r_m_1_assassins_killed = 5 ) AND ( r_m_1_flag_assin_number_6 = 0 ) )
+             GIVE_WEAPON (r_m_1_assassin_2_char, MOLOTOV)
+	            SET r_m_1_flag_assin_number_6 = 1                    //  Lock this IF
+	            SET r_m_1_assassin_2_alive = 1                     //  Update flag
+          ENDIF
+          
+          //  If he is the 7° assassin: use Pistol
+          IF ( ( r_m_1_assassins_killed = 6 ) AND ( r_m_1_flag_assin_number_7 = 0 ) )
+             GIVE_WEAPON (r_m_1_assassin_2_char, PISTOL)
+	            SET r_m_1_flag_assin_number_7 = 1                    //  Lock this IF
+	            SET r_m_1_assassin_2_alive = 1                     //  Update flag
+          ENDIF
+          
+          //  If he is the 8° assassin: use Silenced Machine Gun
+          IF ( ( r_m_1_assassins_killed = 7 ) AND ( r_m_1_flag_assin_number_8 = 0 ) )
+             GIVE_WEAPON (r_m_1_assassin_2_char, SILENCED_MACHINE_GUN)
+	            SET r_m_1_flag_assin_number_8 = 1                    //  Lock this IF
+	            SET r_m_1_assassin_2_alive = 1                     //  Update flag
+          ENDIF
+          
+       ENDIF
+    ENDIF
+    
+    
+    //  If the assassin 2 is alive and on player screen
+    IF ( ( r_m_1_assassin_2_alive = 1 ) AND ( IS_ITEM_ONSCREEN(r_m_1_assassin_2_char) ) )
+       IF ( r_m_1_has_assin_2_arrow = 0 )
+       
+          POINT_ARROW_AT (arrow3, r_m_1_assassin_2_char)    //  Point an arrow at him
+	         SET r_m_1_has_assin_2_arrow = 1                   //  Lock this IF
+          
+          //  If the player is in a car, speed up, or else make him stop his vehicle and fight on foot
+          IF ( IS_CHARACTER_IN_ANY_CAR(p1) )
+             SET_CHAR_MAX_DRIVESPEED (r_m_1_assassin_2_char, 0.40)
+          ELSE
+             SET_CHAR_MAX_DRIVESPEED (r_m_1_assassin_2_char, 0.00)
+          ENDIF
+          
+       ENDIF
+    ENDIF
+    
+    //  If the assassin 2 is alive and isn't on player screen
+    IF ( ( r_m_1_assassin_2_alive = 1 ) AND ( NOT ( IS_ITEM_ONSCREEN(r_m_1_assassin_2_char) ) ) )
+       IF ( r_m_1_has_assin_2_arrow = 1 )
+       
+          SET r_m_1_has_assin_2_arrow = 0                  //  Lock this IF and unlock the previous IF
+	         REMOVE_ARROW (arrow3)           //  Remove his arrow
+          
+          //  If the player is in a car, speed up, or else make him stop his vehicle and fight on foot
+          IF ( IS_CHARACTER_IN_ANY_CAR(p1) )
+             SET_CHAR_MAX_DRIVESPEED (r_m_1_assassin_2_char, 0.40)
+          ELSE
+             SET_CHAR_MAX_DRIVESPEED (r_m_1_assassin_2_char, 0.00)
+          ENDIF
+          
+       ENDIF
+    ENDIF
+    
+    //  If the assassin 2 is alive and is on player screen, which is in a car
+    IF ( ( ( r_m_1_assassin_2_alive = 1 ) AND ( IS_CHARACTER_IN_ANY_CAR(p1) ) ) AND ( IS_ITEM_ONSCREEN(r_m_1_assassin_2_char) ) )
+       SET_CHAR_MAX_DRIVESPEED (r_m_1_assassin_2_char, 0.40)                 //  Speed him up
+    ELSE
+       IF ( NOT ( IS_CHARACTER_IN_ANY_CAR(p1) ) )           //  If the player isn't in any car
+          IF ( IS_ITEM_ONSCREEN(r_m_1_assassin_2_char) )                     //  and the assassin 2 is on player screen
+             SET_CHAR_MAX_DRIVESPEED (r_m_1_assassin_2_char, 0.00)           //  Make him stop
+          ENDIF
+       ENDIF
+    ENDIF
+    
+    
+    
+    ////////////////////////////////////////////////
+    
+    
+    
+    //  If the assassin 1 is alive and on player screen
+    IF ( ( r_m_1_assassin_1_alive = 1 ) AND ( IS_ITEM_ONSCREEN(r_m_1_assassin_1_char) ) )
+       IF ( r_m_1_has_assin_1_arrow = 0 )
+       
+          POINT_ARROW_AT (arrow2, r_m_1_assassin_1_char)    //  Point an arrow at him
+	         SET r_m_1_has_assin_1_arrow = 1                   //  Lock this IF
+          
+          //  If the player is in a car, speed up, or else make him stop his vehicle and fight on foot
+          IF ( IS_CHARACTER_IN_ANY_CAR(p1) )
+             SET_CHAR_MAX_DRIVESPEED (r_m_1_assassin_1_char, 0.40)
+          ELSE
+             SET_CHAR_MAX_DRIVESPEED (r_m_1_assassin_1_char, 0.00)
+          ENDIF
+          
+       ENDIF
+    ENDIF
+    
+    
+    //  If the assassin 1 is alive and isn't on player screen
+    IF ( ( r_m_1_assassin_1_alive = 1 ) AND ( NOT ( IS_ITEM_ONSCREEN(r_m_1_assassin_1_char) ) ) )
+       IF ( r_m_1_has_assin_1_arrow = 1 )
+       
+          SET r_m_1_has_assin_1_arrow = 0                 //  Lock this IF and unlock the previous IF
+	         REMOVE_ARROW (arrow2)          //  Remove his arrow
+          
+          //  If the player is in a car, speed up, or else make him stop his vehicle and fight on foot
+          IF ( IS_CHARACTER_IN_ANY_CAR(p1) )
+             SET_CHAR_MAX_DRIVESPEED (r_m_1_assassin_1_char, 0.40)
+          ELSE
+             SET_CHAR_MAX_DRIVESPEED (r_m_1_assassin_1_char, 0.00)
+          ENDIF
+          
+       ENDIF
+    ENDIF
+    
+    //  If the assassin 1 is alive and is on player screen, which is in a car
+    IF ( ( ( r_m_1_assassin_1_alive = 1 ) AND ( IS_CHARACTER_IN_ANY_CAR(p1) ) ) AND ( IS_ITEM_ONSCREEN(r_m_1_assassin_1_char) ) )
+       SET_CHAR_MAX_DRIVESPEED (r_m_1_assassin_1_char, 0.40)                 //  Speed him up
+    ELSE
+       IF ( NOT ( IS_CHARACTER_IN_ANY_CAR(p1) ) )           //  If the player isn't in any car
+          IF ( IS_ITEM_ONSCREEN(r_m_1_assassin_1_char) )                     //  and the assassin 1 is on player screen
+             SET_CHAR_MAX_DRIVESPEED (r_m_1_assassin_1_char, 0.00)           // Make him stop
+          ENDIF
+       ENDIF
+    ENDIF
+    
+ 
+ ENDWHILE
+ 
+ 
+ 
+	DISPLAY_BRIEF (2060)                //  "I think that's it, Rooster! Shit, are you the Number One Assassin Assassinator!"
+ 
+	REMOVE_ARROW (arrow2)
+	REMOVE_ARROW (arrow3)
+ 
+	DISPLAY_BRIEF (2061)                //  "Hey! Zaibatsu Mercenary Flambo Cortez is in town! He's at the Train Station [...] - but I KNOW you can handle him and his pussies."
+ 
+ //  Flambo Cortez limo
+	r_m_1_cortez_limo_car = CREATE_CAR (128.00, 126.50, 2.00) 1 95 LIMO END
+ 
+	SET_CAR_BULLETPROOF (r_m_1_cortez_limo_car, ON)
+	SET_CAR_FLAMEPROOF (r_m_1_cortez_limo_car, ON)
+	SET_CAR_ROCKETPROOF (r_m_1_cortez_limo_car, ON)
+ 
+ //  Creating the guards
+	r_m_1_zaib_guard_1 = CREATE_CHAR (128.50, 125.50, 2.00) 8 90 GUARD END
+	SET_CHAR_THREAT_SEARCH (r_m_1_zaib_guard_1, AREA_PLAYER_ONLY)
+	SET_CHAR_THREAT_REACTION (r_m_1_zaib_guard_1, REACT_AS_NORMAL)
+	GIVE_WEAPON (r_m_1_zaib_guard_1, MACHINE_GUN)
+	ADD_CHAR_TO_GANG (r_m_1_zaib_guard_1, zaibgang)
+	SET_CHAR_OBJECTIVE (r_m_1_zaib_guard_1, WAIT_ON_FOOT)
+ 
+	r_m_1_zaib_guard_2 = CREATE_CHAR (129.50, 125.50, 2.00) 8 90 GUARD END
+	SET_CHAR_THREAT_SEARCH (r_m_1_zaib_guard_2, AREA_PLAYER_ONLY)
+	SET_CHAR_THREAT_REACTION (r_m_1_zaib_guard_2, REACT_AS_NORMAL)
+	GIVE_WEAPON (r_m_1_zaib_guard_2, MACHINE_GUN)
+	ADD_CHAR_TO_GANG (r_m_1_zaib_guard_2, zaibgang)
+	SET_CHAR_OBJECTIVE (r_m_1_zaib_guard_2, WAIT_ON_FOOT)
+ 
+	r_m_1_zaib_guard_3 = CREATE_CHAR (128.50, 127.50, 2.00) 8 90 GUARD END
+	SET_CHAR_THREAT_SEARCH (r_m_1_zaib_guard_3, AREA_PLAYER_ONLY)
+	SET_CHAR_THREAT_REACTION (r_m_1_zaib_guard_3, REACT_AS_NORMAL)
+	GIVE_WEAPON (r_m_1_zaib_guard_3, MACHINE_GUN)
+	ADD_CHAR_TO_GANG (r_m_1_zaib_guard_3, zaibgang)
+	SET_CHAR_OBJECTIVE (r_m_1_zaib_guard_3, WAIT_ON_FOOT)
+ 
+	r_m_1_zaib_guard_4 = CREATE_CHAR (129.50, 127.50, 2.00) 8 90 GUARD END
+	SET_CHAR_THREAT_SEARCH (r_m_1_zaib_guard_4, AREA_PLAYER_ONLY)
+	SET_CHAR_THREAT_REACTION (r_m_1_zaib_guard_4, REACT_AS_NORMAL)
+	GIVE_WEAPON (r_m_1_zaib_guard_4, MACHINE_GUN)
+	ADD_CHAR_TO_GANG (r_m_1_zaib_guard_4, zaibgang)
+	SET_CHAR_OBJECTIVE (r_m_1_zaib_guard_4, WAIT_ON_FOOT)
+ 
+ //  Flambo Cortez
+	r_m_1_flambo_cortez = CREATE_CHAR (128.50, 129.50, 2.00) 8 90 DUMMY END
+	SET_CHAR_OBJECTIVE (r_m_1_flambo_cortez, ENTER_CAR_AS_PASSENGER, r_m_1_cortez_limo_car)
+	POINT_ARROW_AT (arrow1, r_m_1_cortez_limo_car)
+ 
+ WHILE_EXEC ( r_m_1_while_loop = 0 )
+    
+    //  If Flambo Cortez entered the limo, lock it
+    IF ( IS_CHAR_OBJECTIVE_PASSED(r_m_1_flambo_cortez) )
+       CHANGE_CAR_LOCK (r_m_1_cortez_limo_car, LOCKED)
+    ENDIF
+    
+    //  If the limo has been destroyed
+    IF ( IS_CAR_WRECKED(r_m_1_cortez_limo_car) )
+       DELETE_ITEM (r_m_1_laughs_sound)
+	      CLEAR_ALL_BRIEFS ()
+	      DISPLAY_BRIEF (2062)           //  "You sure showed those soapy Zaibatsu who's boss! Here's $50,000."
+	      DISPLAY_MESSAGE (2999)         //  Mission Complete
+	      SET r_m_1_while_loop = 1
+	      ADD_SCORE (p1, 50000)
+	      SET savecount53 = 1
+	      CLEAR_WANTED_LEVEL (p1)
+	      ADD_MULTIPLIER (p1, 1)
+	      CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (redngang, p1, 1)
+       RETURN
+    ENDIF
+    
+    //  After limo has been hitted by any weapon
+    IF ( r_m_1_sound_brief_flag = 1 )
+       DISPLAY_BRIEF (2065)          //  "This Flambo has some fancy protected vehicle, Rooster. You rig up a Car Bomb and park it beside him, just for fun."
+       SET r_m_1_sound_brief_flag = 2               //  Lock this IF
+    ENDIF
+    
+    //  If the limo has been hitted by any weapon
+    IF ( ( CHECK_ANY_WEAPON_TYPE_HIT_CAR(r_m_1_cortez_limo_car) ) AND ( r_m_1_sound_brief_flag = 0 ) )
+       
+       //IF ( NOT ( CHECK_WEAPON_TYPE_HIT_CAR(r_m_1_cortez_limo_car, BY_CAR_BOMB) ) )
+       
+          DISPLAY_BRIEF (2063)                    //  "Ha! I am Flambo Cortez and my mercenary machine is special Z-Construction!"
+          r_m_1_laughs_sound = CREATE_SOUND (128.00, 126.50, 2.00) SMUG_LAUGH PLAY_FOREVER END            //  Hahahaha!
+          SET r_m_1_sound_brief_flag = 1                         //  Lock this IF
+          
+       //ENDIF
+       
+    ENDIF
+ 
+ ENDWHILE
+ 
+ 
+RETURN
+
+
+
+
+clean_up_redn_med_phone1_m1:             //  Clean up
+ 
+ IF ( NOT ( r_m_1_sound_brief_flag = 0 ) )
+	   DELETE_ITEM (r_m_1_laughs_sound)
+	ENDIF
+ 
+ //  If the player has completed the Redneck Medium Mission 3
+ IF ( savecount63 = 1 )
+	   SET_PHONE_DEAD (obj8)                    //  Kill the phone
+	   DISABLE_THREAD_TRIGGER (trigger13)       //  Disable its trigger too
+	ENDIF
+ 
+ //  If any member of the player redneck group is alive
+ IF ( NOT ( HAS_CHARACTER_DIED(r_m_1_redneck_group_char) ) )
+	   DESTROY_GROUP (r_m_1_redneck_group_char)
+	ENDIF
+ 
+	SET savecount81 = 0
+	SET savecount83 = 0
+ 
+	REMOVE_ARROW (arrow1)
+	REMOVE_ARROW (arrow3)
+	REMOVE_ARROW (arrow4)
+ 
+ //  If the assassin 1 is alive, make him do nothing
+ IF ( NOT ( HAS_CHARACTER_DIED(r_m_1_assassin_1_char) ) )
+	   MAKE_CHAR_DO_NOTHING (r_m_1_assassin_1_char)
+	ENDIF
+ 
+ //  If the assassin 2 is alive, make him do nothing
+ IF ( NOT ( HAS_CHARACTER_DIED(r_m_1_assassin_2_char) ) )
+	   MAKE_CHAR_DO_NOTHING (r_m_1_assassin_2_char)
+	ENDIF
+ 
+	IF ( savecount53 = 1 )
+	   ++savecount87
+	   ++savecount91
+	ENDIF
+ 
+ IF ( CHECK_DEATHARREST_EXECUTED() )
+	   ++savecount90
+	   ++savecount92
+	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (redngang, p1, -1)
+	   CLEAR_WANTED_LEVEL (p1)
+	ENDIF
+ 
+	MISSION_HAS_FINISHED ()
+ 
+RETURN
+
+MISSIONSTART
+GOSUB redn_med_phone1_m1:
+GOSUB clean_up_redn_med_phone1_m1:
+MISSIONEND

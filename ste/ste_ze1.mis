@@ -1,0 +1,399 @@
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Science Friction! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+// Decompiled from "ste_ze1.scr" Using Epic GTA2 Script Decompiler by T.M.
+
+//FORWARD zaib_easy_phone1_m1:
+//FORWARD clean_up_zaib_easy_phone1_m1:
+
+CAR_DATA z_e_1_pickup
+
+COUNTER z_e_1_is_player_in_pickup = 0
+COUNTER z_e_1_is_pickup_in_position = 0
+COUNTER z_e_1_while_loop = 0
+COUNTER z_e_1_bomb_brief_flag = 0
+COUNTER z_e_1_pickup_bomb_rigged = 0
+
+CHAR_DATA z_e_1_redn_guard_1
+CHAR_DATA z_e_1_redn_guard_2
+CHAR_DATA z_e_1_redn_guard_3
+CHAR_DATA z_e_1_redn_guard_4
+CHAR_DATA z_e_1_srs_guard
+
+OBJ_DATA z_e_1_generator_obj
+
+SOUND z_e_1_powergen_sound
+
+COUNTER z_e_1_powergen_destroyed = 0
+OBJ_DATA z_e_1_health_powerup
+OBJ_DATA z_e_1_double_damage
+//COUNTER count8 = 0
+
+/*
+OBJ_DATA obj172
+OBJ_DATA obj173
+OBJ_DATA obj174
+OBJ_DATA obj175
+OBJ_DATA obj176
+OBJ_DATA obj177
+OBJ_DATA obj178
+OBJ_DATA obj179
+OBJ_DATA obj180
+OBJ_DATA obj181
+OBJ_DATA obj182
+OBJ_DATA obj183
+OBJ_DATA obj184
+OBJ_DATA obj185
+OBJ_DATA obj186
+OBJ_DATA obj187
+OBJ_DATA obj188
+OBJ_DATA obj189
+OBJ_DATA obj190
+OBJ_DATA obj191
+*/
+
+zaib_easy_phone1_m1:
+ 
+	SET savecount14 = 0
+ 
+	z_e_1_generator_obj = CREATE_OBJ (174.50, 230.50, 2.00) 0 POWERGEN END
+	z_e_1_powergen_sound = CREATE_SOUND (174.50, 230.50, 2.00) GENERATOR_RUMBLE PLAY_FOREVER END
+ 
+	z_e_1_redn_guard_1 = CREATE_CHAR (24.50, 45.50, 4.00) 5 80 GUARD END
+	SET_CHAR_THREAT_SEARCH (z_e_1_redn_guard_1, AREA_PLAYER_ONLY)
+	SET_CHAR_THREAT_REACTION (z_e_1_redn_guard_1, REACT_AS_NORMAL)
+	GIVE_WEAPON (z_e_1_redn_guard_1, MOLOTOV)
+	ADD_CHAR_TO_GANG (z_e_1_redn_guard_1, redngang)
+	SET_CHAR_OBJECTIVE (z_e_1_redn_guard_1, GUARD_SPOT)
+ 
+	z_e_1_redn_guard_2 = CREATE_CHAR (24.50, 40.50, 4.00) 5 80 GUARD END
+	SET_CHAR_THREAT_SEARCH (z_e_1_redn_guard_2, AREA_PLAYER_ONLY)
+	SET_CHAR_THREAT_REACTION (z_e_1_redn_guard_2, REACT_AS_NORMAL)
+	GIVE_WEAPON (z_e_1_redn_guard_2, MOLOTOV)
+	ADD_CHAR_TO_GANG (z_e_1_redn_guard_2, redngang)
+	SET_CHAR_OBJECTIVE (z_e_1_redn_guard_2, GUARD_SPOT)
+ 
+	z_e_1_redn_guard_3 = CREATE_CHAR (21.50, 46.50, 2.00) 5 275 GUARD END
+	SET_CHAR_THREAT_SEARCH (z_e_1_redn_guard_3, AREA_PLAYER_ONLY)
+	SET_CHAR_THREAT_REACTION (z_e_1_redn_guard_3, REACT_AS_NORMAL)
+	GIVE_WEAPON (z_e_1_redn_guard_3, MACHINE_GUN)
+	ADD_CHAR_TO_GANG (z_e_1_redn_guard_3, redngang)
+	SET_CHAR_OBJECTIVE (z_e_1_redn_guard_3, GUARD_SPOT)
+ 
+	z_e_1_redn_guard_4 = CREATE_CHAR (21.50, 38.50, 2.00) 5 260 GUARD END
+	SET_CHAR_THREAT_SEARCH (z_e_1_redn_guard_4, AREA_PLAYER_ONLY)
+	SET_CHAR_THREAT_REACTION (z_e_1_redn_guard_4, REACT_AS_NORMAL)
+	GIVE_WEAPON (z_e_1_redn_guard_4, MACHINE_GUN)
+	ADD_CHAR_TO_GANG (z_e_1_redn_guard_4, redngang)
+	SET_CHAR_OBJECTIVE (z_e_1_redn_guard_4, GUARD_SPOT)
+ 
+	z_e_1_srs_guard = CREATE_CHAR (175.50, 227.50, 2.00) 7 0 CRIMINAL END
+	GIVE_WEAPON (z_e_1_srs_guard, PISTOL)
+	ADD_CHAR_TO_GANG (z_e_1_srs_guard, sciegang)
+	ADD_PATROL_POINT (z_e_1_srs_guard, 175.50, 230.50, 2.00)
+	ADD_PATROL_POINT (z_e_1_srs_guard, 175.50, 227.50, 2.00)
+ 
+	//SET count8 = 1
+ 
+	DISPLAY_MESSAGE (2464)           //  SCIENCE FRICTION!
+	DISPLAY_BRIEF (2551)             //  "Gecko! Red Valdez here. I need you to bomb the SRS Clone Test Center [...]. Montana's Pickup is loaded with lethal explosives. Steal it."
+ 
+	z_e_1_pickup = CREATE_GANG_CAR (24.00, 41.50, 2.00) 3 90 PICKUP END
+	POINT_ARROW_AT (arrow1, z_e_1_pickup)
+ 
+	SET savecount84 = 1
+	SET savecount81 = 1
+ 
+ WHILE_EXEC ( z_e_1_while_loop = 0 )
+    
+    //  If the door powergen has been destroyed, open the door
+    IF ( ( CHECK_OBJ_MODEL(z_e_1_generator_obj, POWERGEN_DEAD) ) AND ( z_e_1_powergen_destroyed = 0 ) )
+       OPEN_DOOR (door7)
+	      DELETE_ITEM (z_e_1_powergen_sound)
+	      SET_CHAR_OBJECTIVE (z_e_1_srs_guard, KILL_CHAR_ANY_MEANS, p1)
+	      SET z_e_1_powergen_destroyed = 1
+    ENDIF
+    
+    //  If the pickup has been destroyed
+    IF ( ( IS_CAR_WRECKED(z_e_1_pickup) ) AND ( savecount14 = 0 ) )
+       CLEAR_ALL_BRIEFS ()
+	      DISPLAY_BRIEF_NOW (2552)          //  "A smoking Pickup is no way to destroy a building, Gecko. This job is over for you."
+	      SET savecount14 = 1
+	      DISPLAY_MESSAGE (2998)            //  Mission Failed!
+       RETURN
+    ENDIF
+    
+    //  If the player has entered the pickup, give it a bomb
+    IF ( ( IS_CHARACTER_IN_CAR(p1, z_e_1_pickup) ) AND ( z_e_1_pickup_bomb_rigged = 0 ) )
+       GIVE_WEAPON (p1, CAR_BOMB)
+       SET z_e_1_pickup_bomb_rigged = 1
+    ENDIF
+    
+    //  If the player has entered the pickup
+    IF ( ( IS_CHARACTER_IN_CAR(p1, z_e_1_pickup) ) AND ( NOT ( IS_CAR_IN_BLOCK(z_e_1_pickup, 179.50, 234.50, 2.00, 3.00, 1.00) ) ) )
+       IF ( z_e_1_is_player_in_pickup = 0 )
+          SET z_e_1_is_player_in_pickup = 1
+          DISPLAY_BRIEF_NOW (2553)                        //  "Working well, Gecko! Park the Pickup at the South End of the Clone Test Center."
+          POINT_ARROW_AT (arrow1, 179.50, 234.50, 2.00)   //  Point at the Clone Test Center
+       ENDIF
+    ENDIF
+    
+    //  If the player has left the pickup
+    IF ( ( NOT ( IS_CHARACTER_IN_CAR(p1, z_e_1_pickup) ) ) AND ( NOT ( IS_CAR_IN_BLOCK(z_e_1_pickup, 179.50, 234.50, 2.00, 3.00, 1.00) ) ) )
+       IF ( z_e_1_is_player_in_pickup = 1 )
+          SET z_e_1_is_player_in_pickup = 0
+          DISPLAY_BRIEF_NOW (2557)                        //  "Get back in that Pickup, Gecko!"
+          POINT_ARROW_AT (arrow1, z_e_1_pickup)
+       ENDIF
+    ENDIF
+    
+    //  If the player has arrived at the bomb point
+    IF ( ( IS_CAR_IN_BLOCK(z_e_1_pickup, 179.50, 234.50, 2.00, 3.00, 1.00) ) AND ( IS_CHARACTER_IN_CAR(p1, z_e_1_pickup) ) )
+       IF ( z_e_1_is_pickup_in_position = 0 )
+          REMOVE_ARROW (arrow1)
+          SET z_e_1_is_pickup_in_position = 1
+          
+          IF ( z_e_1_bomb_brief_flag = 0 )
+             DISPLAY_BRIEF_NOW (2555)                     //  "Arm the explosives with your trigger finger, Gecko. But don't wait around!"
+             SET z_e_1_bomb_brief_flag = 1                               //  Do this brief once
+          ENDIF
+          
+       ENDIF
+    ENDIF
+    
+    //  If the player get away from the bomb point after arrived at it (still in the pickup)
+    IF ( ( NOT ( IS_CAR_IN_BLOCK(z_e_1_pickup, 179.50, 234.50, 2.00, 3.00, 1.00) ) ) AND ( IS_CHARACTER_IN_CAR(p1, z_e_1_pickup) ) )
+       IF ( z_e_1_is_pickup_in_position = 1 )
+          POINT_ARROW_AT (arrow1, 179.50, 234.50, 2.00)
+          DISPLAY_BRIEF_NOW (2554)                        //  "Complete your job, Gecko. Park the Pickup beside the Clone Test Center."
+          SET z_e_1_is_pickup_in_position = 0
+       ENDIF
+    ENDIF
+    
+    //  If the player has activated the bomb at the correct position
+    IF ( ( IS_CARBOMB_ACTIVE(z_e_1_pickup) ) AND ( z_e_1_is_pickup_in_position = 1 ) )
+       DISPLAY_BRIEF_NOW (2556)                                         //  "he's gonna blow, Gecko! Get out of the Pickup!"
+       SET z_e_1_while_loop = 1                                                   //  Get out of this WHILE_EXEC
+       SET z_e_1_is_pickup_in_position = 2
+       REMOVE_ARROW (arrow1)
+    ENDIF
+    
+    //  If the player get out of the pickup at the correct position but hasn't triggered the bomb
+    IF ( ( IS_CAR_IN_BLOCK(z_e_1_pickup, 179.50, 234.50, 2.00, 3.00, 1.00) ) AND ( NOT ( IS_CHARACTER_IN_CAR(p1, z_e_1_pickup) ) ) )
+       IF ( z_e_1_is_pickup_in_position = 1 )
+          POINT_ARROW_AT (arrow1, z_e_1_pickup)
+          DISPLAY_BRIEF_NOW (2558)                  //  "Get back in the Pickup and arm the explosives, Gecko!"
+          SET z_e_1_is_pickup_in_position = 0
+       ENDIF
+    ENDIF
+    
+ ENDWHILE
+	
+ //  The player has triggered the bomb at the correct position
+ 
+ WHILE_EXEC ( z_e_1_while_loop = 1 )
+    
+    //  If the pickup has exploded out of the correct position
+    IF ( ( IS_CAR_WRECKED(z_e_1_pickup) ) AND ( NOT ( CHECK_CAR_WRECKED_IN_AREA(z_e_1_pickup, 179.50, 234.50, 2.00, 3.00, 1.00) ) ) )
+       IF ( savecount14 = 0 )
+          CLEAR_ALL_BRIEFS ()
+          DISPLAY_BRIEF_NOW (2559)         //  "The secret of good comedy is timing, Gecko. Well, I don't find your timing funny."
+          SET savecount14 = 1
+          DISPLAY_MESSAGE (2998)           //  Mission Failed!
+          RETURN
+       ENDIF
+    ENDIF
+    
+    //  If the pickup has exploded on the correct position
+    IF ( ( IS_CAR_WRECKED(z_e_1_pickup) ) AND ( CHECK_CAR_WRECKED_IN_AREA(z_e_1_pickup, 179.50, 234.50, 2.00, 3.00, 1.00) ) )
+       SET z_e_1_while_loop = 2
+    ENDIF
+ 
+ ENDWHILE
+
+ SET_DEATHARREST_STATE (p1, OFF)           //  Because of this command, you can die in the pickup, respawn and not fail the mission
+ 
+ //  KABOOOOOMM!!
+ 
+ EXPLODE_LARGE (178.00, 230.00, 5.00)
+ EXPLODE_LARGE (180.00, 230.00, 5.00)
+ EXPLODE_LARGE (178.00, 233.00, 5.00)
+ EXPLODE_LARGE (180.00, 233.00, 5.00)
+ LOWER_LEVEL (177, 229) (180, 233)
+ DELAY_HERE (50)
+ 
+ EXPLODE_LARGE (178.00, 230.00, 5.00)
+ EXPLODE_LARGE (180.00, 230.00, 5.00)
+ EXPLODE_LARGE (178.00, 233.00, 5.00)
+ EXPLODE_LARGE (180.00, 233.00, 5.00)
+ LOWER_LEVEL (177, 229) (180, 233)
+ DELAY_HERE (40)
+ 
+ EXPLODE_LARGE (178.00, 230.00, 4.00)
+ EXPLODE_LARGE (180.00, 230.00, 4.00)
+ EXPLODE_LARGE (178.00, 233.00, 4.00)
+ EXPLODE_LARGE (180.00, 233.00, 4.00)
+ LOWER_LEVEL (177, 229) (180, 233)
+ DELAY_HERE (60)
+ 
+ EXPLODE_LARGE (178.00, 230.00, 3.00)
+ EXPLODE_LARGE (180.00, 230.00, 3.00)
+ EXPLODE_LARGE (178.00, 233.00, 3.00)
+ EXPLODE_LARGE (180.00, 233.00, 3.00)
+ LOWER_LEVEL (177, 229) (180, 233)
+ 
+ EXEC
+     REMOVE_BLOCK (177, 229, 1, DONT_DROP)
+     REMOVE_BLOCK (178, 229, 1, DONT_DROP)
+     REMOVE_BLOCK (179, 229, 1, DONT_DROP)
+     REMOVE_BLOCK (180, 229, 1, DONT_DROP)
+     REMOVE_BLOCK (177, 230, 1, DONT_DROP)
+     REMOVE_BLOCK (178, 230, 1, DONT_DROP)
+     REMOVE_BLOCK (179, 230, 1, DONT_DROP)
+     REMOVE_BLOCK (180, 230, 1, DONT_DROP)
+     REMOVE_BLOCK (177, 231, 1, DONT_DROP)
+     REMOVE_BLOCK (178, 231, 1, DONT_DROP)
+     REMOVE_BLOCK (179, 231, 1, DONT_DROP)
+     REMOVE_BLOCK (180, 231, 1, DONT_DROP)
+     REMOVE_BLOCK (177, 232, 1, DONT_DROP)
+     REMOVE_BLOCK (178, 232, 1, DONT_DROP)
+     REMOVE_BLOCK (179, 232, 1, DONT_DROP)
+     REMOVE_BLOCK (180, 232, 1, DONT_DROP)
+     REMOVE_BLOCK (177, 233, 1, DONT_DROP)
+     REMOVE_BLOCK (178, 233, 1, DONT_DROP)
+     REMOVE_BLOCK (179, 233, 1, DONT_DROP)
+     REMOVE_BLOCK (180, 233, 1, DONT_DROP)
+     
+     ADD_NEW_BLOCK (177, 229, 1)
+     ADD_NEW_BLOCK (178, 229, 1)
+     ADD_NEW_BLOCK (179, 229, 1)
+     ADD_NEW_BLOCK (180, 229, 1)
+     ADD_NEW_BLOCK (177, 230, 1)
+     ADD_NEW_BLOCK (178, 230, 1)
+     ADD_NEW_BLOCK (179, 230, 1)
+     ADD_NEW_BLOCK (180, 230, 1)
+     ADD_NEW_BLOCK (177, 231, 1)
+     ADD_NEW_BLOCK (178, 231, 1)
+     ADD_NEW_BLOCK (179, 231, 1)
+     ADD_NEW_BLOCK (180, 231, 1)
+     ADD_NEW_BLOCK (177, 232, 1)
+     ADD_NEW_BLOCK (178, 232, 1)
+     ADD_NEW_BLOCK (179, 232, 1)
+     ADD_NEW_BLOCK (180, 232, 1)
+     ADD_NEW_BLOCK (177, 233, 1)
+     ADD_NEW_BLOCK (178, 233, 1)
+     ADD_NEW_BLOCK (179, 233, 1)
+     ADD_NEW_BLOCK (180, 233, 1)
+     
+     CHANGE_BLOCK LID (176, 228, 1) NOT_FLAT NOT_FLIP 0 0 978
+     CHANGE_BLOCK LID (177, 228, 1) NOT_FLAT NOT_FLIP 0 0 978
+     CHANGE_BLOCK LID (178, 228, 1) NOT_FLAT NOT_FLIP 0 0 978
+     CHANGE_BLOCK LID (179, 228, 1) NOT_FLAT NOT_FLIP 0 0 978
+     CHANGE_BLOCK LID (180, 228, 1) NOT_FLAT NOT_FLIP 0 0 978
+     CHANGE_BLOCK LID (176, 229, 1) NOT_FLAT NOT_FLIP 0 0 978
+     CHANGE_BLOCK LID (176, 230, 1) NOT_FLAT NOT_FLIP 0 0 978
+     CHANGE_BLOCK LID (176, 231, 1) NOT_FLAT NOT_FLIP 0 0 978
+     CHANGE_BLOCK LID (176, 232, 1) NOT_FLAT NOT_FLIP 0 0 978
+     CHANGE_BLOCK LID (176, 233, 1) NOT_FLAT NOT_FLIP 0 0 978
+     CHANGE_BLOCK LID (176, 234, 1) NOT_FLAT NOT_FLIP 0 0 978
+     CHANGE_BLOCK LID (177, 234, 1) NOT_FLAT NOT_FLIP 0 0 978
+     CHANGE_BLOCK LID (178, 234, 1) NOT_FLAT NOT_FLIP 0 0 978
+     CHANGE_BLOCK LID (179, 234, 1) NOT_FLAT NOT_FLIP 0 0 978
+     CHANGE_BLOCK LID (180, 234, 1) NOT_FLAT NOT_FLIP 0 0 978
+     CHANGE_BLOCK LID (181, 228, 1) NOT_FLAT NOT_FLIP 0 90 142
+     CHANGE_BLOCK LID (181, 229, 1) NOT_FLAT NOT_FLIP 0 90 142
+     CHANGE_BLOCK LID (181, 230, 1) NOT_FLAT NOT_FLIP 0 90 142
+     CHANGE_BLOCK LID (181, 231, 1) NOT_FLAT NOT_FLIP 0 90 142
+     CHANGE_BLOCK LID (181, 232, 1) NOT_FLAT NOT_FLIP 0 90 142
+     CHANGE_BLOCK LID (181, 233, 1) NOT_FLAT NOT_FLIP 0 90 142
+     CHANGE_BLOCK LID (181, 234, 1) NOT_FLAT NOT_FLIP 0 90 142
+     CHANGE_BLOCK LID (177, 229, 1) NOT_FLAT NOT_FLIP 0 0 132
+     CHANGE_BLOCK LID (178, 229, 1) NOT_FLAT NOT_FLIP 0 0 133
+     CHANGE_BLOCK LID (179, 229, 1) NOT_FLAT NOT_FLIP 0 0 136
+     CHANGE_BLOCK LID (180, 229, 1) NOT_FLAT NOT_FLIP 0 0 137
+     CHANGE_BLOCK LID (177, 230, 1) NOT_FLAT NOT_FLIP 0 0 138
+     CHANGE_BLOCK LID (178, 230, 1) NOT_FLAT NOT_FLIP 0 0 139
+     CHANGE_BLOCK LID (179, 230, 1) NOT_FLAT NOT_FLIP 0 0 152
+     CHANGE_BLOCK LID (180, 230, 1) NOT_FLAT NOT_FLIP 0 0 153
+     CHANGE_BLOCK LID (177, 231, 1) NOT_FLAT NOT_FLIP 0 0 154
+     CHANGE_BLOCK LID (178, 231, 1) NOT_FLAT NOT_FLIP 0 0 156
+     CHANGE_BLOCK LID (179, 231, 1) NOT_FLAT NOT_FLIP 0 0 157
+     CHANGE_BLOCK LID (180, 231, 1) NOT_FLAT NOT_FLIP 0 0 429
+     CHANGE_BLOCK LID (177, 232, 1) NOT_FLAT NOT_FLIP 0 0 430
+     CHANGE_BLOCK LID (178, 232, 1) NOT_FLAT NOT_FLIP 0 0 433
+     CHANGE_BLOCK LID (179, 232, 1) NOT_FLAT NOT_FLIP 0 0 434
+     CHANGE_BLOCK LID (180, 232, 1) NOT_FLAT NOT_FLIP 0 0 435
+     CHANGE_BLOCK LID (177, 233, 1) NOT_FLAT NOT_FLIP 0 0 436
+     CHANGE_BLOCK LID (178, 233, 1) NOT_FLAT NOT_FLIP 0 0 439
+     CHANGE_BLOCK LID (179, 233, 1) NOT_FLAT NOT_FLIP 0 0 441
+     CHANGE_BLOCK LID (180, 233, 1) NOT_FLAT NOT_FLIP 0 0 444
+ ENDEXEC
+ 
+ CHANGE_BLOCK TYPE (177, 229, 1) FIELD 0
+ CHANGE_BLOCK TYPE (178, 229, 1) FIELD 0
+ CHANGE_BLOCK TYPE (179, 229, 1) FIELD 0
+ CHANGE_BLOCK TYPE (180, 229, 1) FIELD 0
+ CHANGE_BLOCK TYPE (177, 230, 1) FIELD 0
+ CHANGE_BLOCK TYPE (178, 230, 1) FIELD 0
+ CHANGE_BLOCK TYPE (179, 230, 1) FIELD 0
+ CHANGE_BLOCK TYPE (180, 230, 1) FIELD 0
+ CHANGE_BLOCK TYPE (177, 231, 1) FIELD 0
+ CHANGE_BLOCK TYPE (178, 231, 1) FIELD 0
+ CHANGE_BLOCK TYPE (179, 231, 1) FIELD 0
+ CHANGE_BLOCK TYPE (180, 231, 1) FIELD 0
+ CHANGE_BLOCK TYPE (177, 232, 1) FIELD 0
+ CHANGE_BLOCK TYPE (178, 232, 1) FIELD 0
+ CHANGE_BLOCK TYPE (179, 232, 1) FIELD 0
+ CHANGE_BLOCK TYPE (180, 232, 1) FIELD 0
+ CHANGE_BLOCK TYPE (177, 233, 1) FIELD 0
+ CHANGE_BLOCK TYPE (178, 233, 1) FIELD 0
+ CHANGE_BLOCK TYPE (179, 233, 1) FIELD 0
+ CHANGE_BLOCK TYPE (180, 233, 1) FIELD 0
+ 
+ CLEAR_ALL_BRIEFS ()
+ 
+ z_e_1_health_powerup = CREATE_OBJ (179.50, 230.50, 2.00) 0 COLLECT_30 END
+ z_e_1_double_damage = CREATE_OBJ (178.50, 232.50, 2.00) 0 COLLECT_35 END
+ 
+ ADD_SCORE (p1, 30000)
+ SET savecount56 = 1
+ DISPLAY_MESSAGE (2999)               //  Mission Complete!
+ CLEAR_WANTED_LEVEL (p1)
+ DISPLAY_BRIEF (2560)                 //  "Holy shit, Gecko! What a BANG! What a BLAST! Have $30,000 for a job well done."
+ ADD_MULTIPLIER (p1, 1)
+ CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (zaibgang, p1, 1)
+ SET_PHONE_DEAD (obj11)
+ DISABLE_THREAD_TRIGGER (trigger6)
+ SET_DEATHARREST_STATE (p1, ON)
+ 
+RETURN
+
+clean_up_zaib_easy_phone1_m1:
+ 
+	SET savecount81 = 0
+	SET savecount84 = 0
+ 
+	REMOVE_ARROW (arrow1)
+	DELETE_ITEM (z_e_1_powergen_sound)
+ 
+ IF ( savecount56 = 1 )
+	   ++savecount86
+	   ++savecount91
+	ENDIF
+ 
+ IF ( CHECK_DEATHARREST_EXECUTED() )
+	   ++savecount89
+	   ++savecount92
+	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (zaibgang, p1, -1)
+	   CLEAR_WANTED_LEVEL (p1)
+	ENDIF
+ 
+	MISSION_HAS_FINISHED ()
+ 
+RETURN
+
+MISSIONSTART
+GOSUB zaib_easy_phone1_m1:
+GOSUB clean_up_zaib_easy_phone1_m1:
+MISSIONEND

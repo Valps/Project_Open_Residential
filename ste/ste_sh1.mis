@@ -359,7 +359,7 @@ scie_hard_phone_m1:
     ENDIF
     
     
-    //  If the first traitor is in the taxi
+    //  If the second traitor is in the taxi
     IF ( s_h_1_traitor_2_in_taxi = 1 )
        
        //  If the taxi is damaged a bit, destroy it

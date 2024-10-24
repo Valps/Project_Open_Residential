@@ -389,7 +389,7 @@ SAVED_COUNTER savecount88 = 0
 SAVED_COUNTER savecount89 = 0
 SAVED_COUNTER savecount90 = 0
 
-SAVED_COUNTER savecount91 = 7           //   flag_all_missions_count
+SAVED_COUNTER savecount91 = 0           //   flag_all_missions_count
 SAVED_COUNTER savecount92 = 0
 
 SAVED_COUNTER savecount93 = 0

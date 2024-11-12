@@ -30,10 +30,10 @@ CHAR_DATA s_e_1_zman_char
 
 scie_easy_phone1_m1:
 
-	SET savecount4 = 0
+	SET flag_failed_scie_easy_phone1_m1 = 0
  
-	SET savecount81 = 1
-	SET savecount82 = 1
+	SET flag_on_mission = 1
+	SET flag_on_scie_mission = 1
  
 	DISPLAY_MESSAGE (2957)                //  SINK OR SWIM!
  
@@ -51,9 +51,9 @@ scie_easy_phone1_m1:
     
     //  If the player killed the Z-man
     IF ( ( s_e_1_all_zmen_picked = 0 ) AND ( HAS_CHARACTER_DIED(s_e_1_zman_char) ) )
-	      IF ( savecount4 = 0 )
+	      IF ( flag_failed_scie_easy_phone1_m1 = 0 )
 	         DISPLAY_BRIEF (2274)        //  "Killing a Z-Operative places you under Zaibatsu surveillance, THC-303. Marked men are no use to me!"
-	         SET savecount4 = 1
+	         SET flag_failed_scie_easy_phone1_m1 = 1
 	         DISPLAY_MESSAGE (2998)      //  Mission Failed!
           RETURN
        ENDIF
@@ -61,9 +61,9 @@ scie_easy_phone1_m1:
     
     //  If the player has destroyed the taxi
     IF ( ( s_e_1_mission_stage = 1 ) AND ( IS_CAR_WRECKED(s_e_1_taxi_car) ) )
-       IF ( savecount4 = 0 )
+       IF ( flag_failed_scie_easy_phone1_m1 = 0 )
 	         DISPLAY_BRIEF (2275)        //  "I told you, THC-303 - keeping the Taxi in one piece was important. You are OFF the job."
-          SET savecount4 = 1
+          SET flag_failed_scie_easy_phone1_m1 = 1
           DISPLAY_MESSAGE (2998)      //  Mission Failed!
           RETURN
        ENDIF
@@ -91,10 +91,10 @@ scie_easy_phone1_m1:
     //  If the player has left the taxi
     IF ( ( s_e_1_mission_stage = 1 ) AND ( NOT ( IS_CHARACTER_IN_CAR(p1, s_e_1_taxi_car) ) ) )
        IF ( s_e_1_player_out_taxi = 0 )
-          IF ( s_e_1_taxi_at_car_crane = 0 )                            //  If the player isn't leaving the taxi to the crane after getting all Z-men
+          IF ( s_e_1_taxi_at_car_crane = 0 )                  //  If the player isn't leaving the taxi to the crane after getting all Z-men
              POINT_ARROW_AT (arrow1, s_e_1_taxi_car)          //  Point arrow to the taxi
-             DISPLAY_BRIEF_NOW (2277)                  //  "Do not leave the Taxi, THC-303!"
-             SET s_e_1_player_out_taxi = 1                            //  Lock this IF
+             DISPLAY_BRIEF_NOW (2277)                         //  "Do not leave the Taxi, THC-303!"
+             SET s_e_1_player_out_taxi = 1                    //  Lock this IF
           ENDIF
        ENDIF
     ENDIF
@@ -103,7 +103,7 @@ scie_easy_phone1_m1:
     IF ( ( ( s_e_1_mission_stage = 1 ) AND ( LOCATE_CHARACTER_BY_CAR(p1, 193.50, 110.50, 2.00, 8.00, 3.00) ) ) AND (IS_CHARACTER_IN_CAR(p1, s_e_1_taxi_car) ) )
        IF ( s_e_1_player_arrived_zman_1 = 0 )
           DISPLAY_BRIEF (2278)                         //  "Sound the horn, THC-303."
-          SET s_e_1_player_arrived_zman_1 = 1                              //  Lock this IF and unlock the next IF
+          SET s_e_1_player_arrived_zman_1 = 1          //  Lock this IF and unlock the next IF
        ENDIF
     ENDIF
     
@@ -126,9 +126,9 @@ scie_easy_phone1_m1:
        //SET count15 = 1
        SET_CHAR_THREAT_REACTION (s_e_1_zman_char, NO_REACTION)
        SET_CHAR_OBJECTIVE (s_e_1_zman_char, WAIT_ON_FOOT)
-       POINT_ARROW_AT (arrow1, s_e_1_zman_char)                                        //  Point arrow at the second Z-man
+       POINT_ARROW_AT (arrow1, s_e_1_zman_char)                             //  Point arrow at the second Z-man
        DISPLAY_BRIEF (2280)                                                 //  "Good, THC-303. Pick up the second Z-Operative."
-       SET s_e_1_zman_1_picked = 1                                                       //  Lock this IF
+       SET s_e_1_zman_1_picked = 1                                          //  Lock this IF
     ENDIF
     
     //  If the player has arrived at the second Z-man
@@ -136,8 +136,8 @@ scie_easy_phone1_m1:
        IF ( IS_CHARACTER_IN_CAR(p1, s_e_1_taxi_car) )
           IF ( s_e_1_player_arrived_zman_2 = 0 )
              SET s_e_1_player_pressed_horn = 0
-             DISPLAY_BRIEF (2278)              //  "Sound the horn, THC-303."
-             SET s_e_1_player_arrived_zman_2 = 1                   //  Lock this IF
+             DISPLAY_BRIEF (2278)                   //  "Sound the horn, THC-303."
+             SET s_e_1_player_arrived_zman_2 = 1    //  Lock this IF
           ENDIF
        ENDIF
     ENDIF
@@ -145,10 +145,9 @@ scie_easy_phone1_m1:
     //  If the player has pressed the horn
     IF ( ( s_e_1_zman_1_picked = 1 ) AND ( IS_CHAR_PRESSING_HORN(p1) ) )
        IF ( s_e_1_player_pressed_horn = 0 )
-          DISPLAY_BRIEF_NOW (2281)                                          //  "At last! Taxi!"
+          DISPLAY_BRIEF_NOW (2281)                                                             //  "At last! Taxi!"
           SET_CHAR_OBJECTIVE (s_e_1_zman_char, ENTER_CAR_AS_PASSENGER, s_e_1_taxi_car)
           SET s_e_1_player_pressed_horn = 1                                                    //  Lock this IF
-          //SET s_e_1_player_arrived_zman_2 = 2
        ENDIF
     ENDIF
     
@@ -156,9 +155,7 @@ scie_easy_phone1_m1:
     IF ( ( s_e_1_zman_2_picked = 0 ) AND ( IS_CHAR_OBJECTIVE_PASSED(s_e_1_zman_char) ) )
        DELETE_ITEM (s_e_1_zman_char)
        SET s_e_1_zman_1_picked = 2
-       //SET count15 = 0
        s_e_1_zman_char = CREATE_CHAR (104.50, 140.50, 2.00) 8 180 DUMMY END
-       //SET count15 = 1
        SET_CHAR_THREAT_REACTION (s_e_1_zman_char, NO_REACTION)
        SET_CHAR_OBJECTIVE (s_e_1_zman_char, WAIT_ON_FOOT)
        POINT_ARROW_AT (arrow1, s_e_1_zman_char)
@@ -183,7 +180,6 @@ scie_easy_phone1_m1:
           DISPLAY_BRIEF_NOW (2283)                                         //  "About time! Here is my Z-ID."
           SET_CHAR_OBJECTIVE (s_e_1_zman_char, ENTER_CAR_AS_PASSENGER, s_e_1_taxi_car)
           SET s_e_1_player_pressed_horn = 1                                                   //  Lock this IF
-          //SET s_e_1_player_arrived_zman_3 = 2
        ENDIF
     ENDIF
     
@@ -235,7 +231,7 @@ scie_easy_phone1_m1:
     //  If the player is seeing the scientist's crane
     IF ( ( IS_ITEM_ONSCREEN(crane8) ) AND ( s_e_1_taxi_at_car_crane = 0 ) )
        IF ( s_e_1_all_zmen_picked = 1 )                                        //  If the player got all Z-men
-          DISPLAY_BRIEF (2287)                                   //  "Get out of the car, THC-303, and watch the Zaibatsu die!"
+          DISPLAY_BRIEF (2287)                                                 //  "Get out of the car, THC-303, and watch the Zaibatsu die!"
           REMOVE_ARROW (arrow1)
           s_e_1_screams_sound = CREATE_SOUND (197.50, 245.50, 2.00) GANG_DUMPED PLAY_FOREVER END              //  (muffled plea screams)
           SET s_e_1_taxi_at_car_crane = 1                                         //  Lock this IF
@@ -249,7 +245,7 @@ scie_easy_phone1_m1:
              //s_e_1_screams_sound = CREATE_SOUND (197.50, 245.50, 2.00) GANG_DUMPED PLAY_FOREVER END         (removing duplicated sounds)
              CHANGE_CAR_LOCK (s_e_1_taxi_car, LOCKED)         //  Lock the Taxi
              REMOVE_ARROW (arrow1)
-             SET s_e_1_taxi_locked = 1                           //  Lock this IF
+             SET s_e_1_taxi_locked = 1                        //  Lock this IF
           ENDIF
        ENDIF
     ENDIF
@@ -273,15 +269,15 @@ scie_easy_phone1_m1:
        
        ADD_SCORE (p1, 30000)
        
-       SET savecount46 = 1
+       SET flag_passed_scie_easy_phone1_m1 = 1
        
        DISPLAY_MESSAGE (2999)         //  Mission Completed!
        CLEAR_WANTED_LEVEL (p1)
        ADD_MULTIPLIER (p1, 1)
        CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (sciegang, p1, 1)
        
-       SET_PHONE_DEAD (obj1)
-       DISABLE_THREAD_TRIGGER (trigger1)
+       SET_PHONE_DEAD (ph_scie_easy_phone1)
+       DISABLE_THREAD_TRIGGER (thr_scie_easy_phone1_m1)
        RETURN
        
     ENDIF
@@ -298,20 +294,20 @@ clean_up_scie_easy_phone1_m1:                         //  Clean Up
 	   DELETE_ITEM (s_e_1_screams_sound)
 	ENDIF
  
-	SET savecount81 = 0
-	SET savecount82 = 0
+	SET flag_on_mission = 0
+	SET flag_on_scie_mission = 0
  
 	REMOVE_ARROW (arrow1)
 	DISABLE_CRANE (crane8)
  
- IF ( savecount46 = 1 )
-	   ++savecount85
-	   ++savecount91
+ IF ( flag_passed_scie_easy_phone1_m1 = 1 )
+	   ++flag_scie_missions_passed
+	   ++flag_all_missions_passed
  ENDIF
  
  IF ( CHECK_DEATHARREST_EXECUTED() )
-	   ++savecount88
-	   ++savecount92
+	   ++flag_scie_missions_failed
+	   ++flag_all_missions_failed
 	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (sciegang, p1, -1)
 	   CLEAR_WANTED_LEVEL (p1)
 	ENDIF

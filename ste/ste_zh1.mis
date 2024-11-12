@@ -10,26 +10,11 @@
 COUNTER z_h_1_while_loop = 0
 COUNTER z_h_1_is_player_in_mall = 0
 COUNTER z_h_1_has_hunting_started = 0
-//COUNTER count5 = 0
-//COUNTER count6 = 0
-//COUNTER count7 = 0
-//COUNTER count8 = 0
-//COUNTER count9 = 0
-//COUNTER count10 = 0
-
-//CHAR_DATA chr7
-//CHAR_DATA chr8
-//CHAR_DATA chr9
-
-//CAR_DATA auto120
-//CAR_DATA auto121
-//CAR_DATA auto122
 
 ONSCREEN_COUNTER z_h_1_onscreen_2
 ONSCREEN_COUNTER z_h_1_onscreen_3
 
 COUNTER z_h_1_scie_remaining = 0
-//COUNTER count12 = 0
 COUNTER z_h_1_scie_kill_goal = 100
 
 OBJ_DATA z_h_1_health_1
@@ -46,34 +31,20 @@ OBJ_DATA z_h_1_fast_reload_powerup
 OBJ_DATA z_h_1_double_damage_powerup
 
 COUNTER z_h_1_scie_members_killed = 0
-//COUNTER count15 = 0
 COUNTER z_h_1_has_bonus_started = 0
-//COUNTER count17 = 0
 
 CHAR_DATA z_h_1_zmen_group
-//CAR_DATA auto123
-
-/*
-COUNTER count18 = 0
-COUNTER count19 = 0
-COUNTER count20 = 0
-COUNTER count21 = 0
-COUNTER count22 = 0
-COUNTER count23 = 0
-COUNTER count24 = 0
-COUNTER count25 = 0
-*/
 
 BONUS z_h_1_bonus
 
 zaib_hard_phone_m1:
  
-	SET savecount18 = 0
+	SET flag_failed_zaib_hard_phone_m1 = 0
  
 	DISPLAY_MESSAGE (2469)          //  MURDER IN THE MALL!
  
-	SET savecount81 = 1
-	SET savecount84 = 1
+	SET flag_on_mission = 1
+	SET flag_on_zaib_mission = 1
  
 	z_h_1_health_1 = CREATE_OBJ (166.50, 184.50, 5.00) 0 COLLECT_30 END
 	z_h_1_health_2 = CREATE_OBJ (166.50, 166.50, 6.00) 0 COLLECT_30 END
@@ -165,7 +136,7 @@ zaib_hard_phone_m1:
 	CLEAR_ALL_BRIEFS ()
 	DISPLAY_BRIEF (2947)         //  "Commendable combat skills, Gecko! Here's $70,000 in recognition of your ruthlessness."
 	ADD_SCORE (p1, 70000)
-	SET savecount60 = 1
+	SET flag_passed_zaib_hard_phone_m1 = 1
 	DISPLAY_MESSAGE (2999)       //  Mission Complete!
 	CLEAR_WANTED_LEVEL (p1)
 	ADD_MULTIPLIER (p1, 1)
@@ -181,21 +152,21 @@ clean_up_zaib_hard_phone_m1:                                    //  Clean up
 	   DESTROY_GROUP (z_h_1_zmen_group)
 	ENDIF
  
-	SET savecount81 = 0
-	SET savecount84 = 0
+	SET flag_on_mission = 0
+	SET flag_on_zaib_mission = 0
  
 	REMOVE_ARROW (arrow1)
 	CLEAR_ONSCREEN_COUNTER (z_h_1_onscreen_2)
 	CLEAR_ONSCREEN_COUNTER (z_h_1_onscreen_3)
  
- IF ( savecount60 = 1 )
-	   ++savecount86
-	   ++savecount91
+ IF ( flag_passed_zaib_hard_phone_m1 = 1 )
+	   ++flag_zaib_missions_passed
+	   ++flag_all_missions_passed
 	ENDIF
  
  IF ( CHECK_DEATHARREST_EXECUTED() )
-	   ++savecount89
-	   ++savecount92
+	   ++flag_zaib_missions_failed
+	   ++flag_all_missions_failed
 	   CLEAR_TIMER (z_h_1_onscreen_2)
 	   CLEAR_TIMER (z_h_1_onscreen_3)
 	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (zaibgang, p1, -1)

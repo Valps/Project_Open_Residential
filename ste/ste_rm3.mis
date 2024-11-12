@@ -20,16 +20,6 @@ CHAR_DATA r_m_3_army_guard_3
 CHAR_DATA r_m_3_army_guard_4
 CHAR_DATA r_m_3_army_guard_5
 CHAR_DATA r_m_3_army_guard_6
-/*
-CHAR_DATA chr13
-CHAR_DATA chr14
-CHAR_DATA chr15
-CHAR_DATA chr16
-CHAR_DATA chr17
-CHAR_DATA chr18
-CHAR_DATA chr19
-CHAR_DATA chr20
-*/
 
 OBJ_DATA r_m_3_grenade
 OBJ_DATA r_m_3_invulnerability
@@ -39,10 +29,6 @@ COUNTER r_m_3_while_loop = 0
 COUNTER r_m_3_cop_level_6_changed = 0
 COUNTER r_m_3_player_in_tank = 0
 COUNTER r_m_3_is_tank_parking = 0
-//COUNTER count6 = 0               //  seems to be useless
-//COUNTER count7 = 0
-//COUNTER count8 = 0
-//COUNTER count9 = 0
 COUNTER r_m_3_is_powergen_destroyed = 0
 
 SOUND r_m_3_powergen_sound
@@ -51,7 +37,7 @@ OBJ_DATA r_m_3_powergen_obj
 
 redn_med_phone1_2_m3:
 
-	SET savecount21 = 0
+	SET flag_failed_redn_med_phone1_2_m3 = 0
  
 	DISPLAY_MESSAGE (2954)             //  TANKS-GIVING!
  
@@ -66,8 +52,8 @@ redn_med_phone1_2_m3:
 	FORCE_CLEANUP (r_m_3_invulnerability)
 	FORCE_CLEANUP (r_m_3_jail_free_bonus)
  
-	SET savecount81 = 1
-	SET savecount83 = 1
+	SET flag_on_mission = 1
+	SET flag_on_redn_mission = 1
  
  //  Powergen locking the army base entrance
 	r_m_3_powergen_obj = CREATE_OBJ (234.50, 117.50, 2.00) 0 POWERGEN END
@@ -139,9 +125,9 @@ redn_med_phone1_2_m3:
     
     //  Checking if the generator has been destroyed
     IF ( ( CHECK_OBJ_MODEL(r_m_3_powergen_obj, POWERGEN_DEAD) ) AND ( r_m_3_is_powergen_destroyed = 0 ) )
-       OPEN_DOOR (door8)                   //  Open the Army Base door
-      	DELETE_ITEM (r_m_3_powergen_sound)               //  No sounds comes from the generator anymore
-      	SET r_m_3_is_powergen_destroyed = 1                     //  Lock this IF
+       OPEN_DOOR (door8)                            //  Open the Army Base door
+      	DELETE_ITEM (r_m_3_powergen_sound)           //  No sounds comes from the generator anymore
+      	SET r_m_3_is_powergen_destroyed = 1          //  Lock this IF
     ENDIF
     
     //  If the player entered the tank
@@ -160,10 +146,10 @@ redn_med_phone1_2_m3:
     
     //  The tank has been destroyed
     IF ( IS_CAR_WRECKED(r_m_3_tank_car) )
-       IF ( savecount21 = 0 )
+       IF ( flag_failed_redn_med_phone1_2_m3 = 0 )
           CLEAR_ALL_BRIEFS ()
          	DISPLAY_BRIEF (2155)      //  "I even bought the card, Rooster, and you go an' screw up the present. Now I'm pissed."
-          SET savecount21 = 1
+          SET flag_failed_redn_med_phone1_2_m3 = 1
           DISPLAY_MESSAGE (2998)    //  Mission Failed!
           RETURN
        ENDIF
@@ -171,7 +157,7 @@ redn_med_phone1_2_m3:
     
     //  The tank is in front of redneck's garage door
     IF ( ( IS_CAR_IN_BLOCK(r_m_3_tank_car, 54.00, 66.00, 2.00, 2.00, 2.00) ) AND ( r_m_3_is_tank_parking = 0 ) )
-       PARK (r_m_3_tank_car, door2)        //  Park it
+       PARK (r_m_3_tank_car, door2)                //  Park it
        SET r_m_3_is_tank_parking = 1               //  Lock this IF
        REMOVE_ARROW (arrow1)
     ENDIF
@@ -181,19 +167,20 @@ redn_med_phone1_2_m3:
        IF ( HAS_PARK_FINISHED() )
           SET r_m_3_player_in_tank = 2
           SET r_m_3_is_tank_parking = 1
-          //SET count6 = 1
           SET r_m_3_while_loop = 1
        ENDIF
     ENDIF
     
     //  If the tank is at Army Base Entrance
-    IF ( ( IS_CAR_IN_BLOCK(r_m_3_tank_car, 235.50, 117.50, 2.00, 1.00, 1.00) ) OR ( IS_CAR_IN_BLOCK(r_m_3_tank_car, 236.50, 117.50, 2.00, 1.00, 1.00) ) )
-       IF ( r_m_3_cop_level_6_changed = 0 )
-          IF ( r_m_3_player_in_tank = 1)                 //  and if the player is driving the tank
-             SET r_m_3_cop_level_6_changed = 1                //  Lock this IF
-             CHANGE_POLICE_LEVEL (6)       //  ...
-             ALTER_WANTED_LEVEL (p1, 6)    //  Omg
-          ENDIF
+    IF ( ( ( IS_CAR_IN_BLOCK(r_m_3_tank_car, 235.50, 117.50, 2.00, 1.00, 1.00) )
+       OR ( IS_CAR_IN_BLOCK(r_m_3_tank_car, 236.50, 117.50, 2.00, 1.00, 1.00) ) )
+       AND ( r_m_3_cop_level_6_changed = 0 ) )        //  This AND doesn't work for some reason. This explains why you gain 6 heads again if you have escaped and enter the tank again
+                                                      //  (workaround: remove this AND and nest another IF-ENDIF with "r_m_3_cop_level_6_changed = 0")
+       //  and if the player is driving the tank
+       IF ( r_m_3_player_in_tank = 1)                 
+          SET r_m_3_cop_level_6_changed = 1           //  Lock this IF     (or it was supposed to do it)
+          CHANGE_POLICE_LEVEL (6)                     //  ...
+          ALTER_WANTED_LEVEL (p1, 6)                  //  Army!
        ENDIF
     ENDIF
  
@@ -205,7 +192,7 @@ redn_med_phone1_2_m3:
  DISPLAY_BRIEF (2156)                //  "That's fine work, Rooster. You take this $50,000 and you give me a call real soon, y' hear? [...]"
  ADD_SCORE (p1, 50000)
  
- SET savecount63 = 1
+ SET flag_passed_redn_med_phone1_2_m3 = 1
  
  DISPLAY_MESSAGE (2999)              //  Mission Complete!
  CLEAR_WANTED_LEVEL (p1)
@@ -214,15 +201,15 @@ redn_med_phone1_2_m3:
  CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (redngang, p1, 1)    //  RESPECT +
  
  //  If the player has completed the Redneck Medium Phone 1 Mission 1
- IF ( savecount53 = 1 )
-    SET_PHONE_DEAD (obj8)
-    DISABLE_THREAD_TRIGGER (trigger13)
+ IF ( flag_passed_redn_med_phone1_m1 = 1 )
+    SET_PHONE_DEAD (ph_redn_med_phone1)
+    DISABLE_THREAD_TRIGGER (thr_redn_med_phone1_m1)
  ENDIF
  
  //  If the player has completed the Redneck Medium Phone 2 Mission 1
- IF ( savecount54 = 1 )
-    SET_PHONE_DEAD (obj9)
-    DISABLE_THREAD_TRIGGER (trigger14)
+ IF ( flag_passed_redn_med_phone2_m1 = 1 )
+    SET_PHONE_DEAD (ph_redn_med_phone2)
+    DISABLE_THREAD_TRIGGER (thr_redn_med_phone2_m1)
  ENDIF
  
 RETURN
@@ -236,19 +223,19 @@ clean_up_redn_med_phone1_2_m3:                           //  Clean up
  
 	CHANGE_POLICE_LEVEL (5)              //  Changing back the maximum police level
  
-	SET savecount81 = 0
-	SET savecount83 = 0
+	SET flag_on_mission = 0
+	SET flag_on_redn_mission = 0
  
 	REMOVE_ARROW (arrow1)
  
- IF ( savecount63 = 1 )
-	   ++savecount87
-	   ++savecount91
+ IF ( flag_passed_redn_med_phone1_2_m3 = 1 )
+	   ++flag_redn_missions_passed
+	   ++flag_all_missions_passed
 	ENDIF
  
  IF ( CHECK_DEATHARREST_EXECUTED() )
-	   ++savecount90
-	   ++savecount92
+	   ++flag_redn_missions_failed
+	   ++flag_all_missions_failed
 	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (redngang, p1, -1)
 	   CLEAR_WANTED_LEVEL (p1)
 	ENDIF

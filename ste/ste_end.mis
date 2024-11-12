@@ -33,8 +33,8 @@ COUNTER flag_brief_redneck_fm = 0           //  "Do brief once" flag
 
 start_final_mission:
 
-	SET savecount81 = 1
-	SET savecount82 = 1
+	SET flag_on_mission = 1
+	SET flag_on_scie_mission = 1
  
 	DELAY_HERE (600)             //  Wait 20 seconds
  
@@ -204,12 +204,12 @@ start_final_mission:
  
  //  The player killed all bosses
  
- IF ( savecount95 = 0 )
+ IF ( flag_passed_final_mission = 0 )
 	   CLEAR_ALL_BRIEFS ()
 	   DISPLAY_BRIEF (6009)            //  "Incredible! You beat all three of them! You'd better move your sorry ass out to the city's Industrial District before things get any worse."
 	   ADD_SCORE (p1, 3000000)
 	   ADD_MULTIPLIER (p1, 1)
-	   SET savecount95 = 1
+	   SET flag_passed_final_mission = 1
 	ENDIF
  
 RETURN
@@ -223,17 +223,17 @@ clean_up_final_mission:             //  Clean up
  REMOVE_ARROW (arrow3)
  REMOVE_ARROW (arrow4)          
      
-	SET savecount81 = 0
-	SET savecount82 = 0
+	SET flag_on_mission = 0
+	SET flag_on_scie_mission = 0
  
 	CLEAR_WANTED_LEVEL (p1)
  
- IF ( savecount95 = 1 )
-	   ++savecount91
+ IF ( flag_passed_final_mission = 1 )
+	   ++flag_all_missions_passed
 	ENDIF
  
  IF ( CHECK_DEATHARREST_EXECUTED() )
-	   ++savecount92
+	   ++flag_all_missions_failed
 	ENDIF
  
 	MISSION_HAS_FINISHED ()

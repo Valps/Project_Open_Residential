@@ -1,96 +1,170 @@
 // Decompiled from "ste.scr" Using Epic GTA2 Script Decompiler by T.M.
 // This is a remake of ste.mis starting from the partially decompiled ste.scr
 
-// Project Open Residential - Version 0.3.0
+// Project Open Residential - Version 1.0.0
 
 // Greetings,
 // Valps.
 
 
-FORWARD function1:
-FORWARD function2:
-FORWARD function3:
-FORWARD function4:
-FORWARD function5:
-FORWARD function6:
-FORWARD function7:
-FORWARD function8:
-FORWARD function9:
-FORWARD function10:
-FORWARD function11:
-FORWARD function12:
-FORWARD function13:
-FORWARD function14:
-FORWARD function15:
 
-FORWARD function16:
-FORWARD function17:
-FORWARD function18:
-FORWARD function19:
-FORWARD function20:
-FORWARD function21:
-FORWARD function22:
-FORWARD function23:
-FORWARD function24:
-FORWARD function25:
-FORWARD function26:
-FORWARD function27:
-FORWARD function28:
-FORWARD function29:
-FORWARD function30:
-FORWARD function31:
-FORWARD function32:
-FORWARD function33:
-FORWARD function34:
-FORWARD function35:
-FORWARD function36:
-FORWARD function37:
-FORWARD function38:
-FORWARD function39:
-FORWARD function40:
-FORWARD function41:
-FORWARD function42:
-FORWARD function43:
-FORWARD function44:
-FORWARD function45:
-FORWARD function46:
-FORWARD function47:
+// TABLE OF CONTENTS
+
+/*
+
+// Part 1: Declarations
+
+64     Forward Functions
+122    Player Data
+128    Bonus declarations
+158    Kill Frenzies Counters
+166    Sound declarations
+207    Arrows
+219    Parked cars
+316    Wang Cars
+329    Map Zones
+350    Gang Info
+361    Police Level
+367    Trains
+378    Radio Stations
+387    Phones declarations
+413    Mission Saved Counters
+490    Mission Flags declarations
+550    Wang Cars Glitch Fix Setting
+558    Wang Cars Saved Counters
+586    Car Crusher Stuff
+631    Char declarations
+646    Shops
+671    Doors
+687    OBJ: TUNNEL_BLOCKER
+710    Kill Frenzy Cars and Coordinates declarations
+
+
+// Part 2: Functions and Triggers
+
+756    Gang Phone Triggers
+1036   Save-Game Trigger
+1048   Info Phone Triggers
+1074   Wang Cars Triggers
+2104   Kill Frenzy Setting and Triggers
+
+
+// Part 3: LEVELSTART
+
+1561   Level Start
+1752   Tokens Declarations
+1887   Sounds Settings
+1924   Generators
+1997   Gang Kill Reaction and Respect
+2014   Main Loop
+
+*/
+
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX FORWARD FUNCTIONS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+FORWARD ans_scie_easy_phone1_m1:
+FORWARD ans_scie_easy_phone2_m1:
+FORWARD ans_scie_med_phone1_m1:
+FORWARD ans_scie_med_phone2_m1:
+FORWARD ans_scie_hard_phone_m1:
+
+FORWARD ans_zaib_easy_phone1_m1:
+FORWARD ans_zaib_easy_phone2_m1:
+FORWARD ans_zaib_med_phone1_m1:
+FORWARD ans_zaib_med_phone2_m1:
+FORWARD ans_zaib_hard_phone_m1:
+
+FORWARD ans_redn_easy_phone1_m1:
+FORWARD ans_redn_easy_phone2_m1:
+FORWARD ans_redn_med_phone1_m1:
+FORWARD ans_redn_med_phone2_m1:
+FORWARD ans_redn_hard_phone_m1:
+
+FORWARD savepoint_1:
+
+FORWARD ans_zaib_info_phone:
+FORWARD ans_redn_info_phone:
+FORWARD ans_scie_info_phone:
+
+FORWARD get_wang_car_1:
+FORWARD get_wang_car_2:
+FORWARD get_wang_car_3:
+FORWARD get_wang_car_4:
+FORWARD get_wang_car_5:
+FORWARD get_wang_car_6:
+FORWARD get_wang_car_7:
+FORWARD get_wang_car_8:
+
+FORWARD do_kill_frenzy_1:
+FORWARD do_kill_frenzy_2:
+FORWARD do_kill_frenzy_3:
+FORWARD do_kill_frenzy_4:
+FORWARD do_kill_frenzy_5:
+FORWARD do_kill_frenzy_6:
+FORWARD do_kill_frenzy_7:
+FORWARD do_kill_frenzy_8:
+FORWARD do_kill_frenzy_9:
+FORWARD do_kill_frenzy_10:
+FORWARD do_kill_frenzy_11:
+FORWARD do_kill_frenzy_12:
+FORWARD do_kill_frenzy_13:
+FORWARD do_kill_frenzy_14:
+FORWARD do_kill_frenzy_15:
+FORWARD do_kill_frenzy_16:
+FORWARD do_kill_frenzy_17:
+FORWARD do_kill_frenzy_18:
+FORWARD do_kill_frenzy_19:
+FORWARD do_kill_frenzy_20:
+
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX PLAYER DATA XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 PLAYER_PED p1 = (113.50, 124.70, 255.00) 25 1
 
-BONUS bonus1
-BONUS bonus2
-BONUS bonus3
-BONUS bonus4
-BONUS bonus5
-BONUS bonus6
-BONUS bonus7
-BONUS bonus8
-BONUS bonus9
-BONUS bonus10
-BONUS bonus11
-BONUS bonus12
-BONUS bonus13
-BONUS bonus14
-BONUS bonus15
-BONUS bonus16
-BONUS bonus17
-BONUS bonus18
-BONUS bonus19
-BONUS bonus20
-BONUS bonus21
-BONUS bonus22
-BONUS bonus23
-BONUS bonus24
-BONUS bonus25
-BONUS bonus26
-BONUS bonus27
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX BONUS DECLARATIONS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-ONSCREEN_COUNTER onscreen1
+BONUS r_e_2_kill_scientists_bonus
+BONUS r_e_2_kill_zaibatsu_bonus
+BONUS r_h_1_ztype_bonus
+BONUS r_h_1_meteor_bonus
+BONUS r_h_2_bonus
+BONUS kf_bonus_1
+BONUS kf_bonus_2
+BONUS kf_bonus_3
+BONUS kf_bonus_4
+BONUS kf_bonus_5
+BONUS kf_bonus_6
+BONUS kf_bonus_7
+BONUS kf_bonus_8
+BONUS kf_bonus_9
+BONUS kf_bonus_10
+BONUS kf_bonus_11
+BONUS kf_bonus_12
+BONUS kf_bonus_13
+BONUS kf_bonus_14
+BONUS kf_bonus_15
+BONUS kf_bonus_16
+BONUS kf_bonus_17
+BONUS kf_bonus_18
+BONUS kf_bonus_19
+BONUS kf_bonus_20
 
-SAVED_COUNTER savecount1
-SAVED_COUNTER savecount2
-SAVED_COUNTER savecount3 = 0
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX KILL FRENZY COUNTERS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+ONSCREEN_COUNTER kf_onscreen
+SAVED_COUNTER kf_counter_total
+SAVED_COUNTER flag_welcome_brief = 0
+
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX SOUNDS DECLARATIONS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 SOUND sound1
 SOUND sound2
@@ -129,13 +203,21 @@ SOUND sound34
 SOUND sound35
 SOUND sound36
 
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX ARROWS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
 ARROW_DATA arrow1
 ARROW_DATA arrow2
 ARROW_DATA arrow3
 ARROW_DATA arrow4
 ARROW_DATA arrow5
 
-TIMER_DATA timer1
+TIMER_DATA generic_timer
+
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX PARKED CARS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 PARKED_CAR_DATA auto1 = (38.50, 26.50, 255.00) 2 170 TRUKCAB1
 PARKED_CAR_DATA auto2 = (46.50, 27.50, 255.00) 3 15 PICKUP
@@ -227,16 +309,25 @@ PARKED_CAR_DATA auto87 = (5.00, 122.50, 255.00) 0 92 MEDICAR
 PARKED_CAR_DATA auto88 = (5.00, 123.50, 255.00) 0 272 MEDICAR
 PARKED_CAR_DATA auto89 = (229.00, 123.00, 255.00) 0 181 FIRETRUK
 PARKED_CAR_DATA auto90 = (31.00, 144.00, 2.00) 0 178 FIRETRUK
-PARKED_CAR_DATA auto91 = (111.50, 126.50, 255.00) 1 121 SPIDER
 
-CAR_DATA auto92 = (229.50, 178.00, 255.00) 1 270 GT24640
-CAR_DATA auto93 = (58.50, 3.50, 255.00) 1 90 GT24640
-CAR_DATA auto94 = (3.00, 207.00, 255.00) 1 180 GT24640
-CAR_DATA auto95 = (139.00, 254.00, 255.00) 1 180 GT24640
-CAR_DATA auto96 = (184.50, 202.50, 255.00) 1 270 GT24640
-CAR_DATA auto97 = (93.50, 53.50, 255.00) 1 180 GT24640
-CAR_DATA auto98 = (127.00, 47.00, 255.00) 1 90 GT24640
-CAR_DATA auto99 = (216.00, 117.00, 255.00) 1 180 GT24640
+PARKED_CAR_DATA parked_church_car = (111.50, 126.50, 255.00) 1 121 SPIDER          //  The Arachnid which spawns in front of the player spawn point
+
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX WANG CARS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+CAR_DATA wang_car_1 = (229.50, 178.00, 255.00) 1 270 GT24640
+CAR_DATA wang_car_2 = (58.50, 3.50, 255.00) 1 90 GT24640
+CAR_DATA wang_car_3 = (3.00, 207.00, 255.00) 1 180 GT24640
+CAR_DATA wang_car_4 = (139.00, 254.00, 255.00) 1 180 GT24640
+CAR_DATA wang_car_5 = (184.50, 202.50, 255.00) 1 270 GT24640
+CAR_DATA wang_car_6 = (93.50, 53.50, 255.00) 1 180 GT24640
+CAR_DATA wang_car_7 = (127.00, 47.00, 255.00) 1 90 GT24640
+CAR_DATA wang_car_8 = (216.00, 117.00, 255.00) 1 180 GT24640
+
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX MAP ZONES XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 MAP_ZONE cityinfo = (600, 300, 200, 100, 200, 100, 100, 50, 200, 300, 100)
 MAP_ZONE s08 = (100, 500, 200, 100, 250, 0, 0, 0, 999, 100, 100)
@@ -255,14 +346,26 @@ MAP_ZONE s06 = (100, 500, 200, 100, 500, 0, 0, 0, 1000, 0, 100)
 MAP_ZONE m18 = (100, 300, 0, 0, 500, 0, 0, 100, 900, 0, 300)
 MAP_ZONE s04 = (100, 500, 200, 100, 500, 0, 0, 0, 1000, 0, 100)
 
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX GANG INFO XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
 SET_GANG_INFO (redngang, 5, PISTOL, MACHINE_GUN, MOLOTOV, 4, 47.50, 49.50, 255.00, 1, PICKUP, 3)
 SET_GANG_INFO (sciegang, 7, PISTOL, MACHINE_GUN, FLAME_THROWER, 5, 211.50, 219.50, 255.00, 1, STRATOSB, 10)
 SET_GANG_INFO (zaibgang, 8, PISTOL, DUAL_PISTOL, MACHINE_GUN, 3, 199.00, 25.50, 255.00, 1, VTYPE, 2)
 
-SET_GANG_INFO (almagang, 22, NO_WEAPON, NO_WEAPON, NO_WEAPON, 3, 224.50, 20.50, 255.00, 0, VTYPE, 2)
-SET_GANG_INFO (poligang, 0, PISTOL, PISTOL, PISTOL, 3, 224.50, 20.50, 255.00, 0, VTYPE, 2)
+SET_GANG_INFO (almagang, 22, NO_WEAPON, NO_WEAPON, NO_WEAPON, 3, 224.50, 20.50, 255.00, 0, VTYPE, 2)      //  Inmates "gang"
+SET_GANG_INFO (poligang, 0, PISTOL, PISTOL, PISTOL, 3, 224.50, 20.50, 255.00, 0, VTYPE, 2)                //  Cop HQ "gang"
+
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX POLICE LEVEL XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 DECLARE_POLICELEVEL (5)
+
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX TRAINS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 SET_STATION_INFO (trak00, 3, 0, 1)
 SET_STATION_INFO (trak01, 3, 0, 1)
@@ -271,142 +374,153 @@ SET_STATION_INFO (trak11, 3, 0, 1)
 SET_STATION_INFO (trak20, 3, 0, 1)
 SET_STATION_INFO (trak21, 3, 0, 1)
 
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX RADIO STATIONS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
 RADIO_STATION radio1 = STATION_ZAIBATSU (247.50, 67.50)
 RADIO_STATION radio2 = STATION_REDNECK (41.50, 48.50)
 RADIO_STATION radio3 = STATION_SCIENTIST (211.50, 229.50)
 RADIO_STATION radio4 = STATION_RESIDENTIAL (166.50, 103.50)
 
-OBJ_DATA obj1 = (234.50, 202.50, 2.00) 90 GREEN_PHONE
-OBJ_DATA obj2 = (235.50, 202.50, 2.00) 90 GREEN_PHONE
-OBJ_DATA obj3 = (206.50, 227.50, 2.00) 0 YELLOW_PHONE
-OBJ_DATA obj4 = (206.50, 228.50, 2.00) 0 YELLOW_PHONE
-OBJ_DATA obj5 = (222.50, 221.50, 2.00) 90 RED_PHONE
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX PHONES DECLARATIONS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-OBJ_DATA obj6 = (18.50, 68.50, 2.00) 180 GREEN_PHONE
-OBJ_DATA obj7 = (18.50, 67.50, 2.00) 180 GREEN_PHONE
-OBJ_DATA obj8 = (84.50, 30.50, 4.00) 180 YELLOW_PHONE
-OBJ_DATA obj9 = (84.50, 29.50, 4.00) 180 YELLOW_PHONE
-OBJ_DATA obj10 = (4.50, 5.50, 2.00) 90 RED_PHONE
+OBJ_DATA ph_scie_easy_phone1 = (234.50, 202.50, 2.00) 90 GREEN_PHONE
+OBJ_DATA ph_scie_easy_phone2 = (235.50, 202.50, 2.00) 90 GREEN_PHONE
+OBJ_DATA ph_scie_med_phone1 = (206.50, 227.50, 2.00) 0 YELLOW_PHONE
+OBJ_DATA ph_scie_med_phone2 = (206.50, 228.50, 2.00) 0 YELLOW_PHONE
+OBJ_DATA ph_scie_hard_phone = (222.50, 221.50, 2.00) 90 RED_PHONE
 
-OBJ_DATA obj11 = (166.50, 19.50, 3.00) 180 GREEN_PHONE
-OBJ_DATA obj12 = (166.50, 16.50, 3.00) 180 GREEN_PHONE
-OBJ_DATA obj13 = (224.50, 34.50, 3.00) 90 YELLOW_PHONE
-OBJ_DATA obj14 = (225.50, 34.50, 3.00) 90 YELLOW_PHONE
-OBJ_DATA obj15 = (208.50, 25.50, 4.00) 0 RED_PHONE
+OBJ_DATA ph_redn_easy_phone1 = (18.50, 68.50, 2.00) 180 GREEN_PHONE
+OBJ_DATA ph_redn_easy_phone2 = (18.50, 67.50, 2.00) 180 GREEN_PHONE
+OBJ_DATA ph_redn_med_phone1 = (84.50, 30.50, 4.00) 180 YELLOW_PHONE
+OBJ_DATA ph_redn_med_phone2 = (84.50, 29.50, 4.00) 180 YELLOW_PHONE
+OBJ_DATA ph_redn_hard_phone = (4.50, 5.50, 2.00) 90 RED_PHONE
 
-OBJ_DATA obj16 = (199.00, 25.50, 3.00) 0 PHONE
-OBJ_DATA obj17 = (47.50, 49.50, 2.00) 90 PHONE
-OBJ_DATA obj18 = (211.50, 219.50, 2.00) 270 PHONE
+OBJ_DATA ph_zaib_easy_phone1 = (166.50, 19.50, 3.00) 180 GREEN_PHONE
+OBJ_DATA ph_zaib_easy_phone2 = (166.50, 16.50, 3.00) 180 GREEN_PHONE
+OBJ_DATA ph_zaib_med_phone1 = (224.50, 34.50, 3.00) 90 YELLOW_PHONE
+OBJ_DATA ph_zaib_med_phone2 = (225.50, 34.50, 3.00) 90 YELLOW_PHONE
+OBJ_DATA ph_zaib_hard_phone = (208.50, 25.50, 4.00) 0 RED_PHONE
 
-SAVED_COUNTER savecount4 = 0
-SAVED_COUNTER savecount5 = 0
-SAVED_COUNTER savecount6 = 0
-SAVED_COUNTER savecount7 = 0
-SAVED_COUNTER savecount8 = 0
-SAVED_COUNTER savecount9 = 0
-SAVED_COUNTER savecount10 = 0
-SAVED_COUNTER savecount11 = 0
-SAVED_COUNTER savecount12 = 0
-SAVED_COUNTER savecount13 = 0
-SAVED_COUNTER savecount14 = 0
-SAVED_COUNTER savecount15 = 0
-SAVED_COUNTER savecount16 = 0
-SAVED_COUNTER savecount17 = 0
-SAVED_COUNTER savecount18 = 0
-SAVED_COUNTER savecount19 = 0
-SAVED_COUNTER savecount20 = 0
-SAVED_COUNTER savecount21 = 0
-SAVED_COUNTER savecount22 = 0
-SAVED_COUNTER savecount23 = 0
-SAVED_COUNTER savecount24 = 0
-SAVED_COUNTER savecount25 = 0
-SAVED_COUNTER savecount26 = 0
-SAVED_COUNTER savecount27 = 0
-SAVED_COUNTER savecount28 = 0
-SAVED_COUNTER savecount29 = 0
-SAVED_COUNTER savecount30 = 0
-SAVED_COUNTER savecount31 = 0
-SAVED_COUNTER savecount32 = 0
-SAVED_COUNTER savecount33 = 0
-SAVED_COUNTER savecount34 = 0
-SAVED_COUNTER savecount35 = 0
-SAVED_COUNTER savecount36 = 0
-SAVED_COUNTER savecount37 = 0
-SAVED_COUNTER savecount38 = 0
-SAVED_COUNTER savecount39 = 0
-SAVED_COUNTER savecount40 = 0
-SAVED_COUNTER savecount41 = 0
-SAVED_COUNTER savecount42 = 0
-SAVED_COUNTER savecount43 = 0
-SAVED_COUNTER savecount44 = 0
-SAVED_COUNTER savecount45 = 0
-SAVED_COUNTER savecount46 = 0
-SAVED_COUNTER savecount47 = 0
-SAVED_COUNTER savecount48 = 0
-SAVED_COUNTER savecount49 = 0
-SAVED_COUNTER savecount50 = 0
-SAVED_COUNTER savecount51 = 0
-SAVED_COUNTER savecount52 = 0
-SAVED_COUNTER savecount53 = 0
-SAVED_COUNTER savecount54 = 0
-SAVED_COUNTER savecount55 = 0
-SAVED_COUNTER savecount56 = 0
-SAVED_COUNTER savecount57 = 0
-SAVED_COUNTER savecount58 = 0
-SAVED_COUNTER savecount59 = 0
-SAVED_COUNTER savecount60 = 0
-SAVED_COUNTER savecount61 = 0
-SAVED_COUNTER savecount62 = 0
-SAVED_COUNTER savecount63 = 0
-SAVED_COUNTER savecount64 = 0
-SAVED_COUNTER savecount65 = 0
-SAVED_COUNTER savecount66 = 0
-SAVED_COUNTER savecount67 = 0
-SAVED_COUNTER savecount68 = 0
-SAVED_COUNTER savecount69 = 0
-SAVED_COUNTER savecount70 = 0
-SAVED_COUNTER savecount71 = 0
-SAVED_COUNTER savecount72 = 0
-SAVED_COUNTER savecount73 = 0
-SAVED_COUNTER savecount74 = 0
-SAVED_COUNTER savecount75 = 0
-SAVED_COUNTER savecount76 = 0
-SAVED_COUNTER savecount77 = 0
-SAVED_COUNTER savecount78 = 0
-SAVED_COUNTER savecount79 = 0
-SAVED_COUNTER savecount80 = 0
-SAVED_COUNTER savecount81 = 0
+OBJ_DATA ph_zaib_info_phone = (199.00, 25.50, 3.00) 0 PHONE
+OBJ_DATA ph_redn_info_phone = (47.50, 49.50, 2.00) 90 PHONE
+OBJ_DATA ph_scie_info_phone = (211.50, 219.50, 2.00) 270 PHONE
 
-DECLARE_MISSION_FLAG (p1, savecount81)
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX MISSION SAVED COUNTERS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-SAVED_COUNTER savecount82 = 0
-SAVED_COUNTER savecount83 = 0
-SAVED_COUNTER savecount84 = 0
-SAVED_COUNTER savecount85 = 0
-SAVED_COUNTER savecount86 = 0
-SAVED_COUNTER savecount87 = 0
-SAVED_COUNTER savecount88 = 0
-SAVED_COUNTER savecount89 = 0
-SAVED_COUNTER savecount90 = 0
+SAVED_COUNTER flag_failed_scie_easy_phone1_m1 = 0
+SAVED_COUNTER flag_failed_scie_easy_phone2_m1 = 0
+SAVED_COUNTER flag_failed_scie_med_phone1_m1 = 0
+SAVED_COUNTER flag_failed_scie_med_phone2_m1 = 0
+SAVED_COUNTER flag_failed_scie_hard_phone_m1 = 0
+SAVED_COUNTER flag_failed_redn_easy_phone1_m1 = 0
+SAVED_COUNTER flag_failed_redn_easy_phone2_m1 = 0
+SAVED_COUNTER flag_failed_redn_med_phone1_m1 = 0
+SAVED_COUNTER flag_failed_redn_med_phone2_m1 = 0
+SAVED_COUNTER flag_failed_redn_hard_phone_m1 = 0
+SAVED_COUNTER flag_failed_zaib_easy_phone1_m1 = 0
+SAVED_COUNTER flag_failed_zaib_easy_phone2_m1 = 0
+SAVED_COUNTER flag_failed_zaib_med_phone1_m1 = 0
+SAVED_COUNTER flag_failed_zaib_med_phone2_m1 = 0
+SAVED_COUNTER flag_failed_zaib_hard_phone_m1 = 0
 
-SAVED_COUNTER savecount91 = 0           //   flag_all_missions_count
-SAVED_COUNTER savecount92 = 0
+SAVED_COUNTER flag_failed_scie_med_phone1_2_m3 = 0
+SAVED_COUNTER flag_failed_scie_hard_phone_m2 = 0
+SAVED_COUNTER flag_failed_redn_med_phone1_2_m3 = 0
+SAVED_COUNTER flag_failed_redn_hard_phone_m2 = 0
+SAVED_COUNTER flag_failed_zaib_med_phone1_2_m3 = 0
+SAVED_COUNTER flag_failed_zaib_hard_phone_m2 = 0
 
-SAVED_COUNTER savecount93 = 0
-SAVED_COUNTER savecount94 = 0
-SAVED_COUNTER savecount95 = 0
-SAVED_COUNTER savecount96 = 0
-SAVED_COUNTER savecount97 = 0
-SAVED_COUNTER savecount98 = 0
-SAVED_COUNTER savecount99 = 0
-SAVED_COUNTER savecount100 = 0
-SAVED_COUNTER savecount101 = 0
+SAVED_COUNTER flag_failed_scie_easy_phone1_m1a = 0
+SAVED_COUNTER flag_failed_scie_easy_phone2_m1a = 0
+SAVED_COUNTER flag_failed_scie_med_phone1_m1a = 0
+SAVED_COUNTER flag_failed_scie_med_phone2_m1a = 0
+SAVED_COUNTER flag_failed_scie_hard_phone_m1a = 0
 
-DECLARE_GANG_ONE_MISSIONS_PASSED_FLAG (savecount87)
-DECLARE_GANG_TWO_MISSIONS_PASSED_FLAG (savecount85)
-DECLARE_GANG_THREE_MISSIONS_PASSED_FLAG (savecount86)
+SAVED_COUNTER flag_failed_redn_easy_phone1_m1a = 0
+SAVED_COUNTER flag_failed_redn_easy_phone2_m1a = 0
+SAVED_COUNTER flag_failed_redn_med_phone1_m1a = 0
+SAVED_COUNTER flag_failed_redn_med_phone2_m1a = 0
+SAVED_COUNTER flag_failed_redn_hard_phone_m1a = 0
 
-DECLARE_MISSIONS_PASSED_FLAG (savecount91)
+SAVED_COUNTER flag_failed_zaib_easy_phone1_m1a = 0
+SAVED_COUNTER flag_failed_zaib_easy_phone2_m1a = 0
+SAVED_COUNTER flag_failed_zaib_med_phone1_m1a = 0
+SAVED_COUNTER flag_failed_zaib_med_phone2_m1a = 0
+SAVED_COUNTER flag_failed_zaib_hard_phone_m1a = 0
+
+SAVED_COUNTER flag_passed_scie_easy_phone1_m1 = 0
+SAVED_COUNTER flag_passed_scie_easy_phone2_m1 = 0
+SAVED_COUNTER flag_passed_scie_med_phone1_m1 = 0
+SAVED_COUNTER flag_passed_scie_med_phone2_m1 = 0
+SAVED_COUNTER flag_passed_scie_hard_phone2_m1 = 0
+
+SAVED_COUNTER flag_passed_redn_easy_phone1_m1 = 0
+SAVED_COUNTER flag_passed_redn_easy_phone2_m1 = 0
+SAVED_COUNTER flag_passed_redn_med_phone1_m1 = 0
+SAVED_COUNTER flag_passed_redn_med_phone2_m1 = 0
+SAVED_COUNTER flag_passed_redn_hard_phone_m1 = 0
+
+SAVED_COUNTER flag_passed_zaib_easy_phone1_m1 = 0
+SAVED_COUNTER flag_passed_zaib_easy_phone2_m1 = 0
+SAVED_COUNTER flag_passed_zaib_med_phone1_m1 = 0
+SAVED_COUNTER flag_passed_zaib_med_phone2_m1 = 0
+SAVED_COUNTER flag_passed_zaib_hard_phone_m1 = 0
+
+SAVED_COUNTER flag_passed_scie_med_phone1_2_m3 = 0
+SAVED_COUNTER flag_passed_scie_hard_phone_m2 = 0
+SAVED_COUNTER flag_passed_redn_med_phone1_2_m3 = 0
+SAVED_COUNTER flag_passed_redn_hard_phone_m2 = 0
+SAVED_COUNTER flag_passed_zaib_med_phone1_2_m3 = 0
+SAVED_COUNTER flag_passed_zaib_hard_phone_m2 = 0
+
+SAVED_COUNTER flag_played_scie_med_phone1_2_m3a = 0
+SAVED_COUNTER flag_played_scie_hard_phone_m2a = 0
+SAVED_COUNTER flag_played_redn_med_phone1_2_m3a = 0
+SAVED_COUNTER flag_played_redn_hard_phone_m2a = 0
+SAVED_COUNTER flag_played_zaib_med_phone1_2_m3a = 0
+SAVED_COUNTER flag_played_zaib_hard_phone_m2a = 0
+
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXX MISSIONS SETUP DECLARATIONS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+SAVED_COUNTER flag_on_mission = 0                         //  This = 1 if the player is playing a mission, 0 otherwise
+
+DECLARE_MISSION_FLAG (p1, flag_on_mission)
+
+SAVED_COUNTER flag_on_scie_mission = 0
+SAVED_COUNTER flag_on_redn_mission = 0
+SAVED_COUNTER flag_on_zaib_mission = 0
+SAVED_COUNTER flag_scie_missions_passed = 0
+SAVED_COUNTER flag_zaib_missions_passed = 0
+SAVED_COUNTER flag_redn_missions_passed = 0
+SAVED_COUNTER flag_scie_missions_failed = 0
+SAVED_COUNTER flag_zaib_missions_failed = 0
+SAVED_COUNTER flag_redn_missions_failed = 0
+
+SAVED_COUNTER flag_all_missions_passed = 0                //  Count the number of missions passed
+SAVED_COUNTER flag_all_missions_failed = 0                //  Count the number of missions failed
+
+SAVED_COUNTER flag_secrets_passed = 0
+SAVED_COUNTER flag_secrets_failed = 0
+SAVED_COUNTER flag_passed_final_mission = 0
+SAVED_COUNTER flag_r_e_1_checkpoint = 0
+SAVED_COUNTER flag_z_m_2_srs_backdoor_exploded = 0
+SAVED_COUNTER flag_all_redn_missions_completed = 0
+SAVED_COUNTER flag_all_scie_missions_completed = 0
+SAVED_COUNTER flag_all_zaib_missions_completed = 0
+
+DECLARE_GANG_ONE_MISSIONS_PASSED_FLAG (flag_redn_missions_passed)
+DECLARE_GANG_TWO_MISSIONS_PASSED_FLAG (flag_scie_missions_passed)
+DECLARE_GANG_THREE_MISSIONS_PASSED_FLAG (flag_zaib_missions_passed)
+
+DECLARE_MISSIONS_PASSED_FLAG (flag_all_missions_passed)
 
 DECLARE_FINISH_SCORE (3000000)
 
@@ -417,37 +531,48 @@ DECLARE_GANG_ONE_MISSIONS_TOTAL (7)
 DECLARE_GANG_TWO_MISSIONS_TOTAL (7)
 DECLARE_GANG_THREE_MISSIONS_TOTAL (7)
 
-DECLARE_SECRETS_PASSED_FLAG (savecount93)
-DECLARE_SECRETS_FAILED_FLAG (savecount94)
+DECLARE_SECRETS_PASSED_FLAG (flag_secrets_passed)
+DECLARE_SECRETS_FAILED_FLAG (flag_secrets_failed)
 
-DECLARE_GANG_ONE_MISSION_FLAG (p1, savecount83)
-DECLARE_GANG_TWO_MISSION_FLAG (p1, savecount82)
-DECLARE_GANG_THREE_MISSION_FLAG (p1, savecount84)
+DECLARE_GANG_ONE_MISSION_FLAG (p1, flag_on_redn_mission)
+DECLARE_GANG_TWO_MISSION_FLAG (p1, flag_on_scie_mission)
+DECLARE_GANG_THREE_MISSION_FLAG (p1, flag_on_zaib_mission)
 
 DECLARE_GANG_ONE_DEATH_BASE_BRIEF (p1, 6150)
 DECLARE_GANG_TWO_DEATH_BASE_BRIEF (p1, 6160)
 DECLARE_GANG_THREE_DEATH_BASE_BRIEF (p1, 6170)
 
-SAVED_COUNTER savecount102 = 1
-SAVED_COUNTER savecount103 = 0
+SAVED_COUNTER true = 1
 
-COUNTER count1 = 0
+COUNTER can_player_finish_level = 0
+
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX WANG CARS FIX SETTING XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
 
 COUNTER fix_wang_cars_glitch = 1         //     this = 1 will fix the duplicate wang cars glitch present in version v9.6;       this = 0 will restore that glitch
 
-SAVED_COUNTER savecount104 = 0
-SAVED_COUNTER savecount105 = 0
-SAVED_COUNTER savecount106 = 0
-SAVED_COUNTER savecount107 = 0
-SAVED_COUNTER savecount108 = 0
-SAVED_COUNTER savecount109 = 0
-SAVED_COUNTER savecount110 = 0
-SAVED_COUNTER savecount111 = 0
-SAVED_COUNTER savecount112 = 0
-SAVED_COUNTER savecount113 = 0
-SAVED_COUNTER savecount114 = 0
-SAVED_COUNTER savecount115 = 0
 
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX WANG CARS SAVED COUNTERS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+SAVED_COUNTER wang_cars_count = 0                     //  The number of wang cars already gotten
+
+SAVED_COUNTER flag_wang_car_1 = 0                     //  this = 1 if the player has gotten wang car 1, and so on
+SAVED_COUNTER flag_wang_car_2 = 0
+SAVED_COUNTER flag_wang_car_3 = 0
+SAVED_COUNTER flag_wang_car_4 = 0
+SAVED_COUNTER flag_wang_car_5 = 0
+SAVED_COUNTER flag_wang_car_6 = 0
+SAVED_COUNTER flag_wang_car_7 = 0
+SAVED_COUNTER flag_wang_car_8 = 0
+
+SAVED_COUNTER flag_gta2_tokens_spawned = 0            //  Spawn the tokens once   (it will not spawn on the next saves, even if you haven't catched all of them)
+SAVED_COUNTER has_redn_guy_objective_passed = 0       //  Redneck guy has killed the scientist guy?
+
+//  Wang cars lights
 LIGHT light1
 LIGHT light2
 LIGHT light3
@@ -457,15 +582,9 @@ LIGHT light6
 LIGHT light7
 LIGHT light8
 
-SAVED_COUNTER savecount116
-SAVED_COUNTER savecount117
-SAVED_COUNTER savecount118
-SAVED_COUNTER savecount119
-SAVED_COUNTER savecount120
-SAVED_COUNTER savecount121
-SAVED_COUNTER savecount122
-SAVED_COUNTER savecount123
-SAVED_COUNTER savecount124
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX CAR CRUSHER STUFF XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 CONVEYOR conv1 = (9.50, 77.50, 3.00) (1.00, 13.00) 0 1
 CONVEYOR conv2 = (4.50, 80.50, 3.00) (1.00, 7.00) 0 -1
@@ -478,7 +597,7 @@ GENERATOR gen1 = (4.50, 82.50, 3.00) 0 MOVING_COLLECT_01 80 80                //
 GENERATOR gen2 = (229.50, 68.50, 3.00) 0 MOVING_COLLECT_02 80 80
 GENERATOR gen3 = (200.50, 223.50, 3.00) 0 MOVING_COLLECT_04 80 80
 
-DESTRUCTOR des1 = (9.50, 82.50, 3.00) (2.00, 1.00)                //  Original:  (9.50, 83.50, 3.00)           (redneck crane fix)
+DESTRUCTOR des1 = (9.50, 82.50, 3.00) (2.00, 1.00)                            //  Original:  (9.50, 83.50, 3.00)           (redneck crane fix)
 DESTRUCTOR des2 = (4.50, 78.00, 3.00) (2.00, 1.00)
 DESTRUCTOR des3 = (235.50, 70.50, 2.00) (1.00, 1.00)
 DESTRUCTOR des4 = (229.50, 63.50, 2.00) (1.00, 1.00)
@@ -508,16 +627,24 @@ CRUSHER crusher1 = (5.50, 75.50)
 CRUSHER crusher2 = (240.50, 66.50)
 CRUSHER crusher3 = (193.50, 226.50)
 
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX CHAR DECLARATIONS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
 CAR_DATA auto100
 CAR_DATA auto101
 CAR_DATA auto102
 
-CHAR_DATA chr1
-CHAR_DATA chr2
-CHAR_DATA chr3
+CHAR_DATA redneck_guy
+CHAR_DATA scientist_guy
+CHAR_DATA zaibatsu_guy
 
 CHAR_DATA chr4
 CHAR_DATA chr5
+
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX SHOPS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 OBJ_DATA shop1 = (6.50, 181.50, 2.00) 0 CAR_SHOP MACHINEGUN_SHOP
 OBJ_DATA shop2 = (178.50, 214.50, 2.00) 0 CAR_SHOP MACHINEGUN_SHOP
@@ -540,6 +667,10 @@ OBJ_DATA shop18 = (178.50, 218.50, 2.00) 0 CAR_SHOP BOMB_SHOP
 OBJ_DATA shop19 = (215.50, 78.50, 2.00) 0 CAR_SHOP BOMB_SHOP
 OBJ_DATA shop20 = (94.50, 29.50, 2.00) 0 CAR_SHOP BOMB_SHOP
 
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX DOORS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
 DECLARE_DOOR_INFO (56, 63, 2)
 DECLARE_DOOR_INFO (969, 976, 2)
 
@@ -551,6 +682,10 @@ DOOR_DATA door5 = DOUBLE (35, 224, 2) (0.0,0.0,0.0,0.0,0.0) TOP 0 ONE_CAR CLOSE_
 DOOR_DATA door6 = DOUBLE (36, 229, 2) (0.0,0.0,0.0,0.0,0.0) BOTTOM 0 ONE_CAR CLOSE_NEVER 0 NOT_FLIPPED NOT_REVERSED
 DOOR_DATA door7 = DOUBLE (175, 229, 2) (0.0,0.0,0.0,0.0,0.0) LEFT 1 ONE_CAR CLOSE_NEVER 0 NOT_FLIPPED NOT_REVERSED
 DOOR_DATA door8 = DOUBLE (236, 116, 2) (0.0,0.0,0.0,0.0,0.0) BOTTOM 0 ONE_CAR CLOSE_NEVER 0 NOT_FLIPPED NOT_REVERSED
+
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXX OBJ: TUNNEL_BLOCKER XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 OBJ_DATA obj19 = (120.50, 120.50, 3.00) 0 TUNNEL_BLOCKER
 OBJ_DATA obj20 = (121.50, 120.50, 3.00) 0 TUNNEL_BLOCKER
@@ -569,7 +704,11 @@ OBJ_DATA obj32 = (64.50, 212.50, 3.00) 0 TUNNEL_BLOCKER
 OBJ_DATA obj33 = (64.50, 229.50, 3.00) 0 TUNNEL_BLOCKER
 OBJ_DATA obj34 = (63.50, 229.50, 3.00) 0 TUNNEL_BLOCKER
 
-TIMER_DATA timer2
+TIMER_DATA kf_timer
+
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXX KILL FRENZY CARS AND COORDINATES DECLARATIONS XXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 PARKED_CAR_DATA auto103 = (13.00, 83.00, 2.00) 0 91 TANK
 PARKED_CAR_DATA auto104 = (29.00, 178.00, 3.00) 0 180 TANK
@@ -613,16 +752,22 @@ CHAR_DATA chr6
 
 
 
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXX GANG PHONE TRIGGERS - SCIENTISTS XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
 //  Scientist Easy Phone 1
 
-THREAD_TRIGGER trigger1 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, obj1, function1:)
+THREAD_TRIGGER thr_scie_easy_phone1_m1 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, ph_scie_easy_phone1, ans_scie_easy_phone1_m1:)
 
-function1:
+ans_scie_easy_phone1_m1:
 
-	DO_EASY_PHONE_TEMPLATE (2798, ste_se1.mis, savecount46, savecount25, savecount82, savecount83, savecount84, sciegang, 0)
+	DO_EASY_PHONE_TEMPLATE (2798, ste_se1.mis, flag_passed_scie_easy_phone1_m1, flag_failed_scie_easy_phone1_m1a, flag_on_scie_mission, flag_on_redn_mission, flag_on_zaib_mission, sciegang, 0)
  
- IF ( ( savecount81 = 0 ) AND ( savecount91 = 21 ) )
-	   SET savecount91 = 22
+ //  Checking if all missions have passed. Case affirmative, launch end mission
+ IF ( ( flag_on_mission = 0 ) AND ( flag_all_missions_passed = 21 ) )
+	   SET flag_all_missions_passed = 22
 	   LAUNCH_MISSION (ste_end.mis)
 	ENDIF
  
@@ -631,14 +776,15 @@ RETURN
 
 //  Scientist Easy Phone 2
 
-THREAD_TRIGGER trigger2 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, obj2, function2:)
+THREAD_TRIGGER thr_scie_easy_phone2_m1 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, ph_scie_easy_phone2, ans_scie_easy_phone2_m1:)
 
-function2:
+ans_scie_easy_phone2_m1:
  
-	DO_EASY_PHONE_TEMPLATE (2798, ste_se2.mis, savecount47, savecount26, savecount82, savecount83, savecount84, sciegang, 0)
+	DO_EASY_PHONE_TEMPLATE (2798, ste_se2.mis, flag_passed_scie_easy_phone2_m1, flag_failed_scie_easy_phone2_m1a, flag_on_scie_mission, flag_on_redn_mission, flag_on_zaib_mission, sciegang, 0)
  
- IF ( ( savecount81 = 0 ) AND ( savecount91 = 21 ) )
-	   SET savecount91 = 22
+ //  Checking if all missions have passed. Case affirmative, launch end mission
+ IF ( ( flag_on_mission = 0 ) AND ( flag_all_missions_passed = 21 ) )
+	   SET flag_all_missions_passed = 22
 	   LAUNCH_MISSION (ste_end.mis)
 	ENDIF
  
@@ -647,14 +793,15 @@ RETURN
 
 //  Scientist Medium Phone 1
 
-THREAD_TRIGGER trigger3 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, obj3, function3:)
+THREAD_TRIGGER thr_scie_med_phone1_m1 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, ph_scie_med_phone1, ans_scie_med_phone1_m1:)
 
-function3:
+ans_scie_med_phone1_m1:
  
-	DO_PHONE_TEMPLATE (2798, ste_sm1.mis, ste_sm3.mis, savecount48, savecount27, savecount67, savecount82, savecount83, savecount84, sciegang, 2)
+	DO_PHONE_TEMPLATE (2798, ste_sm1.mis, ste_sm3.mis, flag_passed_scie_med_phone1_m1, flag_failed_scie_med_phone1_m1a, flag_played_scie_med_phone1_2_m3a, flag_on_scie_mission, flag_on_redn_mission, flag_on_zaib_mission, sciegang, 2)
  
- IF ( ( savecount81 = 0 ) AND ( savecount91 = 21 ) )
-    SET savecount91 = 22
+ //  Checking if all missions have passed. Case affirmative, launch end mission
+ IF ( ( flag_on_mission = 0 ) AND ( flag_all_missions_passed = 21 ) )
+    SET flag_all_missions_passed = 22
 	   LAUNCH_MISSION (ste_end.mis)
  ENDIF
 
@@ -663,14 +810,15 @@ RETURN
 
 //  Scientist Medium Phone 2
 
-THREAD_TRIGGER trigger4 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, obj4, function4:)
+THREAD_TRIGGER thr_scie_med_phone2_m1 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, ph_scie_med_phone2, ans_scie_med_phone2_m1:)
 
-function4:
+ans_scie_med_phone2_m1:
  
-	DO_PHONE_TEMPLATE (2798, ste_sm2.mis, ste_sm3.mis, savecount49, savecount28, savecount67, savecount82, savecount83, savecount84, sciegang, 2)
+	DO_PHONE_TEMPLATE (2798, ste_sm2.mis, ste_sm3.mis, flag_passed_scie_med_phone2_m1, flag_failed_scie_med_phone2_m1a, flag_played_scie_med_phone1_2_m3a, flag_on_scie_mission, flag_on_redn_mission, flag_on_zaib_mission, sciegang, 2)
  
-	IF ( ( savecount81 = 0 ) AND ( savecount91 = 21 ) )
-    SET savecount91 = 22
+ //  Checking if all missions have passed. Case affirmative, launch end mission
+	IF ( ( flag_on_mission = 0 ) AND ( flag_all_missions_passed = 21 ) )
+    SET flag_all_missions_passed = 22
 	   LAUNCH_MISSION (ste_end.mis)
  ENDIF
  
@@ -679,29 +827,36 @@ RETURN
 
 //  Scientist Hard Phone
 
-THREAD_TRIGGER trigger5 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, obj5, function5:)
+THREAD_TRIGGER thr_scie_hard_phone_m1 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, ph_scie_hard_phone, ans_scie_hard_phone_m1:)
 
-function5:
-	DO_PHONE_TEMPLATE (2798, ste_sh1.mis, ste_sh2.mis, savecount50, savecount29, savecount68, savecount82, savecount83, savecount84, sciegang, 4)
+ans_scie_hard_phone_m1:
+	DO_PHONE_TEMPLATE (2798, ste_sh1.mis, ste_sh2.mis, flag_passed_scie_hard_phone2_m1, flag_failed_scie_hard_phone_m1a, flag_played_scie_hard_phone_m2a, flag_on_scie_mission, flag_on_redn_mission, flag_on_zaib_mission, sciegang, 4)
  
- IF ( ( savecount81 = 0 ) AND ( savecount91 = 21 ) )
-    SET savecount91 = 22
+ //  Checking if all missions have passed. Case affirmative, launch end mission
+ IF ( ( flag_on_mission = 0 ) AND ( flag_all_missions_passed = 21 ) )
+    SET flag_all_missions_passed = 22
 	   LAUNCH_MISSION (ste_end.mis)
  ENDIF
 	
 RETURN
 
 
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXX GANG PHONE TRIGGERS - ZAIBATSU XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
 //  Zaibatsu Easy Phone 1
 
-THREAD_TRIGGER trigger6 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, obj11, function6:)
+THREAD_TRIGGER thr_zaib_easy_phone1_m1 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, ph_zaib_easy_phone1, ans_zaib_easy_phone1_m1:)
 
-function6:
+ans_zaib_easy_phone1_m1:
  
-	DO_EASY_PHONE_TEMPLATE (2818, ste_ze1.mis, savecount56, savecount35, savecount84, savecount83, savecount82, zaibgang, 0)
+	DO_EASY_PHONE_TEMPLATE (2818, ste_ze1.mis, flag_passed_zaib_easy_phone1_m1, flag_failed_zaib_easy_phone1_m1a, flag_on_zaib_mission, flag_on_redn_mission, flag_on_scie_mission, zaibgang, 0)
  
- IF ( ( savecount81 = 0 ) AND ( savecount91 = 21 ) )
-	   SET savecount91 = 22
+ //  Checking if all missions have passed. Case affirmative, launch end mission
+ IF ( ( flag_on_mission = 0 ) AND ( flag_all_missions_passed = 21 ) )
+	   SET flag_all_missions_passed = 22
 	   LAUNCH_MISSION (ste_end.mis)
 	ENDIF
  
@@ -710,14 +865,15 @@ RETURN
 
 //  Zaibatsu Easy Phone 2
 
-THREAD_TRIGGER trigger7 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, obj12, function7:)
+THREAD_TRIGGER thr_zaib_easy_phone2_m1 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, ph_zaib_easy_phone2, ans_zaib_easy_phone2_m1:)
 
-function7:
+ans_zaib_easy_phone2_m1:
  
-	DO_EASY_PHONE_TEMPLATE (2818, ste_ze2.mis, savecount57, savecount36, savecount84, savecount83, savecount82, zaibgang, 0)
+	DO_EASY_PHONE_TEMPLATE (2818, ste_ze2.mis, flag_passed_zaib_easy_phone2_m1, flag_failed_zaib_easy_phone2_m1a, flag_on_zaib_mission, flag_on_redn_mission, flag_on_scie_mission, zaibgang, 0)
  
-	IF ( ( savecount81 = 0 ) AND ( savecount91 = 21 ) )
-	   SET savecount91 = 22
+ //  Checking if all missions have passed. Case affirmative, launch end mission
+	IF ( ( flag_on_mission = 0 ) AND ( flag_all_missions_passed = 21 ) )
+	   SET flag_all_missions_passed = 22
 	   LAUNCH_MISSION (ste_end.mis)
 	ENDIF
  
@@ -726,14 +882,15 @@ RETURN
 
 //  Zaibatsu Medium Phone 1
 
-THREAD_TRIGGER trigger8 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, obj13, function8:)
+THREAD_TRIGGER thr_zaib_med_phone1_m1 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, ph_zaib_med_phone1, ans_zaib_med_phone1_m1:)
 
-function8:
+ans_zaib_med_phone1_m1:
  
-	DO_PHONE_TEMPLATE (2818, ste_zm1.mis, ste_zm3.mis, savecount58, savecount37, savecount71, savecount84, savecount83, savecount82, zaibgang, 2)
+	DO_PHONE_TEMPLATE (2818, ste_zm1.mis, ste_zm3.mis, flag_passed_zaib_med_phone1_m1, flag_failed_zaib_med_phone1_m1a, flag_played_zaib_med_phone1_2_m3a, flag_on_zaib_mission, flag_on_redn_mission, flag_on_scie_mission, zaibgang, 2)
  
-	IF ( ( savecount81 = 0 ) AND ( savecount91 = 21 ) )
-	   SET savecount91 = 22
+ //  Checking if all missions have passed. Case affirmative, launch end mission
+	IF ( ( flag_on_mission = 0 ) AND ( flag_all_missions_passed = 21 ) )
+	   SET flag_all_missions_passed = 22
 	   LAUNCH_MISSION (ste_end.mis)
 	ENDIF
  
@@ -742,14 +899,15 @@ RETURN
 
 //  Zaibatsu Medium Phone 2
 
-THREAD_TRIGGER trigger9 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, obj14, function9:)
+THREAD_TRIGGER thr_zaib_med_phone2_m1 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, ph_zaib_med_phone2, ans_zaib_med_phone2_m1:)
 
-function9:
+ans_zaib_med_phone2_m1:
  
-	DO_PHONE_TEMPLATE (2818, ste_zm2.mis, ste_zm3.mis, savecount59, savecount38, savecount71, savecount84, savecount83, savecount82, zaibgang, 2)
+	DO_PHONE_TEMPLATE (2818, ste_zm2.mis, ste_zm3.mis, flag_passed_zaib_med_phone2_m1, flag_failed_zaib_med_phone2_m1a, flag_played_zaib_med_phone1_2_m3a, flag_on_zaib_mission, flag_on_redn_mission, flag_on_scie_mission, zaibgang, 2)
  
-	IF ( ( savecount81 = 0 ) AND ( savecount91 = 21 ) )
-	   SET savecount91 = 22
+ //  Checking if all missions have passed. Case affirmative, launch end mission
+	IF ( ( flag_on_mission = 0 ) AND ( flag_all_missions_passed = 21 ) )
+	   SET flag_all_missions_passed = 22
 	   LAUNCH_MISSION (ste_end.mis)
 	ENDIF
  
@@ -757,14 +915,15 @@ RETURN
 
 //  Zaibatsu Hard Phone
 
-THREAD_TRIGGER trigger10 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, obj15, function10:)
+THREAD_TRIGGER thr_zaib_hard_phone_m1 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, ph_zaib_hard_phone, ans_zaib_hard_phone_m1:)
 
-function10:
+ans_zaib_hard_phone_m1:
  
-	DO_PHONE_TEMPLATE (2818, ste_zh1.mis, ste_zh2.mis, savecount60, savecount39, savecount72, savecount84, savecount83, savecount82, zaibgang, 4)
+	DO_PHONE_TEMPLATE (2818, ste_zh1.mis, ste_zh2.mis, flag_passed_zaib_hard_phone_m1, flag_failed_zaib_hard_phone_m1a, flag_played_zaib_hard_phone_m2a, flag_on_zaib_mission, flag_on_redn_mission, flag_on_scie_mission, zaibgang, 4)
  
-	IF ( ( savecount81 = 0 ) AND ( savecount91 = 21 ) )
-	   SET savecount91 = 22
+ //  Checking if all missions have passed. Case affirmative, launch end mission
+	IF ( ( flag_on_mission = 0 ) AND ( flag_all_missions_passed = 21 ) )
+	   SET flag_all_missions_passed = 22
 	   LAUNCH_MISSION (ste_end.mis)
 	ENDIF
  
@@ -772,18 +931,23 @@ RETURN
 
 
 
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXX GANG PHONE TRIGGERS - REDNECKS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
 
 //  Redneck Easy Phone 1
 
-THREAD_TRIGGER trigger11 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, obj6, function11:)
+THREAD_TRIGGER thr_redn_easy_phone1_m1 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, ph_redn_easy_phone1, ans_redn_easy_phone1_m1:)
 
-function11:
+ans_redn_easy_phone1_m1:
 
-	DO_EASY_PHONE_TEMPLATE (2808, ste_re1.mis, savecount51, savecount30, savecount83, savecount82, savecount84, redngang, 0)
+	DO_EASY_PHONE_TEMPLATE (2808, ste_re1.mis, flag_passed_redn_easy_phone1_m1, flag_failed_redn_easy_phone1_m1a, flag_on_redn_mission, flag_on_scie_mission, flag_on_zaib_mission, redngang, 0)
  
- IF ( savecount91 = 21 )
-    IF ( savecount81 = 0 )
-       SET savecount91 = 22
+ //  Checking if all missions have passed. Case affirmative, launch end mission
+ IF ( flag_all_missions_passed = 21 )
+    IF ( flag_on_mission = 0 )
+       SET flag_all_missions_passed = 22
    	   LAUNCH_MISSION (ste_end.mis)
     ENDIF
  ENDIF
@@ -793,15 +957,16 @@ RETURN
 
 //  Redneck Easy Phone 2
 
-THREAD_TRIGGER trigger12 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, obj7, function12:)
+THREAD_TRIGGER thr_redn_easy_phone2_m1 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, ph_redn_easy_phone2, ans_redn_easy_phone2_m1:)
 
-function12:
+ans_redn_easy_phone2_m1:
 
-	DO_EASY_PHONE_TEMPLATE (2808, ste_re2.mis, savecount52, savecount31, savecount83, savecount82, savecount84, redngang, 0)
+	DO_EASY_PHONE_TEMPLATE (2808, ste_re2.mis, flag_passed_redn_easy_phone2_m1, flag_failed_redn_easy_phone2_m1a, flag_on_redn_mission, flag_on_scie_mission, flag_on_zaib_mission, redngang, 0)
  
- IF ( savecount81 = 0 )
-	   IF ( savecount91 = 21 )
-       SET savecount91 = 22
+ //  Checking if all missions have passed. Case affirmative, launch end mission
+ IF ( flag_on_mission = 0 )
+	   IF ( flag_all_missions_passed = 21 )
+       SET flag_all_missions_passed = 22
       	LAUNCH_MISSION (ste_end.mis)
     ENDIF
  ENDIF
@@ -811,15 +976,16 @@ RETURN
 
 //  Redneck Medium Phone 1
 
-THREAD_TRIGGER trigger13 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, obj8, function13:)
+THREAD_TRIGGER thr_redn_med_phone1_m1 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, ph_redn_med_phone1, ans_redn_med_phone1_m1:)
 
-function13:
+ans_redn_med_phone1_m1:
 
-	DO_PHONE_TEMPLATE (2808, ste_rm1.mis, ste_rm3.mis, savecount53, savecount32, savecount69, savecount83, savecount82, savecount84, redngang, 2)
+	DO_PHONE_TEMPLATE (2808, ste_rm1.mis, ste_rm3.mis, flag_passed_redn_med_phone1_m1, flag_failed_redn_med_phone1_m1a, flag_played_redn_med_phone1_2_m3a, flag_on_redn_mission, flag_on_scie_mission, flag_on_zaib_mission, redngang, 2)
  
- IF ( savecount81 = 0 )
-    IF ( savecount91 = 21 )
-       SET savecount91 = 22
+ //  Checking if all missions have passed. Case affirmative, launch end mission
+ IF ( flag_on_mission = 0 )
+    IF ( flag_all_missions_passed = 21 )
+       SET flag_all_missions_passed = 22
 	      LAUNCH_MISSION (ste_end.mis)
     ENDIF
  ENDIF
@@ -829,15 +995,16 @@ RETURN
 
 //  Redneck Medium Phone 2
 
-THREAD_TRIGGER trigger14 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, obj9, function14:)
+THREAD_TRIGGER thr_redn_med_phone2_m1 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, ph_redn_med_phone2, ans_redn_med_phone2_m1:)
 
-function14:
+ans_redn_med_phone2_m1:
 
-	DO_PHONE_TEMPLATE (2808, ste_rm2.mis, ste_rm3.mis, savecount54, savecount33, savecount69, savecount83, savecount82, savecount84, redngang, 2)
+	DO_PHONE_TEMPLATE (2808, ste_rm2.mis, ste_rm3.mis, flag_passed_redn_med_phone2_m1, flag_failed_redn_med_phone2_m1a, flag_played_redn_med_phone1_2_m3a, flag_on_redn_mission, flag_on_scie_mission, flag_on_zaib_mission, redngang, 2)
  
- IF ( savecount81 = 0 )
-    IF ( savecount91 = 21 )
-	      SET savecount91 = 22
+ //  Checking if all missions have passed. Case affirmative, launch end mission
+ IF ( flag_on_mission = 0 )
+    IF ( flag_all_missions_passed = 21 )
+	      SET flag_all_missions_passed = 22
 	      LAUNCH_MISSION (ste_end.mis)
     ENDIF
 	ENDIF
@@ -847,15 +1014,16 @@ RETURN
 
 //  Redneck Hard Phone
 
-THREAD_TRIGGER trigger15 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, obj10, function15:)
+THREAD_TRIGGER thr_redn_hard_phone_m1 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, ph_redn_hard_phone, ans_redn_hard_phone_m1:)
 
-function15:
+ans_redn_hard_phone_m1:
  
-	DO_PHONE_TEMPLATE (2808, ste_rh1.mis, ste_rh2.mis, savecount55, savecount34, savecount70, savecount83, savecount82, savecount84, redngang, 4)
+	DO_PHONE_TEMPLATE (2808, ste_rh1.mis, ste_rh2.mis, flag_passed_redn_hard_phone_m1, flag_failed_redn_hard_phone_m1a, flag_played_redn_hard_phone_m2a, flag_on_redn_mission, flag_on_scie_mission, flag_on_zaib_mission, redngang, 4)
  
-	IF ( savecount81 = 0 )
-    IF ( savecount91 = 21 )
-	      SET savecount91 = 22
+ //  Checking if all missions have passed. Case affirmative, launch end mission
+	IF ( flag_on_mission = 0 )
+    IF ( flag_all_missions_passed = 21 )
+	      SET flag_all_missions_passed = 22
 	      LAUNCH_MISSION (ste_end.mis)
     ENDIF
 	ENDIF
@@ -864,54 +1032,68 @@ RETURN
 
 
 
-THREAD_TRIGGER trigger16 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 113.00, 123.00, 2.00, 1.00, 1.00, function16:)
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX SAVE-GAME TRIGGER XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-function16:
-	PERFORM_SAVE_GAME (trigger16, 113.00, 123.00, 2.00, 1.00, 1.00)
+
+THREAD_TRIGGER thr_savepoint_1 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 113.00, 123.00, 2.00, 1.00, 1.00, savepoint_1:)
+
+savepoint_1:
+	PERFORM_SAVE_GAME (thr_savepoint_1, 113.00, 123.00, 2.00, 1.00, 1.00)
 RETURN
 
-THREAD_TRIGGER trigger17 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, obj16, function17:)
 
-function17:
-	DISPLAY_BRIEF (2900)
-	DISPLAY_BRIEF (2901)
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX INFO PHONE TRIGGERS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+THREAD_TRIGGER thr_zaib_info_phone = THREAD_WAIT_FOR_ANSWER_PHONE (p1, ph_zaib_info_phone, ans_zaib_info_phone:)
+
+ans_zaib_info_phone:
+	DISPLAY_BRIEF (2900)         //  "You are talking to the Zaibatsu. You can probably see some of us now - the cool-looking characters dressed in grey."
+	DISPLAY_BRIEF (2901)         //  "You want our respect? Try disposing of filthy Rednecks!"
 RETURN
 
-THREAD_TRIGGER trigger18 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, obj17, function18:)
+THREAD_TRIGGER thr_redn_info_phone = THREAD_WAIT_FOR_ANSWER_PHONE (p1, ph_redn_info_phone, ans_redn_info_phone:)
 
-function18:
-	DISPLAY_BRIEF (2902)
-	DISPLAY_BRIEF (2903)
+ans_redn_info_phone:
+	DISPLAY_BRIEF (2902)         //  "This here's the Rednecks, boy! You might be lookin' at some of us now - the fine-lookin' folk with gorgeous red hair."
+	DISPLAY_BRIEF (2903)         //  "You want our respect? You waste some of them smart-ass Scientists!"
 RETURN
 
-THREAD_TRIGGER trigger19 = THREAD_WAIT_FOR_ANSWER_PHONE (p1, obj18, function19:)
+THREAD_TRIGGER thr_scie_info_phone = THREAD_WAIT_FOR_ANSWER_PHONE (p1, ph_scie_info_phone, ans_scie_info_phone:)
 
-function19:
-	DISPLAY_BRIEF (2904)
-	DISPLAY_BRIEF (2905)
+ans_scie_info_phone:
+	DISPLAY_BRIEF (2904)         //  "You are talking to the Scientists, young man. You can probably see some of us now - the clever chaps in yellow."
+	DISPLAY_BRIEF (2905)         //  "Would you like our respect? We would be most impressed if you chose to eliminate some Zaibatsu."
 RETURN
 
+
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX WANG CARS TRIGGERS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 //  Wang Car 1
 
-THREAD_TRIGGER trigger20 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, auto92, function20:)
+THREAD_TRIGGER thr_wang_car_1 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, wang_car_1, get_wang_car_1:)
 
-function20:
+get_wang_car_1:
  
 	sound1 = CREATE_SOUND (229.50, 178.50, 6.00) YEEHA_BOMB PLAY_INSTANT END
-	DISABLE_THREAD_TRIGGER (trigger20)
+	DISABLE_THREAD_TRIGGER (thr_wang_car_1)
  
  //  If the player didn't get the 8 wang cars yet and it is the first time he get into Wang Car 1
- IF ( ( savecount107 < 7 ) AND ( savecount108 = 0 ) )
+ IF ( ( wang_cars_count < 7 ) AND ( flag_wang_car_1 = 0 ) )
  
 	   WARP_FROM_CAR_TO_POINT (p1, 200.50, 125.50, 2.00, 0)
-	   ++savecount107
+	   ++wang_cars_count
     ADD_NEW_BLOCK (200, 125, 2)
 	   CHANGE_BLOCK SIDE (200, 125, 2) BOTTOM NOT_WALL NOT_BULLET NOT_FLAT NOT_FLIP 0 791
 	   CHANGE_BLOCK SIDE (200, 125, 2) TOP NOT_WALL NOT_BULLET FLAT NOT_FLIP 0 0
 	   light1 = CREATE_LIGHT (200.50, 125.50, 2.00) 2.00 255 (255, 255, 255) 0 0 0
-	   SET savecount108 = 1
-	   DELETE_ITEM (auto92)
+	   SET flag_wang_car_1 = 1
+	   DELETE_ITEM (wang_car_1)
 	   ADD_SCORE (p1, 5000)
     
  ELSE
@@ -940,13 +1122,13 @@ function20:
     
 	   sound1 = CREATE_SOUND (229.50, 178.50, 6.00) YEEHA_BOMB PLAY_INSTANT END
 	   WARP_FROM_CAR_TO_POINT (p1, 204.00, 125.50, 2.00, 0)
-	   ++savecount107
+	   ++wang_cars_count
 	   ADD_NEW_BLOCK (200, 125, 2)
 	   CHANGE_BLOCK SIDE (200, 125, 2) BOTTOM NOT_WALL NOT_BULLET NOT_FLAT NOT_FLIP 0 791
 	   CHANGE_BLOCK SIDE (200, 125, 2) TOP NOT_WALL NOT_BULLET FLAT NOT_FLIP 0 0
 	   light1 = CREATE_LIGHT (204.00, 125.50, 2.00) 2.00 255 (255, 255, 255) 0 0 0
-	   SET savecount108 = 1
-	   DELETE_ITEM (auto92)
+	   SET flag_wang_car_1 = 1
+	   DELETE_ITEM (wang_car_1)
 	   ADD_SCORE (p1, 100000)
     
 	ENDIF
@@ -955,24 +1137,24 @@ RETURN
 
 
 //  Wang Car 2
-THREAD_TRIGGER trigger21 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, auto93, function21:)
+THREAD_TRIGGER thr_wang_car_2 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, wang_car_2, get_wang_car_2:)
 
-function21:
+get_wang_car_2:
  
 	sound1 = CREATE_SOUND (58.50, 3.50, 6.00) YEEHA_BOMB PLAY_INSTANT END
-	DISABLE_THREAD_TRIGGER (trigger21)
+	DISABLE_THREAD_TRIGGER (thr_wang_car_2)
  
  //  If the player didn't get the 8 wang cars yet and it is the first time he get into Wang Car 2
- IF ( ( savecount107 < 7 ) AND ( savecount109 = 0 ) )
+ IF ( ( wang_cars_count < 7 ) AND ( flag_wang_car_2 = 0 ) )
  
 	   WARP_FROM_CAR_TO_POINT (p1, 201.50, 125.50, 2.00, 0)
-	   ++savecount107
+	   ++wang_cars_count
 	   ADD_NEW_BLOCK (201, 125, 2)
 	   CHANGE_BLOCK SIDE (201, 125, 2) BOTTOM NOT_WALL NOT_BULLET NOT_FLAT NOT_FLIP 0 792
 	   CHANGE_BLOCK SIDE (201, 125, 2) TOP NOT_WALL NOT_BULLET FLAT NOT_FLIP 0 0
 	   light2 = CREATE_LIGHT (201.50, 125.50, 2.00) 2.00 255 (255, 255, 255) 0 0 0
-	   SET savecount109 = 1
-	   DELETE_ITEM (auto93)
+	   SET flag_wang_car_2 = 1
+	   DELETE_ITEM (wang_car_2)
 	   ADD_SCORE (p1, 5000)
     
  ELSE
@@ -1001,13 +1183,13 @@ function21:
     
 	   sound1 = CREATE_SOUND (58.50, 3.50, 6.00) YEEHA_BOMB PLAY_INSTANT END
 	   WARP_FROM_CAR_TO_POINT (p1, 204.00, 125.50, 2.00, 0)
-	   ++savecount107
+	   ++wang_cars_count
 	   ADD_NEW_BLOCK (201, 125, 2)
 	   CHANGE_BLOCK SIDE (201, 125, 2) BOTTOM NOT_WALL NOT_BULLET NOT_FLAT NOT_FLIP 0 792
 	   CHANGE_BLOCK SIDE (201, 125, 2) TOP NOT_WALL NOT_BULLET FLAT NOT_FLIP 0 0
 	   light2 = CREATE_LIGHT (201.50, 125.50, 2.00) 2.00 255 (255, 255, 255) 0 0 0
-	   SET savecount109 = 1
-	   DELETE_ITEM (auto93)
+	   SET flag_wang_car_2 = 1
+	   DELETE_ITEM (wang_car_2)
 	   ADD_SCORE (p1, 100000)
     
 	ENDIF
@@ -1015,24 +1197,24 @@ function21:
 RETURN
 
 //  Wang Car 3
-THREAD_TRIGGER trigger22 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, auto94, function22:)
+THREAD_TRIGGER thr_wang_car_3 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, wang_car_3, get_wang_car_3:)
 
-function22:
+get_wang_car_3:
  
 	sound1 = CREATE_SOUND (3.50, 207.50, 6.00) YEEHA_BOMB PLAY_INSTANT END
-	DISABLE_THREAD_TRIGGER (trigger22)
+	DISABLE_THREAD_TRIGGER (thr_wang_car_3)
  
  //  If the player didn't get the 8 wang cars yet and it is the first time he get into Wang Car 3
- IF ( ( savecount107 < 7 ) AND ( savecount110 = 0 ) )
+ IF ( ( wang_cars_count < 7 ) AND ( flag_wang_car_3 = 0 ) )
  
 	   WARP_FROM_CAR_TO_POINT (p1, 202.50, 125.50, 2.00, 0)
-	   ++savecount107
+	   ++wang_cars_count
 	   ADD_NEW_BLOCK (202, 125, 2)
 	   CHANGE_BLOCK SIDE (202, 125, 2) BOTTOM NOT_WALL NOT_BULLET NOT_FLAT NOT_FLIP 0 793
 	   CHANGE_BLOCK SIDE (202, 125, 2) TOP NOT_WALL NOT_BULLET FLAT NOT_FLIP 0 0
 	   light3 = CREATE_LIGHT (202.50, 125.50, 2.00) 2.00 255 (255, 255, 255) 0 0 0
-	   SET savecount110 = 1
-	   DELETE_ITEM (auto94)
+	   SET flag_wang_car_3 = 1
+	   DELETE_ITEM (wang_car_3)
 	   ADD_SCORE (p1, 5000)
     
  ELSE
@@ -1061,13 +1243,13 @@ function22:
     
 	   sound1 = CREATE_SOUND (3.50, 207.50, 6.00) YEEHA_BOMB PLAY_INSTANT END
 	   WARP_FROM_CAR_TO_POINT (p1, 204.00, 125.50, 2.00, 0)
-	   ++savecount107
+	   ++wang_cars_count
 	   ADD_NEW_BLOCK (202, 125, 2)
 	   CHANGE_BLOCK SIDE (202, 125, 2) BOTTOM NOT_WALL NOT_BULLET NOT_FLAT NOT_FLIP 0 793
 	   CHANGE_BLOCK SIDE (202, 125, 2) TOP NOT_WALL NOT_BULLET FLAT NOT_FLIP 0 0
 	   light3 = CREATE_LIGHT (204.00, 125.50, 2.00) 2.00 255 (255, 255, 255) 0 0 0
-	   SET savecount110 = 1
-	   DELETE_ITEM (auto94)
+	   SET flag_wang_car_3 = 1
+	   DELETE_ITEM (wang_car_3)
 	   ADD_SCORE (p1, 100000)
     
 	ENDIF
@@ -1075,24 +1257,24 @@ function22:
 RETURN
 
 //  Wang Car 4
-THREAD_TRIGGER trigger23 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, auto95, function23:)
+THREAD_TRIGGER thr_wang_car_4 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, wang_car_4, get_wang_car_4:)
 
-function23:
+get_wang_car_4:
  
-	DISABLE_THREAD_TRIGGER (trigger23)
+	DISABLE_THREAD_TRIGGER (thr_wang_car_4)
 	sound1 = CREATE_SOUND (139.50, 254.50, 6.00) YEEHA_BOMB PLAY_INSTANT END
  
  //  If the player didn't get the 8 wang cars yet and it is the first time he get into Wang Car 4
- IF ( ( savecount107 < 7 ) AND ( savecount111 = 0 ) )
+ IF ( ( wang_cars_count < 7 ) AND ( flag_wang_car_4 = 0 ) )
  
 	   WARP_FROM_CAR_TO_POINT (p1, 203.50, 125.50, 2.00, 0)
-	   ++savecount107
+	   ++wang_cars_count
 	   ADD_NEW_BLOCK (203, 125, 2)
 	   CHANGE_BLOCK SIDE (203, 125, 2) BOTTOM NOT_WALL NOT_BULLET NOT_FLAT NOT_FLIP 0 794
 	   CHANGE_BLOCK SIDE (203, 125, 2) TOP NOT_WALL NOT_BULLET FLAT NOT_FLIP 0 0
 	   light4 = CREATE_LIGHT (202.50, 125.50, 2.00) 2.00 255 (255, 255, 255) 0 0 0
-	   SET savecount111 = 1
-	   DELETE_ITEM (auto95)
+	   SET flag_wang_car_4 = 1
+	   DELETE_ITEM (wang_car_4)
 	   ADD_SCORE (p1, 5000)
     
  ELSE
@@ -1121,13 +1303,13 @@ function23:
     
 	   sound1 = CREATE_SOUND (139.50, 254.50, 6.00) YEEHA_BOMB PLAY_INSTANT END
 	   WARP_FROM_CAR_TO_POINT (p1, 204.00, 125.50, 2.00, 0)
-	   ++savecount107
+	   ++wang_cars_count
 	   ADD_NEW_BLOCK (203, 125, 2)
 	   CHANGE_BLOCK SIDE (203, 125, 2) BOTTOM NOT_WALL NOT_BULLET NOT_FLAT NOT_FLIP 0 794
 	   CHANGE_BLOCK SIDE (203, 125, 2) TOP NOT_WALL NOT_BULLET FLAT NOT_FLIP 0 0
 	   light4 = CREATE_LIGHT (203.50, 125.50, 2.00) 2.00 255 (255, 255, 255) 0 0 0
-	   SET savecount111 = 1
-	   DELETE_ITEM (auto95)
+	   SET flag_wang_car_4 = 1
+	   DELETE_ITEM (wang_car_4)
 	   ADD_SCORE (p1, 100000)
 	
  ENDIF
@@ -1135,24 +1317,24 @@ function23:
 RETURN
 
 //  Wang Car 5
-THREAD_TRIGGER trigger24 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, auto96, function24:)
+THREAD_TRIGGER thr_wang_car_5 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, wang_car_5, get_wang_car_5:)
 
-function24:
+get_wang_car_5:
  
-	DISABLE_THREAD_TRIGGER (trigger24)
+	DISABLE_THREAD_TRIGGER (thr_wang_car_5)
 	sound1 = CREATE_SOUND (184.50, 202.50, 6.00) YEEHA_BOMB PLAY_INSTANT END
  
  //  If the player didn't get the 8 wang cars yet and it is the first time he get into Wang Car 5
- IF ( ( savecount107 < 7 ) AND ( savecount112 = 0 ) )
+ IF ( ( wang_cars_count < 7 ) AND ( flag_wang_car_5 = 0 ) )
  
 	   WARP_FROM_CAR_TO_POINT (p1, 204.50, 125.50, 2.00, 0)
-	   ++savecount107
+	   ++wang_cars_count
 	   ADD_NEW_BLOCK (204, 125, 2)
 	   CHANGE_BLOCK SIDE (204, 125, 2) BOTTOM NOT_WALL NOT_BULLET NOT_FLAT NOT_FLIP 0 795
 	   CHANGE_BLOCK SIDE (204, 125, 2) TOP NOT_WALL NOT_BULLET FLAT NOT_FLIP 0 0
 	   light5 = CREATE_LIGHT (204.50, 125.50, 2.00) 2.00 255 (255, 255, 255) 0 0 0
-	   SET savecount112 = 1
-	   DELETE_ITEM (auto96)
+	   SET flag_wang_car_5 = 1
+	   DELETE_ITEM (wang_car_5)
 	   ADD_SCORE (p1, 5000)
  
  ELSE
@@ -1181,13 +1363,13 @@ function24:
     
 	   sound1 = CREATE_SOUND (184.50, 202.50, 6.00) YEEHA_BOMB PLAY_INSTANT END
 	   WARP_FROM_CAR_TO_POINT (p1, 204.00, 125.50, 2.00, 0)
-	   ++savecount107
+	   ++wang_cars_count
 	   ADD_NEW_BLOCK (204, 125, 2)
 	   CHANGE_BLOCK SIDE (204, 125, 2) BOTTOM NOT_WALL NOT_BULLET NOT_FLAT NOT_FLIP 0 795
 	   CHANGE_BLOCK SIDE (204, 125, 2) TOP NOT_WALL NOT_BULLET FLAT NOT_FLIP 0 0
 	   light5 = CREATE_LIGHT (204.50, 125.50, 2.00) 2.00 255 (255, 255, 255) 0 0 0
-	   SET savecount112 = 1
-	   DELETE_ITEM (auto96)
+	   SET flag_wang_car_5 = 1
+	   DELETE_ITEM (wang_car_5)
 	   ADD_SCORE (p1, 100000)
 	
  ENDIF
@@ -1196,24 +1378,24 @@ RETURN
 
 
 //  Wang Car 6
-THREAD_TRIGGER trigger25 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, auto97, function25:)
+THREAD_TRIGGER thr_wang_car_6 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, wang_car_6, get_wang_car_6:)
 
-function25:
+get_wang_car_6:
  
-	DISABLE_THREAD_TRIGGER (trigger25)
+	DISABLE_THREAD_TRIGGER (thr_wang_car_6)
 	sound1 = CREATE_SOUND (93.50, 53.50, 6.00) YEEHA_BOMB PLAY_INSTANT END
  
  //  If the player didn't get the 8 wang cars yet and it is the first time he get into Wang Car 6
- IF ( ( savecount107 < 7 ) AND ( savecount113 = 0 ) )
+ IF ( ( wang_cars_count < 7 ) AND ( flag_wang_car_6 = 0 ) )
  
 	   WARP_FROM_CAR_TO_POINT (p1, 205.50, 125.50, 2.00, 0)
-	   ++savecount107
+	   ++wang_cars_count
 	   ADD_NEW_BLOCK (205, 125, 2)
 	   CHANGE_BLOCK SIDE (205, 125, 2) BOTTOM NOT_WALL NOT_BULLET NOT_FLAT NOT_FLIP 0 796
 	   CHANGE_BLOCK SIDE (205, 125, 2) TOP NOT_WALL NOT_BULLET FLAT NOT_FLIP 0 0
 	   light6 = CREATE_LIGHT (205.50, 125.50, 2.00) 2.00 255 (255, 255, 255) 0 0 0
-	   SET savecount113 = 1
-	   DELETE_ITEM (auto97)
+	   SET flag_wang_car_6 = 1
+	   DELETE_ITEM (wang_car_6)
 	   ADD_SCORE (p1, 5000)
  
  ELSE
@@ -1242,13 +1424,13 @@ function25:
     
 	   sound1 = CREATE_SOUND (93.50, 53.50, 6.00) YEEHA_BOMB PLAY_INSTANT END
 	   WARP_FROM_CAR_TO_POINT (p1, 204.00, 125.50, 2.00, 0)
-	   ++savecount107
+	   ++wang_cars_count
 	   ADD_NEW_BLOCK (205, 125, 2)
 	   CHANGE_BLOCK SIDE (205, 125, 2) BOTTOM NOT_WALL NOT_BULLET NOT_FLAT NOT_FLIP 0 796
 	   CHANGE_BLOCK SIDE (205, 125, 2) TOP NOT_WALL NOT_BULLET FLAT NOT_FLIP 0 0
 	   light6 = CREATE_LIGHT (205.50, 125.50, 2.00) 2.00 255 (255, 255, 255) 0 0 0
-	   SET savecount113 = 1
-	   DELETE_ITEM (auto97)
+	   SET flag_wang_car_6 = 1
+	   DELETE_ITEM (wang_car_6)
 	   ADD_SCORE (p1, 100000)
 	
  ENDIF
@@ -1256,24 +1438,24 @@ function25:
 RETURN
 
 //  Wang Car 7
-THREAD_TRIGGER trigger26 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, auto98, function26:)
+THREAD_TRIGGER thr_wang_car_7 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, wang_car_7, get_wang_car_7:)
 
-function26:
+get_wang_car_7:
  
 	sound1 = CREATE_SOUND (127.50, 47.50, 6.00) YEEHA_BOMB PLAY_INSTANT END
-	DISABLE_THREAD_TRIGGER (trigger26)
+	DISABLE_THREAD_TRIGGER (thr_wang_car_7)
  
  //  If the player didn't get the 8 wang cars yet and it is the first time he get into Wang Car 7
- IF ( ( savecount107 < 7 ) AND ( savecount114 = 0 ) )
+ IF ( ( wang_cars_count < 7 ) AND ( flag_wang_car_7 = 0 ) )
  
 	   WARP_FROM_CAR_TO_POINT (p1, 206.50, 125.50, 2.00, 0)
-	   ++savecount107
+	   ++wang_cars_count
 	   ADD_NEW_BLOCK (206, 125, 2)
 	   CHANGE_BLOCK SIDE (206, 125, 2) BOTTOM NOT_WALL NOT_BULLET NOT_FLAT NOT_FLIP 0 797
 	   CHANGE_BLOCK SIDE (206, 125, 2) TOP NOT_WALL NOT_BULLET FLAT NOT_FLIP 0 0
 	   light7 = CREATE_LIGHT (206.50, 125.50, 2.00) 2.00 255 (255, 255, 255) 0 0 0
-	   SET savecount114 = 1
-	   DELETE_ITEM (auto98)
+	   SET flag_wang_car_7 = 1
+	   DELETE_ITEM (wang_car_7)
 	   ADD_SCORE (p1, 5000)
     
  ELSE
@@ -1302,13 +1484,13 @@ function26:
     
 	   sound1 = CREATE_SOUND (127.50, 47.50, 6.00) YEEHA_BOMB PLAY_INSTANT END
 	   WARP_FROM_CAR_TO_POINT (p1, 204.00, 125.50, 2.00, 0)
-	   ++savecount107
+	   ++wang_cars_count
 	   ADD_NEW_BLOCK (206, 125, 2)
 	   CHANGE_BLOCK SIDE (206, 125, 2) BOTTOM NOT_WALL NOT_BULLET NOT_FLAT NOT_FLIP 0 797
 	   CHANGE_BLOCK SIDE (206, 125, 2) TOP NOT_WALL NOT_BULLET FLAT NOT_FLIP 0 0
 	   light7 = CREATE_LIGHT (206.50, 125.50, 2.00) 2.00 255 (255, 255, 255) 0 0 0
-	   SET savecount114 = 1
-	   DELETE_ITEM (auto98)
+	   SET flag_wang_car_7 = 1
+	   DELETE_ITEM (wang_car_7)
 	   ADD_SCORE (p1, 100000)
 	
  ENDIF
@@ -1316,24 +1498,24 @@ function26:
 RETURN
 
 //  Wang Car 8
-THREAD_TRIGGER trigger27 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, auto99, function27:)
+THREAD_TRIGGER thr_wang_car_8 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, wang_car_8, get_wang_car_8:)
 
-function27:
+get_wang_car_8:
  
-	DISABLE_THREAD_TRIGGER (trigger27)
+	DISABLE_THREAD_TRIGGER (thr_wang_car_8)
 	sound1 = CREATE_SOUND (216.50, 117.50, 6.00) YEEHA_BOMB PLAY_INSTANT END
  
  //  If the player didn't get the 8 wang cars yet and it is the first time he get into Wang Car 8
- IF ( ( savecount107 < 7 ) AND ( savecount115 = 0 ) )
+ IF ( ( wang_cars_count < 7 ) AND ( flag_wang_car_8 = 0 ) )
  
 	   WARP_FROM_CAR_TO_POINT (p1, 207.50, 125.50, 2.00, 0)
-	   ++savecount107
+	   ++wang_cars_count
 	   ADD_NEW_BLOCK (207, 125, 2)
 	   CHANGE_BLOCK SIDE (207, 125, 2) BOTTOM NOT_WALL NOT_BULLET NOT_FLAT NOT_FLIP 0 798
 	   CHANGE_BLOCK SIDE (207, 125, 2) TOP NOT_WALL NOT_BULLET FLAT NOT_FLIP 0 0
 	   light8 = CREATE_LIGHT (207.50, 125.50, 2.00) 2.00 255 (255, 255, 255) 0 0 0
-	   SET savecount115 = 1
-	   DELETE_ITEM (auto99)
+	   SET flag_wang_car_8 = 1
+	   DELETE_ITEM (wang_car_8)
 	   ADD_SCORE (p1, 5000)
     
  ELSE
@@ -1362,53 +1544,56 @@ function27:
     
 	   sound1 = CREATE_SOUND (216.50, 117.50, 6.00) YEEHA_BOMB PLAY_INSTANT END
 	   WARP_FROM_CAR_TO_POINT (p1, 204.00, 125.50, 2.00, 0)
-	   ++savecount107
+	   ++wang_cars_count
 	   ADD_NEW_BLOCK (207, 125, 2)
 	   CHANGE_BLOCK SIDE (207, 125, 2) BOTTOM NOT_WALL NOT_BULLET NOT_FLAT NOT_FLIP 0 798
 	   CHANGE_BLOCK SIDE (207, 125, 2) TOP NOT_WALL NOT_BULLET FLAT NOT_FLIP 0 0
 	   light8 = CREATE_LIGHT (207.50, 125.50, 2.00) 2.00 255 (255, 255, 255) 0 0 0
-	   SET savecount115 = 1
-	   DELETE_ITEM (auto99)
+	   SET flag_wang_car_8 = 1
+	   DELETE_ITEM (wang_car_8)
 	   ADD_SCORE (p1, 100000)
 	
  ENDIF
  
 RETURN
 
-
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX LEVEL START XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 LEVELSTART
 
 EXEC
-
+    
+    //  Church sound
     sound29 = CREATE_SOUND (113.50, 123.50, 2.00) CHURCH_SINGING PLAY_FOREVER END
     
     //  Creating the redneck guy
-    chr1 = CREATE_CHAR (108.50, 126.50, 255.00) 5 90 DUMMY END
-    GIVE_WEAPON (chr1, SHOTGUN)
-    SET_CHAR_THREAT_REACTION (chr1, NO_REACTION)
-    SET_CHAR_SHOOTING_SKILL (chr1, CRACK_SHOT)
+    redneck_guy = CREATE_CHAR (108.50, 126.50, 255.00) 5 90 DUMMY END
+    GIVE_WEAPON (redneck_guy, SHOTGUN)                                               //  SHOTGUN
+    SET_CHAR_THREAT_REACTION (redneck_guy, NO_REACTION)
+    SET_CHAR_SHOOTING_SKILL (redneck_guy, CRACK_SHOT)
     
     //  Creating the scientist guy
-    chr2 = CREATE_CHAR (117.50, 125.50, 255.00) 7 270 DUMMY END
-    GIVE_WEAPON (chr2, PISTOL)
-    SET_CHAR_THREAT_REACTION (chr2, NO_REACTION)
+    scientist_guy = CREATE_CHAR (117.50, 125.50, 255.00) 7 270 DUMMY END
+    GIVE_WEAPON (scientist_guy, PISTOL)                                                //  PISTOL
+    SET_CHAR_THREAT_REACTION (scientist_guy, NO_REACTION)
     
     //  Creating the zaibatsu guy
-    chr3 = CREATE_CHAR (106.50, 126.50, 255.00) 8 180 DUMMY END
-    GIVE_WEAPON (chr3, MACHINE_GUN)
+    zaibatsu_guy = CREATE_CHAR (106.50, 126.50, 255.00) 8 180 DUMMY END
+    GIVE_WEAPON (zaibatsu_guy, MACHINE_GUN)                                           //  MACHINE_GUN
     
-    SET_CHAR_THREAT_REACTION (chr2, NO_REACTION)
-    SET_CHAR_SHOOTING_SKILL (chr2, CRACK_SHOT)
+    SET_CHAR_THREAT_REACTION (scientist_guy, NO_REACTION)
+    SET_CHAR_SHOOTING_SKILL (scientist_guy, CRACK_SHOT)
     
-    SET_CHAR_OBJECTIVE (chr1, KILL_CHAR_ON_FOOT, chr2)
-    SET_CHAR_OBJECTIVE (chr2, KILL_CHAR_ON_FOOT, chr3)
-    SET_CHAR_OBJECTIVE (chr3, KILL_CHAR_ANY_MEANS, chr1)
+    SET_CHAR_OBJECTIVE (redneck_guy, KILL_CHAR_ON_FOOT, scientist_guy)
+    SET_CHAR_OBJECTIVE (scientist_guy, KILL_CHAR_ON_FOOT, zaibatsu_guy)
+    SET_CHAR_OBJECTIVE (zaibatsu_guy, KILL_CHAR_ANY_MEANS, redneck_guy)            //  Kill the redneck guy by any means (i.e. he will use a car if needed)
     
-    SET_FAVOURITE_MODEL (chr3, VTYPE)
+    SET_FAVOURITE_MODEL (zaibatsu_guy, VTYPE)               //  Use a Z-TYPE
     
     //  Arachnid no collide
-    SET_CAR_NO_COLLIDE (auto91)
+    SET_CAR_NO_COLLIDE (parked_church_car)
     
     SET_DIR_OF_TV_VANS (113.00, 123.00)
     
@@ -1418,11 +1603,11 @@ EXEC
     SET_DEATHARREST_STATE (p1, ON)                 //  Check for deaths and arrests for the player
     
     //  If the Wang Car 1 has already gotten (in a previous save)
-    IF ( savecount108 = 1 )
+    IF ( flag_wang_car_1 = 1 )
        
        IF ( fix_wang_cars_glitch = 1 )
-          DISABLE_THREAD_TRIGGER (trigger20)        //  Disable its trigger
-          DELETE_ITEM (auto92)                      //  Delete Wang Car 1
+          DISABLE_THREAD_TRIGGER (thr_wang_car_1)       //  Disable its trigger
+          DELETE_ITEM (wang_car_1)                      //  Delete Wang Car 1
        ENDIF
        
        //  Change Wang Cars store
@@ -1430,15 +1615,15 @@ EXEC
        CHANGE_BLOCK SIDE (200, 125, 2) TOP NOT_WALL NOT_BULLET FLAT NOT_FLIP 0 0
        light1 = CREATE_LIGHT (200.50, 125.50, 2.00) 2.00 255 (255, 255, 255) 0 0 0
     ELSE
-       SET_CAR_NUMBER_GRAPHIC (auto92, 1)     //  If not, set its number
+       SET_CAR_NUMBER_GRAPHIC (wang_car_1, 1)     //  If not, set its number
     ENDIF
     
     //  If the Wang Car 2 has already gotten (in a previous save)
-    IF ( savecount109 = 1 )
+    IF ( flag_wang_car_2 = 1 )
     
        IF ( fix_wang_cars_glitch = 1 )
-          DISABLE_THREAD_TRIGGER (trigger21)
-          DELETE_ITEM (auto93)
+          DISABLE_THREAD_TRIGGER (thr_wang_car_2)
+          DELETE_ITEM (wang_car_2)
        ENDIF
        
        //  Change Wang Cars store
@@ -1446,15 +1631,15 @@ EXEC
        CHANGE_BLOCK SIDE (201, 125, 2) TOP NOT_WALL NOT_BULLET FLAT NOT_FLIP 0 0
        light2 = CREATE_LIGHT (201.50, 125.50, 2.00) 2.00 255 (255, 255, 255) 0 0 0
     ELSE
-       SET_CAR_NUMBER_GRAPHIC (auto93, 2)
+       SET_CAR_NUMBER_GRAPHIC (wang_car_2, 2)
     ENDIF
     
     //  If the Wang Car 3 has already gotten (in a previous save)
-    IF ( savecount110 = 1 )
+    IF ( flag_wang_car_3 = 1 )
     
        IF ( fix_wang_cars_glitch = 1 )
-          DISABLE_THREAD_TRIGGER (trigger22)
-          DELETE_ITEM (auto94)
+          DISABLE_THREAD_TRIGGER (thr_wang_car_3)
+          DELETE_ITEM (wang_car_3)
        ENDIF
        
        //  Change Wang Cars store
@@ -1462,15 +1647,15 @@ EXEC
        CHANGE_BLOCK SIDE (202, 125, 2) TOP NOT_WALL NOT_BULLET FLAT NOT_FLIP 0 0
        light3 = CREATE_LIGHT (202.50, 125.50, 2.00) 2.00 255 (255, 255, 255) 0 0 0
     ELSE
-       SET_CAR_NUMBER_GRAPHIC (auto94, 3)
+       SET_CAR_NUMBER_GRAPHIC (wang_car_3, 3)
     ENDIF
     
     //  If the Wang Car 4 has already gotten (in a previous save)
-    IF ( savecount111 = 1 )
+    IF ( flag_wang_car_4 = 1 )
     
        IF ( fix_wang_cars_glitch = 1 )
-          DISABLE_THREAD_TRIGGER (trigger23)
-          DELETE_ITEM (auto95)
+          DISABLE_THREAD_TRIGGER (thr_wang_car_4)
+          DELETE_ITEM (wang_car_4)
        ENDIF
        
        //  Change Wang Cars store
@@ -1478,15 +1663,15 @@ EXEC
        CHANGE_BLOCK SIDE (203, 125, 2) TOP NOT_WALL NOT_BULLET FLAT NOT_FLIP 0 0
        light4 = CREATE_LIGHT (203.50, 125.50, 2.00) 2.00 255 (255, 255, 255) 0 0 0
     ELSE
-       SET_CAR_NUMBER_GRAPHIC (auto95, 4)
+       SET_CAR_NUMBER_GRAPHIC (wang_car_4, 4)
     ENDIF
     
     //  If the Wang Car 5 has already gotten (in a previous save)
-    IF ( savecount112 = 1 )
+    IF ( flag_wang_car_5 = 1 )
     
        IF ( fix_wang_cars_glitch = 1 )
-          DISABLE_THREAD_TRIGGER (trigger24)
-          DELETE_ITEM (auto96)
+          DISABLE_THREAD_TRIGGER (thr_wang_car_5)
+          DELETE_ITEM (wang_car_5)
        ENDIF
        
        //  Change Wang Cars store
@@ -1494,15 +1679,15 @@ EXEC
        CHANGE_BLOCK SIDE (204, 125, 2) TOP NOT_WALL NOT_BULLET FLAT NOT_FLIP 0 0
        light5 = CREATE_LIGHT (204.50, 125.50, 2.00) 2.00 255 (255, 255, 255) 0 0 0
     ELSE
-       SET_CAR_NUMBER_GRAPHIC (auto96, 5)
+       SET_CAR_NUMBER_GRAPHIC (wang_car_5, 5)
     ENDIF
     
     //  If the Wang Car 6 has already gotten (in a previous save)
-    IF ( savecount113 = 1 )
+    IF ( flag_wang_car_6 = 1 )
     
        IF ( fix_wang_cars_glitch = 1 )
-          DISABLE_THREAD_TRIGGER (trigger25)
-          DELETE_ITEM (auto97)
+          DISABLE_THREAD_TRIGGER (thr_wang_car_6)
+          DELETE_ITEM (wang_car_6)
        ENDIF
        
        //  Change Wang Cars store
@@ -1510,15 +1695,15 @@ EXEC
        CHANGE_BLOCK SIDE (205, 125, 2) TOP NOT_WALL NOT_BULLET FLAT NOT_FLIP 0 0
        light6 = CREATE_LIGHT (205.50, 125.50, 2.00) 2.00 255 (255, 255, 255) 0 0 0
     ELSE
-       SET_CAR_NUMBER_GRAPHIC (auto97, 6)
+       SET_CAR_NUMBER_GRAPHIC (wang_car_6, 6)
     ENDIF
     
     //  If the Wang Car 7 has already gotten (in a previous save)
-    IF ( savecount114 = 1 )
+    IF ( flag_wang_car_7 = 1 )
        
        IF ( fix_wang_cars_glitch = 1 )
-          DISABLE_THREAD_TRIGGER (trigger26)
-          DELETE_ITEM (auto98)
+          DISABLE_THREAD_TRIGGER (thr_wang_car_7)
+          DELETE_ITEM (wang_car_7)
        ENDIF
        
        //  Change Wang Cars store
@@ -1526,15 +1711,15 @@ EXEC
        CHANGE_BLOCK SIDE (206, 125, 2) TOP NOT_WALL NOT_BULLET FLAT NOT_FLIP 0 0
        light7 = CREATE_LIGHT (206.50, 125.50, 2.00) 2.00 255 (255, 255, 255) 0 0 0
     ELSE
-       SET_CAR_NUMBER_GRAPHIC (auto98, 7)
+       SET_CAR_NUMBER_GRAPHIC (wang_car_7, 7)
     ENDIF
     
     //  If the Wang Car 8 has already gotten (in a previous save)
-    IF ( savecount115 = 1 )
+    IF ( flag_wang_car_8 = 1 )
     
        IF ( fix_wang_cars_glitch = 1 )
-          DISABLE_THREAD_TRIGGER (trigger27)
-          DELETE_ITEM (auto99)
+          DISABLE_THREAD_TRIGGER (thr_wang_car_8)
+          DELETE_ITEM (wang_car_8)
        ENDIF
        
        //  Change Wang Cars store
@@ -1542,16 +1727,16 @@ EXEC
        CHANGE_BLOCK SIDE (207, 125, 2) TOP NOT_WALL NOT_BULLET FLAT NOT_FLIP 0 0
        light8 = CREATE_LIGHT (207.50, 125.50, 2.00) 2.00 255 (255, 255, 255) 0 0 0
     ELSE
-       SET_CAR_NUMBER_GRAPHIC (auto99, 8)
+       SET_CAR_NUMBER_GRAPHIC (wang_car_8, 8)
     ENDIF
     
 ENDEXEC
 
 
 //  Welcome to Residential District brief
-IF ( savecount3 = 0 )
+IF ( flag_welcome_brief = 0 )
    DISPLAY_BRIEF (6146)
-   SET savecount3 = 1      //  Do it once
+   SET flag_welcome_brief = 1      //  Do it once
 ENDIF
 
 GIVE_CAR_ALARM (auto29)
@@ -1563,7 +1748,11 @@ GIVE_CAR_ALARM (auto70)
 GIVE_CAR_ALARM (auto74)
 GIVE_CAR_ALARM (auto46)
 
-IF ( savecount104 = 0 )
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX TOKENS DECLARATIONS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+IF ( flag_gta2_tokens_spawned = 0 )
    
    OBJ_DATA gta2_token_1 = (195.50, 4.50, 255.00) 0 BONUS_TOKEN
    OBJ_DATA gta2_token_2 = (246.50, 2.50, 255.00) 0 BONUS_TOKEN
@@ -1685,7 +1874,7 @@ IF ( savecount104 = 0 )
    OBJ_DATA obj166 = (74.50, 235.50, 2.00) 0 COLLECT_34
    OBJ_DATA obj167 = (114.50, 57.50, 2.00) 0 COLLECT_04
    OBJ_DATA obj168 = (25.50, 101.50, 2.00) 0 COLLECT_34
-   SET savecount104 = 1
+   SET flag_gta2_tokens_spawned = 1
 
 ENDIF
 
@@ -1693,6 +1882,10 @@ ENDIF
 PUT_CAR_ON_TRAILER (auto105, auto108)
 PUT_CAR_ON_TRAILER (auto106, auto109)
 PUT_CAR_ON_TRAILER (auto107, auto110)
+
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX SOUNDS SETTINGS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 sound2 = CREATE_SOUND (110.00, 14.00, 6.00) WATERFALL PLAY_FOREVER END
 sound3 = CREATE_SOUND (101.50, 29.50, 6.00) CRICKETS PLAY_FOREVER END
@@ -1726,6 +1919,10 @@ sound34 = CREATE_SOUND (158.50, 186.50, 6.00) CLOCK_TOWER PLAY_FOREVER END
 sound35 = CREATE_SOUND (62.50, 76.50, 6.00) DISGRACELAND PLAY_FOREVER END
 sound28 = CREATE_SOUND (139.50, 252.50, 6.00) INDUSTRIAL_LOW PLAY_FOREVER END
 sound36 = CREATE_SOUND (125.50, 149.50, 6.00) FAN_NOISE PLAY_FOREVER END
+
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX GENERATORS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 GENERATOR gen4 = (114.50, 124.50, 2.00) 0 COLLECT_00 1800 1800
 SWITCH_GENERATOR (gen4, ON)
@@ -1796,91 +1993,103 @@ SWITCH_GENERATOR (gen33, ON)
 SWITCH_GENERATOR (gen34, ON)
 SWITCH_GENERATOR (gen35, ON)
 
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXX GANG KILL REACTION AND RESPECT XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
 SET_GANG_KILL_REACTION (redngang, zaibgang, 1)
 SET_GANG_KILL_REACTION (sciegang, redngang, 1)
 SET_GANG_KILL_REACTION (zaibgang, sciegang, 1)
 
-CHANGE_GANG_CHAR_RESPECT (poligang, p1, -5)
+CHANGE_GANG_CHAR_RESPECT (poligang, p1, -5)          //  They hate the player
 
 DISABLE_CRANE (crane8)
 
-// testing
-//LAUNCH_MISSION (ste_zm3.mis)
-//ADD_SCORE (p1, 50000)
 
-//  Main Loop
-WHILE ( savecount102 = 1 )
+//LAUNCH_MISSION (ste_zm3.mis)          //  (use this if you want to test a mission right away)
+//ADD_SCORE (p1, 50000)                 //  (use this if you want to have money to save in the very start)
+
+
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX MAIN LOOP XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+WHILE ( true = 1 )
    
    //  If the redneck guy killed the scientist guy
-   IF ( ( IS_CHAR_OBJECTIVE_PASSED(chr1) ) AND ( savecount105 = 0 ) )
-      MAKE_CHAR_DO_NOTHING (chr1)
-      SET_CHAR_SHOOTING_SKILL (chr1, CRAP_SHOT)
-      SET_CHAR_THREAT_REACTION (chr1, REACT_AS_NORMAL)
-      SET savecount105 = 1
+   IF ( ( IS_CHAR_OBJECTIVE_PASSED(redneck_guy) ) AND ( has_redn_guy_objective_passed = 0 ) )
+      MAKE_CHAR_DO_NOTHING (redneck_guy)
+      SET_CHAR_SHOOTING_SKILL (redneck_guy, CRAP_SHOT)
+      SET_CHAR_THREAT_REACTION (redneck_guy, REACT_AS_NORMAL)
+      SET has_redn_guy_objective_passed = 1
+	  
+	  //  If the zaibatsu guy has killed the redneck guy
+	  IF ( IS_CHAR_OBJECTIVE_PASSED(zaibatsu_guy) )
+         MAKE_CHAR_DO_NOTHING (zaibatsu_guy)
+      ENDIF
+	  
    ENDIF
    
-   //  If the zaibatsu guy killed the redneck guy
-   IF ( IS_CHAR_OBJECTIVE_PASSED(chr3) )
-      MAKE_CHAR_DO_NOTHING (chr3)
-   ENDIF
+   
    
    //  Player has completed all Redneck missions
-   IF ( ( savecount87 = 7 ) AND ( savecount99 = 0 ) )
+   IF ( ( flag_redn_missions_passed = 7 ) AND ( flag_all_redn_missions_completed = 0 ) )
       DISPLAY_MESSAGE (6185)      //  REDNECK GANG COMPLETE!
       DISPLAY_BRIEF (6182)        //  "Jesus H Christ, Rooster! You've passed all of the Redneck jobs."
-      SET savecount99 = 1
+      SET flag_all_redn_missions_completed = 1
    ENDIF
    
    //  Player has completed all Scientist missions
-   IF ( ( savecount85 = 7 ) AND ( savecount100 = 0 ) )
+   IF ( ( flag_scie_missions_passed = 7 ) AND ( flag_all_scie_missions_completed = 0 ) )
       DISPLAY_MESSAGE (6184)      //  SCIENTIST GANG COMPLETE!
       DISPLAY_BRIEF (6183)        //  "Excellent work, THC-303! You have passed all of the Scientist jobs."
-      SET savecount100 = 1
+      SET flag_all_scie_missions_completed = 1
    ENDIF
    
    //  Player has completed all Zaibatsu missions
-   IF ( ( savecount86 = 7 ) AND ( savecount101 = 0 ) )
+   IF ( ( flag_zaib_missions_passed = 7 ) AND ( flag_all_zaib_missions_completed = 0 ) )
       DISPLAY_MESSAGE (6186)      //  ZAIBATSU GANG COMPLETE!
       DISPLAY_BRIEF (6181)        //  "Well done, Gecko! You have passed all of the Zaibatsu jobs."
-      SET savecount101 = 1
+      SET flag_all_zaib_missions_completed = 1
    ENDIF
    
    //   It is causing issues, sometimes causing the end job to start twice at once
    /*
-   IF ( ( savecount91 = 21 ) AND ( savecount81 = 0 ) )
-      SET savecount91 = 22
+   IF ( ( flag_all_missions_passed = 21 ) AND ( flag_on_mission = 0 ) )
+      SET flag_all_missions_passed = 22
       LAUNCH_MISSION (ste_end.mis)
    ENDIF
    */
    
    //  If the player has the final score and isn't playing a mission
-   IF ( ( CHECK_SCORE_GREATER(p1, 2999999) ) AND ( savecount81 = 0 ) )
-      IF ( count1 = 0 )
+   IF ( ( CHECK_SCORE_GREATER(p1, 2999999) ) AND ( flag_on_mission = 0 ) )
+      IF ( can_player_finish_level = 0 )
          LEVEL_END_POINT_ARROW_AT (arrow4, 116.00, 123.00, 2.00)
-         SET count1 = 1
+         SET can_player_finish_level = 1
          DISPLAY_BRIEF_NOW (2910)          //  "HEY! You now have enough cash to leave this District. Follow the marker if you want to leave!"
       ENDIF
    ENDIF
    
    //  Is Player in mission and he got the final score?
-   IF ( ( count1 = 1 ) AND ( savecount81 = 1 ) )
+   IF ( ( can_player_finish_level = 1 ) AND ( flag_on_mission = 1 ) )
       IF ( CHECK_SCORE_GREATER(p1, 2999999) )
          REMOVE_ARROW (arrow4)             //  Remove the end arrow
-         SET count1 = 0
+         SET can_player_finish_level = 0
       ENDIF
    ENDIF
    
    //  Player does not have 2999999 score anymore?
-   IF ( ( count1 = 1 ) AND ( savecount81 = 0 ) )
+   IF ( ( can_player_finish_level = 1 ) AND ( flag_on_mission = 0 ) )
       IF ( NOT ( CHECK_SCORE_GREATER(p1, 2999999) ) )
          REMOVE_ARROW (arrow4)             //  Remove the end arrow
-         SET count1 = 0
+         SET can_player_finish_level = 0
          DISPLAY_BRIEF_NOW (2911)          //  "You don't have enough money to leave this District. You need $3,000,000!"
       ENDIF
    ENDIF
    
    //  If the player has the final score and he is in the end district point
-   IF ( ( count1 = 1 ) AND ( savecount81 = 0 ) )
+   IF ( ( can_player_finish_level = 1 ) AND ( flag_on_mission = 0 ) )
       IF ( LOCATE_CHARACTER_ANY_MEANS(p1, 116.00, 123.00, 2.00, 1.00, 1.00) )
          FINISH_LEVEL (BONUS_1)            //  Finish Residential District
       ENDIF
@@ -1891,173 +2100,178 @@ ENDWHILE
 LEVELEND
 
 
-//                             Kill Frenzies
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXX KILL FRENZY SETTING AND TRIGGERS XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 
 //  Kill Frenzy: Tank 1
-THREAD_TRIGGER trigger28 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, auto103, function28:)
+THREAD_TRIGGER thr_kill_frenzy_1 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, auto103, do_kill_frenzy_1:)
 
-function28:
-	START_BASIC_KF_TEMPLATE (trigger28, 6106, auto103, p1, TANK_GUN)
-	bonus8 = START_BONUS_CHECK (NO_ZONE, 3600, 20, 0, CHAR, NOT_EXCLUSIVE, BY_ROCKET_LAUNCHER, TANK, NO_OCCUPATION)
-	DO_BASIC_KF_TEMPLATE (bonus8, timer2, 120, onscreen1, savecount2, 20, 6106, p1, LIVES, 1)
+do_kill_frenzy_1:
+	START_BASIC_KF_TEMPLATE (thr_kill_frenzy_1, 6106, auto103, p1, TANK_GUN)
+	kf_bonus_1 = START_BONUS_CHECK (NO_ZONE, 3600, 20, 0, CHAR, NOT_EXCLUSIVE, BY_ROCKET_LAUNCHER, TANK, NO_OCCUPATION)
+	DO_BASIC_KF_TEMPLATE (kf_bonus_1, kf_timer, 120, kf_onscreen, kf_counter_total, 20, 6106, p1, LIVES, 1)
 RETURN
 
 //  Kill Frenzy: Tank 2
-THREAD_TRIGGER trigger29 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, auto104, function29:)
+THREAD_TRIGGER thr_kill_frenzy_2 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, auto104, do_kill_frenzy_2:)
 
-function29:
-	START_BASIC_KF_TEMPLATE (trigger29, 6107, auto104, p1, TANK_GUN)
-	bonus9 = START_BONUS_CHECK (NO_ZONE, 3600, 20, 0, CAR, NOT_EXCLUSIVE, BY_ROCKET_LAUNCHER, TANK, NONE)
-	DO_BASIC_KF_TEMPLATE (bonus9, timer2, 120, onscreen1, savecount2, 20, 6107, p1, LIVES, 1)
+do_kill_frenzy_2:
+	START_BASIC_KF_TEMPLATE (thr_kill_frenzy_2, 6107, auto104, p1, TANK_GUN)
+	kf_bonus_2 = START_BONUS_CHECK (NO_ZONE, 3600, 20, 0, CAR, NOT_EXCLUSIVE, BY_ROCKET_LAUNCHER, TANK, NONE)
+	DO_BASIC_KF_TEMPLATE (kf_bonus_2, kf_timer, 120, kf_onscreen, kf_counter_total, 20, 6107, p1, LIVES, 1)
 RETURN
 
 //  Kill Frenzy: Car in trailer 1
-THREAD_TRIGGER trigger30 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, auto105, function30:)
+THREAD_TRIGGER thr_kill_frenzy_3 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, auto105, do_kill_frenzy_3:)
 
-function30:
-	START_BASIC_KF_TEMPLATE (trigger30, 6108, auto105, p1, CAR_MACHINE_GUN)
-	bonus10 = START_BONUS_CHECK (NO_ZONE, 3600, 100, 0, CHAR, NOT_EXCLUSIVE, BY_GUN, ZCX5, NO_OCCUPATION)  //  (NO_ZONE, 3600, 100, 0, CHAR, NOT_EXCLUSIVE, BY_GUN, ZCX5, NO_OCCUPATION)
-	DO_BASIC_KF_TEMPLATE (bonus10, timer2, 120, onscreen1, savecount2, 100, 6108, p1, LIVES, 1)          //   (bonus10, timer2, 120, onscreen1, savecount2, 100, 6108, p1, LIVES, 1)
+do_kill_frenzy_3:
+	START_BASIC_KF_TEMPLATE (thr_kill_frenzy_3, 6108, auto105, p1, CAR_MACHINE_GUN)
+	kf_bonus_3 = START_BONUS_CHECK (NO_ZONE, 3600, 100, 0, CHAR, NOT_EXCLUSIVE, BY_GUN, ZCX5, NO_OCCUPATION)
+	DO_BASIC_KF_TEMPLATE (kf_bonus_3, kf_timer, 120, kf_onscreen, kf_counter_total, 100, 6108, p1, LIVES, 1)
 RETURN
 
 //  Kill Frenzy: Car in trailer 2
-THREAD_TRIGGER trigger31 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, auto106, function31:)
+THREAD_TRIGGER thr_kill_frenzy_4 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, auto106, do_kill_frenzy_4:)
 
-function31:
-	START_BASIC_KF_TEMPLATE (trigger31, 6109, auto106, p1, CAR_MACHINE_GUN)
-	bonus11 = START_BONUS_CHECK (NO_ZONE, 2700, 75, 0, CHAR, NOT_EXCLUSIVE, BY_GUN, ZCX5, NO_OCCUPATION)
-	DO_BASIC_KF_TEMPLATE (bonus11, timer2, 90, onscreen1, savecount2, 75, 6109, p1, LIVES, 1)
+do_kill_frenzy_4:
+	START_BASIC_KF_TEMPLATE (thr_kill_frenzy_4, 6109, auto106, p1, CAR_MACHINE_GUN)
+	kf_bonus_4 = START_BONUS_CHECK (NO_ZONE, 2700, 75, 0, CHAR, NOT_EXCLUSIVE, BY_GUN, ZCX5, NO_OCCUPATION)
+	DO_BASIC_KF_TEMPLATE (kf_bonus_4, kf_timer, 90, kf_onscreen, kf_counter_total, 75, 6109, p1, LIVES, 1)
 RETURN
 
 //  Kill Frenzy: Car in trailer 3
-THREAD_TRIGGER trigger32 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, auto107, function32:)
+THREAD_TRIGGER thr_kill_frenzy_5 = THREAD_WAIT_FOR_CHAR_IN_CAR (p1, auto107, do_kill_frenzy_5:)
 
-function32:
-	START_BASIC_KF_TEMPLATE (trigger32, 6110, auto107, p1, CAR_MINE)
-	bonus12 = START_BONUS_CHECK (NO_ZONE, 3600, 20, 0, CAR, NOT_EXCLUSIVE, BY_CAR_MINE, ZCX5, COPCAR)
-	DO_BASIC_KF_TEMPLATE (bonus12, timer2, 120, onscreen1, savecount2, 20, 6110, p1, LIVES, 1)
+do_kill_frenzy_5:
+	START_BASIC_KF_TEMPLATE (thr_kill_frenzy_5, 6110, auto107, p1, CAR_MINE)
+	kf_bonus_5 = START_BONUS_CHECK (NO_ZONE, 3600, 20, 0, CAR, NOT_EXCLUSIVE, BY_CAR_MINE, ZCX5, COPCAR)
+	DO_BASIC_KF_TEMPLATE (kf_bonus_5, kf_timer, 120, kf_onscreen, kf_counter_total, 20, 6110, p1, LIVES, 1)
 RETURN
 
 //  Other Kill Frenzies
 
-THREAD_TRIGGER trigger33 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 132.50, 171.50, 2.00, 0.20, 0.20, function33:)
+THREAD_TRIGGER thr_kill_frenzy_6 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 132.50, 171.50, 2.00, 0.20, 0.20, do_kill_frenzy_6:)
 
-function33:
-	START_BASIC_KF_TEMPLATE (trigger33, 6111, obj35, p1, MACHINE_GUN)
-	bonus13 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CHAR, NOT_EXCLUSIVE, BY_GUN, NONE, NO_OCCUPATION)
-	DO_BASIC_KF_TEMPLATE (bonus13, timer2, 60, onscreen1, savecount2, 20, 6111, p1, LIVES, 1)
+do_kill_frenzy_6:
+	START_BASIC_KF_TEMPLATE (thr_kill_frenzy_6, 6111, obj35, p1, MACHINE_GUN)
+	kf_bonus_6 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CHAR, NOT_EXCLUSIVE, BY_GUN, NONE, NO_OCCUPATION)
+	DO_BASIC_KF_TEMPLATE (kf_bonus_6, kf_timer, 60, kf_onscreen, kf_counter_total, 20, 6111, p1, LIVES, 1)
 RETURN
 
-THREAD_TRIGGER trigger34 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 253.50, 86.50, 2.00, 0.20, 0.20, function34:)
+THREAD_TRIGGER thr_kill_frenzy_7 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 253.50, 86.50, 2.00, 0.20, 0.20, do_kill_frenzy_7:)
 
-function34:
-	START_BASIC_KF_TEMPLATE (trigger34, 6112, obj36, p1, MACHINE_GUN)
-	bonus14 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CHAR, NOT_EXCLUSIVE, BY_GUN, NONE, ANY_LAW_ENFORCEMENT)
-	DO_BASIC_KF_TEMPLATE (bonus14, timer2, 60, onscreen1, savecount2, 20, 6112, p1, LIVES, 1)
+do_kill_frenzy_7:
+	START_BASIC_KF_TEMPLATE (thr_kill_frenzy_7, 6112, obj36, p1, MACHINE_GUN)
+	kf_bonus_7 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CHAR, NOT_EXCLUSIVE, BY_GUN, NONE, ANY_LAW_ENFORCEMENT)
+	DO_BASIC_KF_TEMPLATE (kf_bonus_7, kf_timer, 60, kf_onscreen, kf_counter_total, 20, 6112, p1, LIVES, 1)
 RETURN
 
-THREAD_TRIGGER trigger35 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 113.50, 144.50, 2.00, 0.20, 0.20, function35:)
+THREAD_TRIGGER thr_kill_frenzy_8 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 113.50, 144.50, 2.00, 0.20, 0.20, do_kill_frenzy_8:)
 
-function35:
-	START_BASIC_KF_TEMPLATE (trigger35, 6113, obj37, p1, MOLOTOV)
-	bonus15 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CHAR, NOT_EXCLUSIVE, BY_MOLOTOV, NONE, NO_OCCUPATION)
-	DO_BASIC_KF_TEMPLATE (bonus15, timer2, 60, onscreen1, savecount2, 20, 6113, p1, LIVES, 1)
+do_kill_frenzy_8:
+	START_BASIC_KF_TEMPLATE (thr_kill_frenzy_8, 6113, obj37, p1, MOLOTOV)
+	kf_bonus_8 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CHAR, NOT_EXCLUSIVE, BY_MOLOTOV, NONE, NO_OCCUPATION)
+	DO_BASIC_KF_TEMPLATE (kf_bonus_8, kf_timer, 60, kf_onscreen, kf_counter_total, 20, 6113, p1, LIVES, 1)
 RETURN
 
-THREAD_TRIGGER trigger36 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 161.50, 78.50, 6.00, 0.20, 0.20, function36:)
+THREAD_TRIGGER thr_kill_frenzy_9 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 161.50, 78.50, 6.00, 0.20, 0.20, do_kill_frenzy_9:)
 
-function36:
-	START_BASIC_KF_TEMPLATE (trigger36, 6114, obj38, p1, MOLOTOV)
-	bonus16 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CAR, NOT_EXCLUSIVE, BY_MOLOTOV, NONE, NONE)
-	DO_BASIC_KF_TEMPLATE (bonus16, timer2, 60, onscreen1, savecount2, 20, 6114, p1, LIVES, 1)
+do_kill_frenzy_9:
+	START_BASIC_KF_TEMPLATE (thr_kill_frenzy_9, 6114, obj38, p1, MOLOTOV)
+	kf_bonus_9 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CAR, NOT_EXCLUSIVE, BY_MOLOTOV, NONE, NONE)
+	DO_BASIC_KF_TEMPLATE (kf_bonus_9, kf_timer, 60, kf_onscreen, kf_counter_total, 20, 6114, p1, LIVES, 1)
 RETURN
 
-THREAD_TRIGGER trigger37 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 176.50, 143.50, 2.00, 0.20, 0.20, function37:)
+THREAD_TRIGGER thr_kill_frenzy_10 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 176.50, 143.50, 2.00, 0.20, 0.20, do_kill_frenzy_10:)
 
-function37:
-	START_BASIC_KF_TEMPLATE (trigger37, 6115, obj39, p1, ROCKET_LAUNCHER)
-	bonus17 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CHAR, NOT_EXCLUSIVE, BY_ROCKET_LAUNCHER, NONE, NO_OCCUPATION)
-	DO_BASIC_KF_TEMPLATE (bonus17, timer2, 60, onscreen1, savecount2, 20, 6115, p1, LIVES, 1)
+do_kill_frenzy_10:
+	START_BASIC_KF_TEMPLATE (thr_kill_frenzy_10, 6115, obj39, p1, ROCKET_LAUNCHER)
+	kf_bonus_10 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CHAR, NOT_EXCLUSIVE, BY_ROCKET_LAUNCHER, NONE, NO_OCCUPATION)
+	DO_BASIC_KF_TEMPLATE (kf_bonus_10, kf_timer, 60, kf_onscreen, kf_counter_total, 20, 6115, p1, LIVES, 1)
 RETURN
 
-THREAD_TRIGGER trigger38 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 84.50, 57.50, 2.00, 0.20, 0.20, function38:)
 
-function38:
-	START_BASIC_KF_TEMPLATE (trigger38, 6116, obj40, p1, ROCKET_LAUNCHER)
-	bonus18 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CAR, NOT_EXCLUSIVE, BY_ROCKET_LAUNCHER, NONE, COPCAR)
-	DO_BASIC_KF_TEMPLATE (bonus18, timer2, 60, onscreen1, savecount2, 20, 6116, p1, LIVES, 1)
+THREAD_TRIGGER thr_kill_frenzy_11 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 84.50, 57.50, 2.00, 0.20, 0.20, do_kill_frenzy_11:)
+
+//  One of the "impossible" kill frenzies:   60 seconds to destroy 20 cop cars using rocket launcher  (average of 1 cop car per 3 seconds)
+do_kill_frenzy_11:
+	START_BASIC_KF_TEMPLATE (thr_kill_frenzy_11, 6116, obj40, p1, ROCKET_LAUNCHER)
+	kf_bonus_11 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CAR, NOT_EXCLUSIVE, BY_ROCKET_LAUNCHER, NONE, COPCAR)
+	DO_BASIC_KF_TEMPLATE (kf_bonus_11, kf_timer, 60, kf_onscreen, kf_counter_total, 20, 6116, p1, LIVES, 1)
 RETURN
 
-THREAD_TRIGGER trigger39 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 112.50, 164.50, 2.00, 0.20, 0.20, function39:)
+THREAD_TRIGGER thr_kill_frenzy_12 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 112.50, 164.50, 2.00, 0.20, 0.20, do_kill_frenzy_12:)
 
-function39:
-	START_BASIC_KF_TEMPLATE (trigger39, 6117, obj41, p1, ROCKET_LAUNCHER)
-	bonus19 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CAR, NOT_EXCLUSIVE, BY_ROCKET_LAUNCHER, NONE, NONE)
-	DO_BASIC_KF_TEMPLATE (bonus19, timer2, 60, onscreen1, savecount2, 20, 6117, p1, LIVES, 1)
+do_kill_frenzy_12:
+	START_BASIC_KF_TEMPLATE (thr_kill_frenzy_12, 6117, obj41, p1, ROCKET_LAUNCHER)
+	kf_bonus_12 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CAR, NOT_EXCLUSIVE, BY_ROCKET_LAUNCHER, NONE, NONE)
+	DO_BASIC_KF_TEMPLATE (kf_bonus_12, kf_timer, 60, kf_onscreen, kf_counter_total, 20, 6117, p1, LIVES, 1)
 RETURN
 
-THREAD_TRIGGER trigger40 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 9.50, 27.50, 2.00, 0.20, 0.20, function40:)
+THREAD_TRIGGER thr_kill_frenzy_13 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 9.50, 27.50, 2.00, 0.20, 0.20, do_kill_frenzy_13:)
 
-function40:
-	START_BASIC_KF_TEMPLATE (trigger40, 6118, obj42, p1, FLAME_THROWER)
-	bonus20 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CHAR, NOT_EXCLUSIVE, BY_FLAMETHROWER, NONE, NO_OCCUPATION)
-	DO_BASIC_KF_TEMPLATE (bonus20, timer2, 60, onscreen1, savecount2, 20, 6118, p1, LIVES, 1)
+do_kill_frenzy_13:
+	START_BASIC_KF_TEMPLATE (thr_kill_frenzy_13, 6118, obj42, p1, FLAME_THROWER)
+	kf_bonus_13 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CHAR, NOT_EXCLUSIVE, BY_FLAMETHROWER, NONE, NO_OCCUPATION)
+	DO_BASIC_KF_TEMPLATE (kf_bonus_13, kf_timer, 60, kf_onscreen, kf_counter_total, 20, 6118, p1, LIVES, 1)
 RETURN
 
-THREAD_TRIGGER trigger41 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 43.50, 146.50, 2.00, 0.20, 0.20, function41:)
+THREAD_TRIGGER thr_kill_frenzy_14 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 43.50, 146.50, 2.00, 0.20, 0.20, do_kill_frenzy_14:)
 
-function41:
-	START_BASIC_KF_TEMPLATE (trigger41, 6119, obj43, p1, FLAME_THROWER)
-	bonus21 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CHAR, NOT_EXCLUSIVE, BY_FLAMETHROWER, NONE, ANY_LAW_ENFORCEMENT)
-	DO_BASIC_KF_TEMPLATE (bonus21, timer2, 60, onscreen1, savecount2, 20, 6119, p1, LIVES, 1)
+do_kill_frenzy_14:
+	START_BASIC_KF_TEMPLATE (thr_kill_frenzy_14, 6119, obj43, p1, FLAME_THROWER)
+	kf_bonus_14 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CHAR, NOT_EXCLUSIVE, BY_FLAMETHROWER, NONE, ANY_LAW_ENFORCEMENT)
+	DO_BASIC_KF_TEMPLATE (kf_bonus_14, kf_timer, 60, kf_onscreen, kf_counter_total, 20, 6119, p1, LIVES, 1)
 RETURN
 
-THREAD_TRIGGER trigger42 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 147.50, 43.50, 2.00, 0.20, 0.20, function42:)
+THREAD_TRIGGER thr_kill_frenzy_15 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 147.50, 43.50, 2.00, 0.20, 0.20, do_kill_frenzy_15:)
 
-function42:
-	START_BASIC_KF_TEMPLATE (trigger42, 6120, obj44, p1, ELECTRO_GUN)
-	bonus22 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CHAR, NOT_EXCLUSIVE, BY_ELECTRO_WEAPON, NONE, NO_OCCUPATION)
-	DO_BASIC_KF_TEMPLATE (bonus22, timer2, 60, onscreen1, savecount2, 20, 6120, p1, LIVES, 1)
+do_kill_frenzy_15:
+	START_BASIC_KF_TEMPLATE (thr_kill_frenzy_15, 6120, obj44, p1, ELECTRO_GUN)
+	kf_bonus_15 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CHAR, NOT_EXCLUSIVE, BY_ELECTRO_WEAPON, NONE, NO_OCCUPATION)
+	DO_BASIC_KF_TEMPLATE (kf_bonus_15, kf_timer, 60, kf_onscreen, kf_counter_total, 20, 6120, p1, LIVES, 1)
 RETURN
 
-THREAD_TRIGGER trigger43 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 151.50, 122.50, 3.00, 0.20, 0.20, function43:)
+THREAD_TRIGGER thr_kill_frenzy_16 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 151.50, 122.50, 3.00, 0.20, 0.20, do_kill_frenzy_16:)
 
-function43:
-	START_BASIC_KF_TEMPLATE (trigger43, 6121, obj45, p1, ELECTRO_GUN)
-	bonus23 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CHAR, NOT_EXCLUSIVE, BY_ELECTRO_WEAPON, NONE, NO_OCCUPATION)
-	DO_BASIC_KF_TEMPLATE (bonus23, timer2, 60, onscreen1, savecount2, 20, 6121, p1, LIVES, 1)
+do_kill_frenzy_16:
+	START_BASIC_KF_TEMPLATE (thr_kill_frenzy_16, 6121, obj45, p1, ELECTRO_GUN)
+	kf_bonus_16 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CHAR, NOT_EXCLUSIVE, BY_ELECTRO_WEAPON, NONE, NO_OCCUPATION)
+	DO_BASIC_KF_TEMPLATE (kf_bonus_16, kf_timer, 60, kf_onscreen, kf_counter_total, 20, 6121, p1, LIVES, 1)
 RETURN
 
-THREAD_TRIGGER trigger44 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 212.50, 201.50, 2.00, 0.20, 0.20, function44:)
+THREAD_TRIGGER thr_kill_frenzy_17 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 212.50, 201.50, 2.00, 0.20, 0.20, do_kill_frenzy_17:)
 
-function44:
-	START_BASIC_KF_TEMPLATE (trigger44, 6122, obj46, p1, ELECTRO_GUN)
-	bonus24 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CHAR, NOT_EXCLUSIVE, BY_ELECTRO_WEAPON, NONE, ANY_LAW_ENFORCEMENT)
-	DO_BASIC_KF_TEMPLATE (bonus24, timer2, 60, onscreen1, savecount2, 20, 6122, p1, LIVES, 1)
+do_kill_frenzy_17:
+	START_BASIC_KF_TEMPLATE (thr_kill_frenzy_17, 6122, obj46, p1, ELECTRO_GUN)
+	kf_bonus_17 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CHAR, NOT_EXCLUSIVE, BY_ELECTRO_WEAPON, NONE, ANY_LAW_ENFORCEMENT)
+	DO_BASIC_KF_TEMPLATE (kf_bonus_17, kf_timer, 60, kf_onscreen, kf_counter_total, 20, 6122, p1, LIVES, 1)
 RETURN
 
-THREAD_TRIGGER trigger45 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 146.50, 211.50, 2.00, 0.20, 0.20, function45:)
+THREAD_TRIGGER thr_kill_frenzy_18 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 146.50, 211.50, 2.00, 0.20, 0.20, do_kill_frenzy_18:)
 
-function45:
-	START_BASIC_KF_TEMPLATE (trigger45, 6123, obj47, p1, ELECTRO_GUN)
-	bonus25 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CAR, NOT_EXCLUSIVE, BY_ELECTRO_WEAPON, NONE, COPCAR)
-	DO_BASIC_KF_TEMPLATE (bonus25, timer2, 60, onscreen1, savecount2, 20, 6123, p1, LIVES, 1)
+//  Another "impossible" kill frenzy:   60 seconds to destroy 20 cop cars using electrogun  (average of 1 cop car per 3 seconds)
+do_kill_frenzy_18:
+	START_BASIC_KF_TEMPLATE (thr_kill_frenzy_18, 6123, obj47, p1, ELECTRO_GUN)
+	kf_bonus_18 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CAR, NOT_EXCLUSIVE, BY_ELECTRO_WEAPON, NONE, COPCAR)
+	DO_BASIC_KF_TEMPLATE (kf_bonus_18, kf_timer, 60, kf_onscreen, kf_counter_total, 20, 6123, p1, LIVES, 1)
 RETURN
 
-THREAD_TRIGGER trigger46 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 172.50, 192.50, 5.00, 0.20, 0.20, function46:)
+THREAD_TRIGGER thr_kill_frenzy_19 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 172.50, 192.50, 5.00, 0.20, 0.20, do_kill_frenzy_19:)
 
-function46:
-	START_BASIC_KF_TEMPLATE (trigger46, 6124, obj48, p1, SHOTGUN)
-	bonus26 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CHAR, NOT_EXCLUSIVE, BY_SHOTGUN, NONE, NO_OCCUPATION)
-	DO_BASIC_KF_TEMPLATE (bonus26, timer2, 60, onscreen1, savecount2, 20, 6124, p1, LIVES, 1)
+do_kill_frenzy_19:
+	START_BASIC_KF_TEMPLATE (thr_kill_frenzy_19, 6124, obj48, p1, SHOTGUN)
+	kf_bonus_19 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CHAR, NOT_EXCLUSIVE, BY_SHOTGUN, NONE, NO_OCCUPATION)
+	DO_BASIC_KF_TEMPLATE (kf_bonus_19, kf_timer, 60, kf_onscreen, kf_counter_total, 20, 6124, p1, LIVES, 1)
 RETURN
 
-THREAD_TRIGGER trigger47 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 208.50, 93.50, 2.00, 0.20, 0.20, function47:)
+THREAD_TRIGGER thr_kill_frenzy_20 = THREAD_WAIT_FOR_CHAR_IN_AREA (p1, 208.50, 93.50, 2.00, 0.20, 0.20, do_kill_frenzy_20:)
 
-function47:
-	START_BASIC_KF_TEMPLATE (trigger47, 6125, obj49, p1, SHOTGUN)
-	bonus27 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CHAR, NOT_EXCLUSIVE, BY_SHOTGUN, NONE, ANY_LAW_ENFORCEMENT)
-	DO_BASIC_KF_TEMPLATE (bonus27, timer2, 60, onscreen1, savecount2, 20, 6125, p1, LIVES, 1)
+do_kill_frenzy_20:
+	START_BASIC_KF_TEMPLATE (thr_kill_frenzy_20, 6125, obj49, p1, SHOTGUN)
+	kf_bonus_20 = START_BONUS_CHECK (NO_ZONE, 1800, 20, 0, CHAR, NOT_EXCLUSIVE, BY_SHOTGUN, NONE, ANY_LAW_ENFORCEMENT)
+	DO_BASIC_KF_TEMPLATE (kf_bonus_20, kf_timer, 60, kf_onscreen, kf_counter_total, 20, 6125, p1, LIVES, 1)
 RETURN
 

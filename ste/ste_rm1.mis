@@ -37,33 +37,20 @@ COUNTER r_m_1_flag_assin_number_6 = 0
 COUNTER r_m_1_flag_assin_number_7 = 0
 COUNTER r_m_1_flag_assin_number_8 = 0
 
-/*
-COUNTER count14 = 0
-COUNTER count15 = 0
-COUNTER count16 = 0
-COUNTER count17 = 0
-COUNTER count18 = 0
-COUNTER count19 = 0
-COUNTER count20 = 0
-COUNTER count21 = 0
-*/
-
 COUNTER r_m_1_sound_brief_flag = 0
-
 COUNTER r_m_1_respawn_count = 0
-
 COUNTER r_m_1_while_loop = 0
 
 SOUND r_m_1_laughs_sound
 
 redn_med_phone1_m1:
 
-	SET savecount11 = 0
+	SET flag_failed_redn_med_phone1_m1 = 0
  
 	DISPLAY_MESSAGE (2673)          //  GREATEST HITS!
  
-	SET savecount81 = 1
-	SET savecount83 = 1
+	SET flag_on_mission = 1
+	SET flag_on_redn_mission = 1
  
 	DISPLAY_BRIEF (2051)            //  "Hey, Rooster, it's Billy Bob Bean. I fancy killin' myself some Zaibatsu Hitmen [...] Can you start assassinatin' 'em fer me?"
  
@@ -125,49 +112,49 @@ redn_med_phone1_m1:
           //  If he is the 2° assassin: use Shotgun
           IF ( ( r_m_1_assassins_killed = 1 ) AND ( r_m_1_flag_assin_number_2 = 0 ) )
              GIVE_WEAPON (r_m_1_assassin_1_char, SHOTGUN)
-            	SET r_m_1_flag_assin_number_2 = 1                    //  Lock this IF
+            	SET r_m_1_flag_assin_number_2 = 1                 //  Lock this IF
             	SET r_m_1_assassin_1_alive = 1                    //  Update flag
           ENDIF
           
           //  If he is the 3° assassin: use Shotgun
           IF ( ( r_m_1_assassins_killed = 2 ) AND ( r_m_1_flag_assin_number_3 = 0 ) )
              GIVE_WEAPON (r_m_1_assassin_1_char, SHOTGUN)
-            	SET r_m_1_flag_assin_number_3 = 1                    //  Lock this IF
+            	SET r_m_1_flag_assin_number_3 = 1                 //  Lock this IF
             	SET r_m_1_assassin_1_alive = 1                    //  Update flag
           ENDIF
           
           //  If he is the 4° assassin: use Grenades
           IF ( ( r_m_1_assassins_killed = 3 ) AND ( r_m_1_flag_assin_number_4 = 0 ) )
              GIVE_WEAPON (r_m_1_assassin_1_char, GRENADE)
-            	SET r_m_1_flag_assin_number_4 = 1                    //  Lock this IF
+            	SET r_m_1_flag_assin_number_4 = 1                 //  Lock this IF
             	SET r_m_1_assassin_1_alive = 1                    //  Update flag
           ENDIF
           
           //  If he is the 5° assassin: use Machine Gun
           IF ( ( r_m_1_assassins_killed = 4 ) AND ( r_m_1_flag_assin_number_5 = 0 ) )
              GIVE_WEAPON (r_m_1_assassin_1_char, MACHINE_GUN)
-	            SET r_m_1_flag_assin_number_5 = 1                    //  Lock this IF
+	            SET r_m_1_flag_assin_number_5 = 1                  //  Lock this IF
 	            SET r_m_1_assassin_1_alive = 1                     //  Update flag
           ENDIF
           
           //  If he is the 6° assassin: use Molotov
           IF ( ( r_m_1_assassins_killed = 5 ) AND ( r_m_1_flag_assin_number_6 = 0 ) )
              GIVE_WEAPON (r_m_1_assassin_1_char, MOLOTOV)
-            	SET r_m_1_flag_assin_number_6 = 1                    //  Lock this IF
+            	SET r_m_1_flag_assin_number_6 = 1                  //  Lock this IF
             	SET r_m_1_assassin_1_alive = 1                     //  Update flag
           ENDIF
           
           //  If he is the 7° assassin: use Machine Gun
           IF ( ( r_m_1_assassins_killed = 6 ) AND ( r_m_1_flag_assin_number_7 = 0 ) )
              GIVE_WEAPON (r_m_1_assassin_1_char, MACHINE_GUN)
-	            SET r_m_1_flag_assin_number_7 = 1                    //  Lock this IF
+	            SET r_m_1_flag_assin_number_7 = 1                  //  Lock this IF
 	            SET r_m_1_assassin_1_alive = 1                     //  Update flag
           ENDIF
           
           //  If he is the 8° assassin: use Silenced Machine Gun
           IF ( ( r_m_1_assassins_killed = 7 ) AND ( r_m_1_flag_assin_number_8 = 0 ) )
              GIVE_WEAPON (r_m_1_assassin_1_char, SILENCED_MACHINE_GUN)
-            	SET r_m_1_flag_assin_number_8 = 1                    //  Lock this IF
+            	SET r_m_1_flag_assin_number_8 = 1                  //  Lock this IF
             	SET r_m_1_assassin_1_alive = 1                     //  Update flag
           ENDIF
           
@@ -200,49 +187,49 @@ redn_med_phone1_m1:
           //  If he is the 2° assassin: use Shotgun
           IF ( ( r_m_1_assassins_killed = 1 ) AND ( r_m_1_flag_assin_number_2 = 0 ) )
              GIVE_WEAPON (r_m_1_assassin_2_char, SHOTGUN)
-	            SET r_m_1_flag_assin_number_2 = 1                     //  Lock this IF
+	            SET r_m_1_flag_assin_number_2 = 1                  //  Lock this IF
 	            SET r_m_1_assassin_2_alive = 1                     //  Update flag
           ENDIF
           
           //  If he is the 3° assassin: use Pistol
           IF ( ( r_m_1_assassins_killed = 2 ) AND ( r_m_1_flag_assin_number_3 = 0 ) )
              GIVE_WEAPON (r_m_1_assassin_2_char, PISTOL)
-             SET r_m_1_flag_assin_number_3 = 1                     //  Lock this IF
+             SET r_m_1_flag_assin_number_3 = 1                  //  Lock this IF
 	            SET r_m_1_assassin_2_alive = 1                     //  Update flag
           ENDIF
           
           //  If he is the 4° assassin: use Grenades
           IF ( ( r_m_1_assassins_killed = 3 ) AND ( r_m_1_flag_assin_number_4 = 0 ) )
              GIVE_WEAPON (r_m_1_assassin_2_char, GRENADE)
-             SET r_m_1_flag_assin_number_4 = 1                     //  Lock this IF
+             SET r_m_1_flag_assin_number_4 = 1                  //  Lock this IF
 	            SET r_m_1_assassin_2_alive = 1                     //  Update flag
           ENDIF
           
           //  If he is the 5° assassin: use Pistol
           IF ( ( r_m_1_assassins_killed = 4 ) AND ( r_m_1_flag_assin_number_5 = 0 ) )
              GIVE_WEAPON (r_m_1_assassin_2_char, PISTOL)
-	            SET r_m_1_flag_assin_number_5 = 1                    //  Lock this IF
+	            SET r_m_1_flag_assin_number_5 = 1                  //  Lock this IF
 	            SET r_m_1_assassin_2_alive = 1                     //  Update flag
           ENDIF
           
           //  If he is the 6° assassin: use Molotov
           IF ( ( r_m_1_assassins_killed = 5 ) AND ( r_m_1_flag_assin_number_6 = 0 ) )
              GIVE_WEAPON (r_m_1_assassin_2_char, MOLOTOV)
-	            SET r_m_1_flag_assin_number_6 = 1                    //  Lock this IF
+	            SET r_m_1_flag_assin_number_6 = 1                  //  Lock this IF
 	            SET r_m_1_assassin_2_alive = 1                     //  Update flag
           ENDIF
           
           //  If he is the 7° assassin: use Pistol
           IF ( ( r_m_1_assassins_killed = 6 ) AND ( r_m_1_flag_assin_number_7 = 0 ) )
              GIVE_WEAPON (r_m_1_assassin_2_char, PISTOL)
-	            SET r_m_1_flag_assin_number_7 = 1                    //  Lock this IF
+	            SET r_m_1_flag_assin_number_7 = 1                  //  Lock this IF
 	            SET r_m_1_assassin_2_alive = 1                     //  Update flag
           ENDIF
           
           //  If he is the 8° assassin: use Silenced Machine Gun
           IF ( ( r_m_1_assassins_killed = 7 ) AND ( r_m_1_flag_assin_number_8 = 0 ) )
              GIVE_WEAPON (r_m_1_assassin_2_char, SILENCED_MACHINE_GUN)
-	            SET r_m_1_flag_assin_number_8 = 1                    //  Lock this IF
+	            SET r_m_1_flag_assin_number_8 = 1                  //  Lock this IF
 	            SET r_m_1_assassin_2_alive = 1                     //  Update flag
           ENDIF
           
@@ -342,7 +329,7 @@ redn_med_phone1_m1:
     ELSE
        IF ( NOT ( IS_CHARACTER_IN_ANY_CAR(p1) ) )           //  If the player isn't in any car
           IF ( IS_ITEM_ONSCREEN(r_m_1_assassin_1_char) )                     //  and the assassin 1 is on player screen
-             SET_CHAR_MAX_DRIVESPEED (r_m_1_assassin_1_char, 0.00)           // Make him stop
+             SET_CHAR_MAX_DRIVESPEED (r_m_1_assassin_1_char, 0.00)           //  Make him stop
           ENDIF
        ENDIF
     ENDIF
@@ -415,31 +402,48 @@ redn_med_phone1_m1:
 	      DISPLAY_MESSAGE (2999)         //  Mission Complete
 	      SET r_m_1_while_loop = 1
 	      ADD_SCORE (p1, 50000)
-	      SET savecount53 = 1
+	      SET flag_passed_redn_med_phone1_m1 = 1
 	      CLEAR_WANTED_LEVEL (p1)
 	      ADD_MULTIPLIER (p1, 1)
 	      CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (redngang, p1, 1)
+       
+       //  If the player has completed the Redneck Medium Mission 3
+       IF ( flag_passed_redn_med_phone1_2_m3 = 1 )
+	         SET_PHONE_DEAD (ph_redn_med_phone1)                   //  Kill the phone
+	         DISABLE_THREAD_TRIGGER (thr_redn_med_phone1_m1)       //  Disable its trigger too
+       ENDIF
+       
        RETURN
     ENDIF
     
     //  After limo has been hitted by any weapon
     IF ( r_m_1_sound_brief_flag = 1 )
-       DISPLAY_BRIEF (2065)          //  "This Flambo has some fancy protected vehicle, Rooster. You rig up a Car Bomb and park it beside him, just for fun."
-       SET r_m_1_sound_brief_flag = 2               //  Lock this IF
+       DISPLAY_BRIEF (2065)                     //  "This Flambo has some fancy protected vehicle, Rooster. You rig up a Car Bomb and park it beside him, just for fun."
+       SET r_m_1_sound_brief_flag = 2           //  Lock this IF
     ENDIF
     
+    
+    
     //  If the limo has been hitted by any weapon
-    IF ( ( CHECK_ANY_WEAPON_TYPE_HIT_CAR(r_m_1_cortez_limo_car) ) AND ( r_m_1_sound_brief_flag = 0 ) )
-       
-       //IF ( NOT ( CHECK_WEAPON_TYPE_HIT_CAR(r_m_1_cortez_limo_car, BY_CAR_BOMB) ) )
-       
-          DISPLAY_BRIEF (2063)                    //  "Ha! I am Flambo Cortez and my mercenary machine is special Z-Construction!"
-          r_m_1_laughs_sound = CREATE_SOUND (128.00, 126.50, 2.00) SMUG_LAUGH PLAY_FOREVER END            //  Hahahaha!
-          SET r_m_1_sound_brief_flag = 1                         //  Lock this IF
-          
-       //ENDIF
-       
-    ENDIF
+    IF ( ( CHECK_ANY_WEAPON_TYPE_HIT_CAR(r_m_1_cortez_limo_car) )
+							AND ( r_m_1_sound_brief_flag = 0 ) )
+
+							IF ( ( ( ( ( ( ( ( ( ( CHECK_WEAPON_TYPE_HIT_CAR(r_m_1_cortez_limo_car, BY_EXPLOSION) )
+										OR ( CHECK_WEAPON_TYPE_HIT_CAR(r_m_1_cortez_limo_car, BY_GUN) ) )
+										OR ( CHECK_WEAPON_TYPE_HIT_CAR(r_m_1_cortez_limo_car, BY_FLAMETHROWER) ) )
+										OR ( CHECK_WEAPON_TYPE_HIT_CAR(r_m_1_cortez_limo_car, BY_GRENADE) ) )
+										OR ( CHECK_WEAPON_TYPE_HIT_CAR(r_m_1_cortez_limo_car, BY_MOLOTOV) ) )
+										OR ( CHECK_WEAPON_TYPE_HIT_CAR(r_m_1_cortez_limo_car, BY_ROCKET_LAUNCHER) ) )
+										OR ( CHECK_WEAPON_TYPE_HIT_CAR(r_m_1_cortez_limo_car, BY_ELECTRO_WEAPON) ) )
+										OR ( CHECK_WEAPON_TYPE_HIT_CAR(r_m_1_cortez_limo_car, BY_ROCKET_LAUNCHER) ) )
+										OR ( CHECK_WEAPON_TYPE_HIT_CAR(r_m_1_cortez_limo_car, BY_ELECTRO_WEAPON) ) )
+										OR ( CHECK_WEAPON_TYPE_HIT_CAR(r_m_1_cortez_limo_car, BY_SHOTGUN) ) )
+
+										DISPLAY_BRIEF (2063)                    //  "Ha! I am Flambo Cortez and my mercenary machine is special Z-Construction!"
+										r_m_1_laughs_sound = CREATE_SOUND (128.00, 126.50, 2.00) SMUG_LAUGH PLAY_FOREVER END            //  Hahahaha!
+										SET r_m_1_sound_brief_flag = 1
+							ENDIF
+				ENDIF
  
  ENDWHILE
  
@@ -455,19 +459,15 @@ clean_up_redn_med_phone1_m1:             //  Clean up
 	   DELETE_ITEM (r_m_1_laughs_sound)
 	ENDIF
  
- //  If the player has completed the Redneck Medium Mission 3
- IF ( savecount63 = 1 )
-	   SET_PHONE_DEAD (obj8)                    //  Kill the phone
-	   DISABLE_THREAD_TRIGGER (trigger13)       //  Disable its trigger too
-	ENDIF
+ 
  
  //  If any member of the player redneck group is alive
  IF ( NOT ( HAS_CHARACTER_DIED(r_m_1_redneck_group_char) ) )
 	   DESTROY_GROUP (r_m_1_redneck_group_char)
 	ENDIF
  
-	SET savecount81 = 0
-	SET savecount83 = 0
+	SET flag_on_mission = 0
+	SET flag_on_redn_mission = 0
  
 	REMOVE_ARROW (arrow1)
 	REMOVE_ARROW (arrow3)
@@ -483,14 +483,14 @@ clean_up_redn_med_phone1_m1:             //  Clean up
 	   MAKE_CHAR_DO_NOTHING (r_m_1_assassin_2_char)
 	ENDIF
  
-	IF ( savecount53 = 1 )
-	   ++savecount87
-	   ++savecount91
+	IF ( flag_passed_redn_med_phone1_m1 = 1 )
+	   ++flag_redn_missions_passed
+	   ++flag_all_missions_passed
 	ENDIF
  
  IF ( CHECK_DEATHARREST_EXECUTED() )
-	   ++savecount90
-	   ++savecount92
+	   ++flag_redn_missions_failed
+	   ++flag_all_missions_failed
 	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (redngang, p1, -1)
 	   CLEAR_WANTED_LEVEL (p1)
 	ENDIF

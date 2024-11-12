@@ -50,14 +50,14 @@ COUNTER s_m_2_loony_3_created = 0
 COUNTER s_m_2_redn_assassins_created = 0
 COUNTER s_m_2_while_loop_3 = 0
 
-DECLARE_MISSION_FLAG (p1, savecount81)      //   ????
+DECLARE_MISSION_FLAG (p1, flag_on_mission)      //   ????
 
 scie_med_phone2_m1:
  
-	SET savecount7 = 0
+	SET flag_failed_scie_med_phone2_m1 = 0
  
-	SET savecount81 = 1
-	SET savecount82 = 1
+	SET flag_on_mission = 1
+	SET flag_on_scie_mission = 1
  
 	DISPLAY_MESSAGE (2460)             //  GRAN'PA WE LOVE YOU!
  
@@ -111,10 +111,10 @@ scie_med_phone2_m1:
     
     //  If the pickup has been destroyed
 	   IF ( IS_CAR_WRECKED(s_m_2_grampa_pickup) )
-       IF ( savecount7 = 0 )
+       IF ( flag_failed_scie_med_phone2_m1 = 0 )
           CLEAR_ALL_BRIEFS ()
 	         DISPLAY_BRIEF (2393)          //  "The job is over for you, THC-303. Without the Pickup you won't ever get Gran'pa."
-	         SET savecount7 = 1
+	         SET flag_failed_scie_med_phone2_m1 = 1
 	         DISPLAY_MESSAGE (2998)        //  Mission Failed!
           RETURN
        ENDIF
@@ -137,17 +137,17 @@ scie_med_phone2_m1:
     IF ( ( ( ( HAS_CHARACTER_DIED(s_m_2_redneck_1_char) ) OR ( HAS_CHARACTER_DIED(s_m_2_redneck_2_char) ) ) OR ( HAS_CHARACTER_DIED(s_m_2_redneck_3_char) ) ) OR ( HAS_CHARACTER_DIED(s_m_2_redneck_4_char) ) )
        CLEAR_ALL_BRIEFS ()
        DISPLAY_BRIEF (2397)             //  "Killing Rednecks at this stage of the job wasn't clever, THC-303. Now it's pointless carrying on."
-       SET savecount7 = 1
+       SET flag_failed_scie_med_phone2_m1 = 1
        DISPLAY_MESSAGE (2998)           //  Mission Failed!
        RETURN
     ENDIF
     
     //  If the Gram'pa pickup has been destroyed
     IF ( IS_CAR_WRECKED(s_m_2_grampa_pickup) )
-       IF ( savecount7 = 0 )
+       IF ( flag_failed_scie_med_phone2_m1 = 0 )
           CLEAR_ALL_BRIEFS ()
           DISPLAY_BRIEF (2398)          //  "Destroying the Redneck vehicles makes no friends, THC-303."
-          SET savecount7 = 1
+          SET flag_failed_scie_med_phone2_m1 = 1
           DISPLAY_MESSAGE (2998)        //  Mission Failed!
           RETURN
        ENDIF
@@ -155,10 +155,10 @@ scie_med_phone2_m1:
     
     //  If the first car has been destroyed
     IF ( IS_CAR_WRECKED(s_m_2_hunting_car_1) )
-       IF ( savecount7 = 0 )
+       IF ( flag_failed_scie_med_phone2_m1 = 0 )
           CLEAR_ALL_BRIEFS ()
           DISPLAY_BRIEF (2398)          //  "Destroying the Redneck vehicles makes no friends, THC-303."
-          SET savecount7 = 1
+          SET flag_failed_scie_med_phone2_m1 = 1
           DISPLAY_MESSAGE (2998)        //  Mission Failed!
           RETURN
        ENDIF
@@ -166,10 +166,10 @@ scie_med_phone2_m1:
     
     //  If the second car has been destroyed
     IF ( IS_CAR_WRECKED(s_m_2_hunting_car_2) )
-       IF ( savecount7 = 0 )
+       IF ( flag_failed_scie_med_phone2_m1 = 0 )
           CLEAR_ALL_BRIEFS ()
           DISPLAY_BRIEF (2398)          //  "Destroying the Redneck vehicles makes no friends, THC-303."
-          SET savecount7 = 1
+          SET flag_failed_scie_med_phone2_m1 = 1
           DISPLAY_MESSAGE (2998)        //  Mission Failed!
           RETURN
        ENDIF
@@ -177,10 +177,10 @@ scie_med_phone2_m1:
     
     //  If the third car has been destroyed
     IF ( IS_CAR_WRECKED(s_m_2_hunting_car_3) )
-       IF ( savecount7 = 0 )
+       IF ( flag_failed_scie_med_phone2_m1 = 0 )
           CLEAR_ALL_BRIEFS ()
           DISPLAY_BRIEF (2398)          //  "Destroying the Redneck vehicles makes no friends, THC-303."
-          SET savecount7 = 1
+          SET flag_failed_scie_med_phone2_m1 = 1
           DISPLAY_MESSAGE (2998)        //  Mission Failed!
           RETURN
        ENDIF
@@ -212,9 +212,9 @@ scie_med_phone2_m1:
     
     //  Time Out!
     IF ( s_m_2_internal_counter = 0 )
-       IF ( savecount7 = 0 )
+       IF ( flag_failed_scie_med_phone2_m1 = 0 )
           CLEAR_ALL_BRIEFS ()
-          SET savecount7 = 1
+          SET flag_failed_scie_med_phone2_m1 = 1
           DISPLAY_MESSAGE (2998)         //  Mission Failed!
           DISPLAY_BRIEF (2411)           //  "Sheesh, City Boy, you got lead in your ass? Get outta here!"
           RETURN
@@ -303,20 +303,20 @@ scie_med_phone2_m1:
     ENDIF
     
     //  If the pickup has been destroyed
-    IF ( ( IS_CAR_WRECKED(s_m_2_grampa_pickup) ) AND ( savecount7 = 0 ) )
+    IF ( ( IS_CAR_WRECKED(s_m_2_grampa_pickup) ) AND ( flag_failed_scie_med_phone2_m1 = 0 ) )
        CLEAR_ALL_BRIEFS ()
        DISPLAY_BRIEF (2410)                   //  "Now that was silly, THC-303. Now there's no way to complete this job!"
-       SET savecount7 = 1
+       SET flag_failed_scie_med_phone2_m1 = 1
        DISPLAY_MESSAGE (2998)                 //  Mission Failed!
        RETURN
     ENDIF
     
     //  If Grand'pa has died
     IF ( HAS_CHARACTER_DIED(s_m_2_grandpa_char) )
-       IF ( savecount7 = 0 )
+       IF ( flag_failed_scie_med_phone2_m1 = 0 )
           CLEAR_ALL_BRIEFS ()
           DISPLAY_BRIEF (2403)                //  "A dead old man is no use for what The Professor has in mind, THC-303. You are off the job."
-          SET savecount7 = 1
+          SET flag_failed_scie_med_phone2_m1 = 1
           DISPLAY_MESSAGE (2998)              //  Mission Failed!
           RETURN
        ENDIF
@@ -437,10 +437,10 @@ scie_med_phone2_m1:
     
     //  If the pickup has been destroyed
     IF ( IS_CAR_WRECKED(s_m_2_grampa_pickup) )
-       IF ( savecount7 = 0 )
+       IF ( flag_failed_scie_med_phone2_m1 = 0 )
           CLEAR_ALL_BRIEFS ()
           DISPLAY_BRIEF (2402)               //  "IMBECILE, you couldn't even keep the Pickup in once piece, THC-303! This job is OVER."
-          SET savecount7 = 1
+          SET flag_failed_scie_med_phone2_m1 = 1
           DISPLAY_MESSAGE (2998)             //  Mission Failed!
           RETURN
        ENDIF
@@ -453,16 +453,16 @@ scie_med_phone2_m1:
  CLEAR_ALL_BRIEFS ()
  DISPLAY_BRIEF (2408)                        //  "Smooth, THC-303. You are a cool operator. Please accept #$50,000# with our thanks for all your hard work."
  ADD_SCORE (p1, 50000)
- SET savecount49 = 1
+ SET flag_passed_scie_med_phone2_m1 = 1
  DISPLAY_MESSAGE (2999)                      //  Mission Complete!
  CLEAR_WANTED_LEVEL (p1)
  ADD_MULTIPLIER (p1, 1)
  CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (sciegang, p1, 1)
  
  //  If the player has already completed the Scientist Medium Mission 3, disable Scientist Medium phone 2
- IF ( savecount61 = 1 )
-    SET_PHONE_DEAD (obj4)
-    DISABLE_THREAD_TRIGGER (trigger4)
+ IF ( flag_passed_scie_med_phone1_2_m3 = 1 )
+    SET_PHONE_DEAD (ph_scie_med_phone2)
+    DISABLE_THREAD_TRIGGER (thr_scie_med_phone2_m1)
  ENDIF
 
 RETURN
@@ -471,8 +471,8 @@ RETURN
 
 clean_up_scie_med_phone2_m1:                          //  Clean up
  
-	SET savecount81 = 0
-	SET savecount82 = 0
+	SET flag_on_mission = 0
+	SET flag_on_scie_mission = 0
  
 	REMOVE_ARROW (arrow1)
 	REMOVE_ARROW (arrow3)
@@ -507,14 +507,14 @@ clean_up_scie_med_phone2_m1:                          //  Clean up
  ENDIF
  
  
- IF ( savecount49 = 1 )
-	   ++savecount85
-	   ++savecount91
+ IF ( flag_passed_scie_med_phone2_m1 = 1 )
+	   ++flag_scie_missions_passed
+	   ++flag_all_missions_passed
 	ENDIF
  
  IF ( CHECK_DEATHARREST_EXECUTED() )
-    ++savecount88
-	   ++savecount92
+    ++flag_scie_missions_failed
+	   ++flag_all_missions_failed
 	   CLEAR_TIMER (s_m_2_timer)
 	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (sciegang, p1, -1)
 	   CLEAR_WANTED_LEVEL (p1)

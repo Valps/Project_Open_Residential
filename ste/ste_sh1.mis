@@ -14,9 +14,6 @@ CHAR_DATA s_h_1_traitor_1_char
 CHAR_DATA s_h_1_traitor_2_char
 CHAR_DATA s_h_1_traitor_3_char
 
-//CHAR_DATA chr10
-//CHAR_DATA chr11
-
 OBJ_DATA s_h_1_remote_control_obj
 
 COUNTER s_h_1_while_loop = 0
@@ -33,10 +30,7 @@ COUNTER s_h_1_traitor_3_stage = 0
 COUNTER s_h_1_traitor_1_in_taxi = 0
 COUNTER s_h_1_traitor_2_in_taxi = 0
 COUNTER s_h_1_traitor_3_in_taxi = 0
-//COUNTER count16 = 0
-//COUNTER count17 = 0
 COUNTER s_h_1_traitor_1_perished = 0
-//COUNTER count19 = 0
 COUNTER s_h_1_traitor_3_perished = 0
 COUNTER s_h_1_player_at_remote_control = 0
 COUNTER s_h_1_test_taxi_destroyed = 0
@@ -48,19 +42,13 @@ COUNTER s_h_1_lap_2_brief = 0
 COUNTER s_h_1_lap_3_brief = 0
 COUNTER s_h_1_lap_4_brief = 0
 COUNTER s_h_1_lap_5_brief = 0
-//COUNTER count31 = 0
-//COUNTER count32 = 0
-//COUNTER count33 = 0
-//COUNTER count34 = 0
-//COUNTER count35 = 0
-//COUNTER count36 = 0
 
 scie_hard_phone_m1:
  
-	SET savecount8 = 0
+	SET flag_failed_scie_hard_phone_m1 = 0
  
-	SET savecount81 = 1
-	SET savecount82 = 1
+	SET flag_on_mission = 1
+	SET flag_on_scie_mission = 1
  
 	DISPLAY_MESSAGE (2462)          //  TAXI TRAITOR TEST!
  
@@ -77,7 +65,7 @@ scie_hard_phone_m1:
        SET s_h_1_test_taxi_destroyed = 1
        CLEAR_ALL_BRIEFS ()
        DISPLAY_BRIEF (2485)          //  "Bad luck, THC-303. You gave it your best shot - but your best just wasn't good enough."
-       SET savecount8 = 1
+       SET flag_failed_scie_hard_phone_m1 = 1
        DISPLAY_MESSAGE (2998)        //  Mission Failed!
        RETURN
     ENDIF
@@ -110,7 +98,7 @@ scie_hard_phone_m1:
              DISPLAY_MESSAGE (2473)       //  "GO!"
              SET s_h_1_player_control_tst_taxi = 1
              SET s_h_1_time_trial_started = 1
-             DISPLAY_TIMER (timer1, 120)
+             DISPLAY_TIMER (generic_timer, 120)
              SET s_h_1_internal_counter = 3600            //  3600 = ( 120 seconds )*( 30 cycles per second )
           ENDIF
        ENDIF
@@ -168,7 +156,7 @@ scie_hard_phone_m1:
     //  If the player completed all five laps before the timer runs out
     IF ( ( s_h_1_internal_counter > 0 ) AND ( s_h_1_time_trial_laps = 5 ) )
        DISPLAY_BRIEF (2484)                    //  "Excellent, THC-303! You beat the time. Don't worry about the mess - we haven't had time to test the system properly."
-       SET s_h_1_time_trial_laps = 6                          //  Lock this IF
+       SET s_h_1_time_trial_laps = 6           //  Lock this IF
        SET s_h_1_while_loop = 1
     ENDIF
     
@@ -176,7 +164,7 @@ scie_hard_phone_m1:
     IF ( s_h_1_internal_counter = 0 )
        CLEAR_ALL_BRIEFS ()
        DISPLAY_BRIEF (2494)          //  "Oh, so slow, THC-303. Have you been up all night? No jobs for the sleepy snail!"
-       SET savecount8 = 1
+       SET flag_failed_scie_hard_phone_m1 = 1
        DISPLAY_MESSAGE (2998)        //  Mission Failed!
        RETURN
     ENDIF
@@ -185,7 +173,7 @@ scie_hard_phone_m1:
  
  //  The player completed all five laps
  
- CLEAR_TIMER (timer1)
+ CLEAR_TIMER (generic_timer)
  EXPLODE (s_h_1_time_trial_taxi)        //  BOOM!
  DELAY_HERE (100)
  DISPLAY_BRIEF (2486)     //  "Think you can handle test-driving the remote-control Taxi around town? Well that's the job."
@@ -223,8 +211,8 @@ scie_hard_phone_m1:
           ENDWHILE
           
           CLEAR_ALL_BRIEFS ()
-          SET savecount8 = 1
-          DISPLAY_MESSAGE (2998)         //  Mission Failed!
+          SET flag_failed_scie_hard_phone_m1 = 1
+          DISPLAY_MESSAGE (2998)                    //  Mission Failed!
           RETURN
           
        ENDIF
@@ -246,7 +234,7 @@ scie_hard_phone_m1:
        IF ( HAS_CHARACTER_DIED(s_h_1_traitor_1_char) )
           CLEAR_ALL_BRIEFS ()
           DISPLAY_BRIEF (2491)                                   //  "It should always look like an accident, THC-303. Sometimes your enthusiasm overtakes you."
-          SET savecount8 = 1
+          SET flag_failed_scie_hard_phone_m1 = 1
           DISPLAY_MESSAGE (2998)                                 //  Mission Failed!
           RETURN
        ENDIF
@@ -318,7 +306,7 @@ scie_hard_phone_m1:
           ENDWHILE
           
           CLEAR_ALL_BRIEFS ()
-          SET savecount8 = 1
+          SET flag_failed_scie_hard_phone_m1 = 1
           DISPLAY_MESSAGE (2998)     //  Mission Failed!
           RETURN
        
@@ -341,7 +329,7 @@ scie_hard_phone_m1:
        IF ( HAS_CHARACTER_DIED(s_h_1_traitor_2_char) )
           CLEAR_ALL_BRIEFS ()
           DISPLAY_BRIEF (2491)        //  "It should always look like an accident, THC-303. Sometimes your enthusiasm overtakes you."
-          SET savecount8 = 1
+          SET flag_failed_scie_hard_phone_m1 = 1
           DISPLAY_MESSAGE (2998)      //  Mission Failed!
           RETURN
        ENDIF
@@ -414,7 +402,7 @@ scie_hard_phone_m1:
           ENDWHILE
           
           CLEAR_ALL_BRIEFS ()
-          SET savecount8 = 1
+          SET flag_failed_scie_hard_phone_m1 = 1
           DISPLAY_MESSAGE (2998)        //  Mission Failed!
           RETURN
        
@@ -437,7 +425,7 @@ scie_hard_phone_m1:
        IF ( HAS_CHARACTER_DIED(s_h_1_traitor_3_char) )
           CLEAR_ALL_BRIEFS ()
           DISPLAY_BRIEF (2491)            //  "It should always look like an accident, THC-303. Sometimes your enthusiasm overtakes you."
-          SET savecount8 = 1
+          SET flag_failed_scie_hard_phone_m1 = 1
           DISPLAY_MESSAGE (2998)          //  Mission Failed!
           EXPLODE (s_h_1_remote_taxi)
           RETURN
@@ -475,7 +463,7 @@ scie_hard_phone_m1:
 
  CLEAR_ALL_BRIEFS ()
  ADD_SCORE (p1, 70000)
- SET savecount50 = 1
+ SET flag_passed_scie_hard_phone2_m1 = 1
  DISPLAY_MESSAGE (2999)        //  Mission Complete!
  DISPLAY_BRIEF (2493)          //  "It's a pleasure to watch you work, THC-303. You deserve this $70,000."
  CLEAR_WANTED_LEVEL (p1)
@@ -486,10 +474,10 @@ RETURN
 
 clean_up_scie_hard_phone_m1:                          //  Clean up
  
-	SET savecount81 = 0
-	SET savecount82 = 0
+	SET flag_on_mission = 0
+	SET flag_on_scie_mission = 0
 	REMOVE_ARROW (arrow1)
-	CLEAR_TIMER (timer1)
+	CLEAR_TIMER (generic_timer)
  
  //  If the test taxi hasn't been destroyed
  IF ( ( s_h_1_mission_part_two = 0 ) AND ( s_h_1_test_taxi_destroyed = 0 ) )
@@ -519,15 +507,15 @@ clean_up_scie_hard_phone_m1:                          //  Clean up
     ENDIF
  ENDIF
 	
-	IF ( savecount50 = 1 )
-	   ++savecount85
-    ++savecount91
-	   CLEAR_TIMER (timer1)
+	IF ( flag_passed_scie_hard_phone2_m1 = 1 )
+	   ++flag_scie_missions_passed
+    ++flag_all_missions_passed
+	   CLEAR_TIMER (generic_timer)
 	ENDIF
  
  IF ( CHECK_DEATHARREST_EXECUTED() )
-	   ++savecount88
-	   ++savecount92
+	   ++flag_scie_missions_failed
+	   ++flag_all_missions_failed
 	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (sciegang, p1, -1)
 	   CLEAR_WANTED_LEVEL (p1)
 	ENDIF

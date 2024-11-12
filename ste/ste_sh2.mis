@@ -33,7 +33,6 @@ OBJ_DATA s_h_2_cocktail_molotov
 
 OBJ_DATA s_h_2_h2000_generator_obj
 
-//COUNTER count2 = 0
 COUNTER s_h_2_player_arrived_h2000 = 0
 COUNTER s_h_2_h2000_generator_destroyed = 0
 COUNTER s_h_2_turbine_1_destroyed = 0
@@ -41,7 +40,6 @@ COUNTER s_h_2_turbine_2_destroyed = 0
 COUNTER s_h_2_turbine_3_destroyed = 0
 COUNTER s_h_2_turbine_4_destroyed = 0
 COUNTER s_h_2_turbines_destroyed_count = 0
-//COUNTER count10 = 0
 COUNTER s_h_2_h2000_guard_alive = 0
 COUNTER s_h_2_while_loop = 0
 COUNTER s_h_2_lights_sounds_created = 0
@@ -66,10 +64,10 @@ SOUND s_h_2_alarm_sound_8
 
 scie_hard_phone_m2:
  
-	SET savecount20 = 0
+	SET flag_failed_scie_hard_phone_m2 = 0
  
-	SET savecount81 = 1
-	SET savecount82 = 1
+	SET flag_on_mission = 1
+	SET flag_on_scie_mission = 1
  
 	DISPLAY_MESSAGE (2463)          //  WATER CARRY ON!
  
@@ -288,14 +286,14 @@ scie_hard_phone_m2:
 	      SET s_h_2_while_loop = 1
 	      ADD_SCORE (p1, 70000)
 	      DISPLAY_BRIEF (2517)         //  "Well done, THC-303. Now the H2000 Water Company is high and dry [...]. Have $70,000 for your outstanding contribution."
-	      SET savecount62 = 1
+	      SET flag_passed_scie_hard_phone_m2 = 1
 	      DISPLAY_MESSAGE (2999)       //  Mission Complete!
 	      CLEAR_WANTED_LEVEL (p1)
 	      ADD_MULTIPLIER (p1, 1)
 	      CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (sciegang, p1, 1)
       	REMOVE_ARROW (arrow1)
-	      SET_PHONE_DEAD (obj5)                          //  Disable the Scientist Hard phone
-	      DISABLE_THREAD_TRIGGER (trigger5)
+	      SET_PHONE_DEAD (ph_scie_hard_phone)                          //  Disable the Scientist Hard phone
+	      DISABLE_THREAD_TRIGGER (thr_scie_hard_phone_m1)
        RETURN
     ENDIF
 	
@@ -312,8 +310,8 @@ clean_up_scie_hard_phone_m2:                       //  Clean up
 	   DESTROY_GROUP (s_h_2_srs_clones)
 	ENDIF
  
-	SET savecount81 = 0
-	SET savecount82 = 0
+	SET flag_on_mission = 0
+	SET flag_on_scie_mission = 0
  
 	REMOVE_ARROW (arrow1)
 	REMOVE_ARROW (arrow3)
@@ -337,14 +335,14 @@ clean_up_scie_hard_phone_m2:                       //  Clean up
 	   DELETE_ITEM (s_h_2_alarm_light_6)
 	ENDIF
  
- IF ( savecount62 = 1 )
-	   ++savecount85
-	   ++savecount91
+ IF ( flag_passed_scie_hard_phone_m2 = 1 )
+	   ++flag_scie_missions_passed
+	   ++flag_all_missions_passed
 	ENDIF
  
  IF ( CHECK_DEATHARREST_EXECUTED() )
-	   ++savecount88
-	   ++savecount92
+	   ++flag_scie_missions_failed
+	   ++flag_all_missions_failed
 	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (sciegang, p1, -1)
 	   CLEAR_WANTED_LEVEL (p1)
 	ENDIF

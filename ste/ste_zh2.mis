@@ -19,9 +19,6 @@ CHAR_DATA z_h_2_cop_guard_6
 CHAR_DATA z_h_2_cop_guard_7
 CHAR_DATA z_h_2_cop_guard_8
 CHAR_DATA z_h_2_cop_guard_9
-//CHAR_DATA chr16
-
-//CHAR_DATA chr17
 
 OBJ_DATA z_h_2_powergen
 OBJ_DATA z_h_2_health
@@ -44,23 +41,18 @@ SOUND z_h_2_alarm_sound_3
 SOUND z_h_2_alarm_sound_4
 
 COUNTER z_h_2_generator_destroyed = 0
-//COUNTER count3 = 0
-//COUNTER count4 = 0
 COUNTER z_h_2_while_loop_2 = 0
 COUNTER z_h_2_internal_counter = 0
 COUNTER z_h_2_has_distraction_started = 0
-//COUNTER count8 = 0
-//COUNTER count9 = 0
-//COUNTER count10 = 0
 COUNTER z_h_2_while_loop_1 = 0
 COUNTER z_h_2_lights_sounds_created = 0
 
 zaib_hard_phone_m2:
  
-	SET savecount24 = 0
+	SET flag_failed_zaib_hard_phone_m2 = 0
  
-	SET savecount81 = 1
-	SET savecount84 = 1
+	SET flag_on_mission = 1
+	SET flag_on_zaib_mission = 1
  
 	DISPLAY_MESSAGE (2470)          //  DISTRACTION ACTION!
  
@@ -166,7 +158,7 @@ zaib_hard_phone_m2:
     IF ( IS_CAR_WRECKED(z_h_2_truck_trailer) )
        CLEAR_ALL_BRIEFS ()
 	      DISPLAY_BRIEF (2963)           //  "Idiot! The job is impossible with the Trailer destroyed!"
-	      SET savecount24 = 1
+	      SET flag_failed_zaib_hard_phone_m2 = 1
 	      DISPLAY_MESSAGE (2998)
        RETURN
     ENDIF
@@ -196,9 +188,9 @@ zaib_hard_phone_m2:
  
     IF ( IS_CHARACTER_IN_CAR(p1, z_h_2_truck_trailer) )
        SET z_h_2_while_loop_1 = 1
-       DISPLAY_TIMER (timer1, 60)
+       DISPLAY_TIMER (generic_timer, 60)
        SET z_h_2_internal_counter = 1800          //  1800 = ( 60 seconds )*( 30 cycles or frames per second )
-       DISPLAY_BRIEF (2970)       //  "Distract the Cops and avoid getting arrested for ONE minute. That should give me just enough time to pull off the little job I have planned."
+       DISPLAY_BRIEF (2970)          //  "Distract the Cops and avoid getting arrested for ONE minute. That should give me just enough time to pull off the little job I have planned."
        SET z_h_2_has_distraction_started = 1
        ALTER_WANTED_LEVEL (p1, 3)    //  POLICE!
        REMOVE_ARROW (arrow1)
@@ -207,7 +199,7 @@ zaib_hard_phone_m2:
     IF ( IS_CAR_WRECKED(z_h_2_truck_trailer) )
        CLEAR_ALL_BRIEFS ()
        DISPLAY_BRIEF (2971)      //  "The destruction of the Truck means the operation is over, Gecko."
-       SET savecount24 = 1
+       SET flag_failed_zaib_hard_phone_m2 = 1
        DISPLAY_MESSAGE (2998)    //  Mission Failed!
        RETURN
     ENDIF
@@ -222,17 +214,17 @@ zaib_hard_phone_m2:
     IF ( IS_CAR_WRECKED(z_h_2_truck_trailer) )
        CLEAR_ALL_BRIEFS ()
        DISPLAY_BRIEF (2971)          //  "The destruction of the Truck means the operation is over, Gecko."
-       SET savecount24 = 1
+       SET flag_failed_zaib_hard_phone_m2 = 1
        DISPLAY_MESSAGE (2998)        //  Mission Failed!
        RETURN
     ENDIF
     
     //  If the trailer has been detached
     IF ( NOT ( IS_TRAILER_ATTACHED(z_h_2_truck_trailer, z_h_2_truck_trailer) ) )
-       IF ( savecount24 = 0 )
+       IF ( flag_failed_zaib_hard_phone_m2 = 0 )
           CLEAR_ALL_BRIEFS ()
           DISPLAY_BRIEF (2973)              //  "How dare you detach the Trailer! Forget it - the job's OFF!"
-          SET savecount24 = 1
+          SET flag_failed_zaib_hard_phone_m2 = 1
           DISPLAY_MESSAGE (2998)            //  Mission Failed!
           RETURN
        ENDIF
@@ -255,14 +247,14 @@ zaib_hard_phone_m2:
  CLEAR_ALL_BRIEFS ()
  DISPLAY_BRIEF (2975)                   //  "That was perfect, Gecko. Ha ha! One day perhaps I might share the reason for my mirth with you. For now, here's $70,000."
  ADD_SCORE (p1, 70000)
- SET savecount66 = 1
+ SET flag_passed_zaib_hard_phone_m2 = 1
  DISPLAY_MESSAGE (2999)                 //  Mission Complete!
  CLEAR_WANTED_LEVEL (p1)
  ADD_MULTIPLIER (p1, 1)
  CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (zaibgang, p1, 1)
  
- SET_PHONE_DEAD (obj15)                 //  Deactivate Zaibatsu Hard Phone
- DISABLE_THREAD_TRIGGER (trigger10)
+ SET_PHONE_DEAD (ph_zaib_hard_phone)                 //  Disable Zaibatsu Hard Phone
+ DISABLE_THREAD_TRIGGER (thr_zaib_hard_phone_m1)
  
 RETURN
 
@@ -270,12 +262,12 @@ RETURN
 
 clean_up_zaib_hard_phone_m2:             //  Clean up
  
-	SET savecount81 = 0
-	SET savecount84 = 0
+	SET flag_on_mission = 0
+	SET flag_on_zaib_mission = 0
  
 	REMOVE_ARROW (arrow1)
  
-	CLEAR_TIMER (timer1)
+	CLEAR_TIMER (generic_timer)
  
 	ENABLE_CRANE (crane7)
 	ENABLE_CRANE (crane9)
@@ -292,14 +284,14 @@ clean_up_zaib_hard_phone_m2:             //  Clean up
 	   DELETE_ITEM (z_h_2_alarm_light_4)
 	ENDIF
  
- IF ( savecount66 = 1 )
-	   ++savecount86
-	   ++savecount91
+ IF ( flag_passed_zaib_hard_phone_m2 = 1 )
+	   ++flag_zaib_missions_passed
+	   ++flag_all_missions_passed
 	ENDIF
  
  IF ( CHECK_DEATHARREST_EXECUTED() )
-	   ++savecount89
-	   ++savecount92
+	   ++flag_zaib_missions_failed
+	   ++flag_all_missions_failed
 	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (zaibgang, p1, -1)
 	   CLEAR_WANTED_LEVEL (p1)
 	ENDIF

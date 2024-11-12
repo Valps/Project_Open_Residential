@@ -26,12 +26,12 @@ COUNTER r_h_1_ztypes_destroyed = 0
 
 redn_hard_phone_m1:
 
-	SET savecount13 = 0
+	SET flag_failed_redn_hard_phone_m1 = 0
  
 	DISPLAY_MESSAGE (2955)            //  GANG CAR BANG!
  
-	SET savecount81 = 1
-	SET savecount83 = 1
+	SET flag_on_mission = 1
+	SET flag_on_redn_mission = 1
  
 	GIVE_WEAPON (p1, ROCKET_LAUNCHER, 10)
  
@@ -51,7 +51,7 @@ redn_hard_phone_m1:
  
     IF ( ( r_h_1_hunting_meteors = 0 ) AND ( IS_CHAR_IN_GANGZONE(p1, sciegang) ) )
        DISPLAY_BRIEF_NOW (2161)                                               //  "Here we are, Rooster! Start bustin' up them Meteors!"
-	      bonus6 = START_BONUS_CHECK (sciegang, 65535, 5, 0, CAR, NOT_EXCLUSIVE, BY_ANY_WEAPON, NONE, STRATOSB)
+	      r_h_1_meteor_bonus = START_BONUS_CHECK (sciegang, 65535, 5, 0, CAR, NOT_EXCLUSIVE, BY_ANY_WEAPON, NONE, STRATOSB)
 	      SET r_h_1_meteors_remaining = 5
 	      SET r_h_1_hunting_meteors = 1
 	      SET r_h_1_has_bonus_started = 1
@@ -71,7 +71,7 @@ redn_hard_phone_m1:
     ENDIF
     
     IF ( r_h_1_has_bonus_started = 1 )
-       STORE_BONUS_COUNT (bonus6, r_h_1_meteors_destroyed)
+       STORE_BONUS_COUNT (r_h_1_meteor_bonus, r_h_1_meteors_destroyed)
     ENDIF
     
     IF ( r_h_1_has_bonus_started = 1 )
@@ -79,7 +79,7 @@ redn_hard_phone_m1:
     ENDIF
     
     IF ( r_h_1_hunting_meteors = 1 )
-       IF ( HAS_BONUS_PASSED(bonus6) )
+       IF ( HAS_BONUS_PASSED(r_h_1_meteor_bonus) )
           DISPLAY_BRIEF_NOW (2163)                //  "You sure got a taste for it, Rooster! C'mon, let's do the Zaibatsu. Head over to The Village. Yee-ha!"
 	         CLEAR_ONSCREEN_COUNTER (r_h_1_onscreen_meteors)
 	         SET r_h_1_while_loop_1 = 1
@@ -88,10 +88,10 @@ redn_hard_phone_m1:
     ENDIF
     
     IF ( r_h_1_hunting_meteors = 1 )
-       IF ( HAS_BONUS_FAILED(bonus6) )
+       IF ( HAS_BONUS_FAILED(r_h_1_meteor_bonus) )
           DISPLAY_BRIEF_NOW (2164)                //  "You play with fire, son, you gonna get burned!"
 	         CLEAR_ONSCREEN_COUNTER (r_h_1_onscreen_meteors)
-	         SET savecount13 = 1
+	         SET flag_failed_redn_hard_phone_m1 = 1
 	         DISPLAY_MESSAGE (2998)                  //  Mission Failed!
           RETURN
        ENDIF
@@ -107,7 +107,7 @@ redn_hard_phone_m1:
  
     IF ( ( r_h_1_hunting_ztypes = 0 ) AND ( IS_CHAR_IN_GANGZONE(p1, zaibgang) ) )
        DISPLAY_BRIEF_NOW (2165)                                       //  "Look at them pretty Z-Types! First one to FIVE is The King."
-       bonus5 = START_BONUS_CHECK (zaibgang, 65535, 5, 0, CAR, NOT_EXCLUSIVE, BY_ANY_WEAPON, NONE, VTYPE)
+       r_h_1_ztype_bonus = START_BONUS_CHECK (zaibgang, 65535, 5, 0, CAR, NOT_EXCLUSIVE, BY_ANY_WEAPON, NONE, VTYPE)
        SET r_h_1_ztypes_remaining = 5
        SET r_h_1_has_bonus_started = 1
        ADD_ONSCREEN_COUNTER (r_h_1_onscreen_ztypes, r_h_1_ztypes_remaining)
@@ -127,7 +127,7 @@ redn_hard_phone_m1:
     ENDIF
     
     IF ( r_h_1_has_bonus_started = 1 )
-       STORE_BONUS_COUNT (bonus5, r_h_1_ztypes_destroyed)
+       STORE_BONUS_COUNT (r_h_1_ztype_bonus, r_h_1_ztypes_destroyed)
     ENDIF
     
     IF ( r_h_1_has_bonus_started = 1 )
@@ -135,7 +135,7 @@ redn_hard_phone_m1:
     ENDIF
     
     IF ( r_h_1_hunting_ztypes = 1 )
-       IF ( HAS_BONUS_PASSED(bonus5) )
+       IF ( HAS_BONUS_PASSED(r_h_1_ztype_bonus) )
           CLEAR_ALL_BRIEFS ()
           DISPLAY_BRIEF_NOW (2167)       //  "We sure are BUZZIN' from the fun, son! Here - here's a $70,000 bonus. C'mon, Rooster, it's King Karaoke at RV and YOU are up first!"
           CLEAR_ONSCREEN_COUNTER (r_h_1_onscreen_ztypes)
@@ -144,10 +144,10 @@ redn_hard_phone_m1:
     ENDIF
     
     IF ( r_h_1_hunting_ztypes = 1 )
-       IF ( HAS_BONUS_FAILED(bonus5) )
+       IF ( HAS_BONUS_FAILED(r_h_1_ztype_bonus) )
           DISPLAY_BRIEF_NOW (2168)                    //  "What's up, boy? You got a target tattooed on that there yella belly?"
           CLEAR_ONSCREEN_COUNTER (r_h_1_onscreen_ztypes)
-          SET savecount13 = 1
+          SET flag_failed_redn_hard_phone_m1 = 1
           DISPLAY_MESSAGE (2998)                      //  Mission Failed!
           RETURN
        ENDIF
@@ -159,7 +159,7 @@ redn_hard_phone_m1:
  
  ADD_SCORE (p1, 70000)
  
- SET savecount55 = 1
+ SET flag_passed_redn_hard_phone_m1 = 1
  
  DISPLAY_MESSAGE (2999)              //  Mission Complete!
  CLEAR_WANTED_LEVEL (p1)
@@ -176,22 +176,22 @@ clean_up_redn_hard_phone_m1:                                  //  Clean up
 	   DESTROY_GROUP (r_h_1_redneck_group_leader)
 	ENDIF
  
-	SET savecount81 = 0
-	SET savecount83 = 0
+	SET flag_on_mission = 0
+	SET flag_on_redn_mission = 0
  
 	REMOVE_ARROW (arrow1)
  
 	CLEAR_ONSCREEN_COUNTER (r_h_1_onscreen_meteors)
 	CLEAR_ONSCREEN_COUNTER (r_h_1_onscreen_ztypes)
  
- IF ( savecount55 = 1 )
-	   ++savecount87
-	   ++savecount91
+ IF ( flag_passed_redn_hard_phone_m1 = 1 )
+	   ++flag_redn_missions_passed
+	   ++flag_all_missions_passed
 	ENDIF
  
  IF ( CHECK_DEATHARREST_EXECUTED() )
-	   ++savecount90
-	   ++savecount92
+	   ++flag_redn_missions_failed
+	   ++flag_all_missions_failed
 	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (redngang, p1, -1)
 	   CLEAR_WANTED_LEVEL (p1)
 	ENDIF

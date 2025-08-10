@@ -332,9 +332,6 @@ clean_up_scie_med_phone1_2_m3:                          //  Clean up
  
 	CLEAR_TIMER (s_m_3_timer)
  
-	SET flag_on_mission = 0
-	SET flag_on_scie_mission = 0
- 
 	REMOVE_ARROW (arrow1)
 	REMOVE_ARROW (arrow3)
 	REMOVE_ARROW (arrow4)
@@ -362,6 +359,9 @@ clean_up_scie_med_phone1_2_m3:                          //  Clean up
 	   CHANGE_GANG_CHAR_RESPECT_AND_UPDATE (sciegang, p1, -1)
 	   CLEAR_WANTED_LEVEL (p1)
 	ENDIF
+ 
+ SET flag_on_mission = 0
+	SET flag_on_scie_mission = 0
  
 	MISSION_HAS_FINISHED ()
  

@@ -37,6 +37,8 @@ OBJ_DATA r_m_3_powergen_obj
 
 redn_med_phone1_2_m3:
 
+ SET flag_on_mission = 1
+	SET flag_on_redn_mission = 1
 	SET flag_failed_redn_med_phone1_2_m3 = 0
  
 	DISPLAY_MESSAGE (2954)             //  TANKS-GIVING!
@@ -51,9 +53,6 @@ redn_med_phone1_2_m3:
 	FORCE_CLEANUP (r_m_3_grenade)
 	FORCE_CLEANUP (r_m_3_invulnerability)
 	FORCE_CLEANUP (r_m_3_jail_free_bonus)
- 
-	SET flag_on_mission = 1
-	SET flag_on_redn_mission = 1
  
  //  Powergen locking the army base entrance
 	r_m_3_powergen_obj = CREATE_OBJ (234.50, 117.50, 2.00) 0 POWERGEN END

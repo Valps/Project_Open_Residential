@@ -42,13 +42,11 @@ SOUND r_m_2_wow_yeeha_sound
 
 redn_med_phone2_m1:
 
+ SET flag_on_mission = 1
+	SET flag_on_redn_mission = 1
 	SET flag_failed_redn_med_phone2_m1 = 0
  
 	DISPLAY_MESSAGE (2674)          //  BENSON BURNER!
- 
-	SET flag_on_mission = 1
-	SET flag_on_redn_mission = 1
- 
 	DISPLAY_BRIEF (2101)            //  "Hey, Rooster! Billy Bob Bean here. [...] So steal me a Benson!"
  
  //  Create the benson and the trailer

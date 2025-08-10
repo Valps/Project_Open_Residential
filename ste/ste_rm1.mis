@@ -45,13 +45,11 @@ SOUND r_m_1_laughs_sound
 
 redn_med_phone1_m1:
 
+ SET flag_on_mission = 1
+	SET flag_on_redn_mission = 1
 	SET flag_failed_redn_med_phone1_m1 = 0
  
 	DISPLAY_MESSAGE (2673)          //  GREATEST HITS!
- 
-	SET flag_on_mission = 1
-	SET flag_on_redn_mission = 1
- 
 	DISPLAY_BRIEF (2051)            //  "Hey, Rooster, it's Billy Bob Bean. I fancy killin' myself some Zaibatsu Hitmen [...] Can you start assassinatin' 'em fer me?"
  
  //  Creating the redneck group to help the player
